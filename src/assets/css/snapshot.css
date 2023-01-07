@@ -18,13 +18,18 @@
 }
 
 /* 开始录制 闪烁 */
-.record-procees {
-  display: inline-block;
-  height: 10px;
-  width: 10px;
+.record-process {
+  height: 25pt;
+  width: 25pt;
   background: red;
-  border-radius: 8px;
+  border-radius: 25pt;
   animation: blings 1s linear infinite;
+  margin-right: 10px;
+}
+
+.snapshot-img {
+  width: 25pt;
+  margin-right: 10px;
 }
 
 .mt10 {
@@ -32,8 +37,8 @@
 }
 
 .ml10 {
+  flex: 1;
   font-size: 25pt !important;
-  margin-left: 10px;
 }
 
 .ac {

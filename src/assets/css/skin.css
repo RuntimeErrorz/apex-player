@@ -342,3 +342,7 @@
 .video-js .vjs-load-progress {
     background: rgba(255, 255, 255, 0.5);
 }
+
+.vjs-playback-rate {
+    margin-right: 0.6em !important;
+}

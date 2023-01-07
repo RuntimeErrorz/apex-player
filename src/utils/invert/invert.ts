@@ -2,12 +2,9 @@
 export default function invertColor(el: Element | undefined) {
     if (typeof el === 'undefined')
         throw new Error('bar is undefined');
-    let canv = <HTMLCanvasElement>document.getElementById("canv")
-    canv.id = "canv"
-    canv.className = "canv"
+    let canv = <HTMLCanvasElement>document.getElementById("invert")
     let cxt = <CanvasRenderingContext2D>canv.getContext('2d')
     const vid = <HTMLVideoElement>el.querySelector('video')
-    document.getElementById("container")?.appendChild(canv)
 
     const width = parseFloat(getComputedStyle(el).width.slice(0, -2));
     const height = parseFloat(getComputedStyle(el).height.slice(0, -2));

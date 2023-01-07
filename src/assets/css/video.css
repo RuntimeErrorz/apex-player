@@ -10,14 +10,20 @@
   margin-right: 0.5em !important;
 }
 
-.canv {
+.vjs-pixelate-bt {
+  cursor: pointer;
+  font-size: 17pt !important;
+  margin-right: 1em !important;
+}
+
+.invert {
   margin: 0 2vw;
   max-width: 46.5vw;
   flex: 1 1 0
-    /* left: 30px;
-top: 25px;
-position: absolute;
-z-index: 999; */
+}
+
+.pixelate {
+  margin: 2vw 2vw;
 }
 
 .container {
@@ -42,7 +48,7 @@ z-index: 999; */
 }
 
 .slide-fade-leave-active {
-  transition: all 0.15s ease-out;
+  transition: all 0.1s ease-out;
 }
 
 .slide-fade-leave-to {

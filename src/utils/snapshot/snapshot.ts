@@ -76,7 +76,7 @@ function drawMedia(params: RecorderParams) {
 function recordHandle(recordDom: HTMLDivElement, params: RecorderParams) {
   if (!params.isRecording) {
     console.log("ye")
-    recordDom.innerHTML = `<i class="record-procees"></i><span class="ml10">结束</span>`
+    recordDom.innerHTML = `<i class="record-process"></i><span class="ml10">结束</span>`
     if (!params.canvas) {
       params.canvas = document.createElement("canvas");
     }
@@ -88,7 +88,7 @@ function recordHandle(recordDom: HTMLDivElement, params: RecorderParams) {
     drawMedia(params);
   } 
   else {
-    recordDom.innerHTML = `<img src="${monitorImg}" style="width:25pt" /><span class="ml10">录像</span>`
+    recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`
     params.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(<Blob>params.recorder?.getBlob());
       downloadFile(url, "webm");
@@ -115,11 +115,11 @@ export default function addSnapshot(params: RecorderParams) {
         className: 'vjs-custom-bar',
         innerHTML: `
           <div  class="vjs-custom-control-bar vjs-button ac">
-            <img src="${cameraImg}" style="width:25pt" />
+            <img src="${cameraImg}"  class="snapshot-img"/>
             <span class="ml10">截图</span>
           </div>
           <div class="mt10 vjs-custom-control-bar ac" >
-            <img src="${monitorImg}" style="width:25pt" />
+            <img src="${monitorImg}" class="snapshot-img" />
             <span class="ml10">录像</span>
           </div>
         `
