@@ -1,3 +1,5 @@
+import type { VideoJsPlayer } from "video.js";
+
 export interface pixelatePositions {
     leftX: number;
     leftY: number;
@@ -5,21 +7,21 @@ export interface pixelatePositions {
     rightY: number;
 }
 
-export default function addPixelate(el: Element | undefined, positions: pixelatePositions) {
-    if (!el)
+export default function addPixelate(player: VideoJsPlayer | undefined, positions: pixelatePositions) {
+    if (!player)
         throw new Error("el is null")
     const canvas = <HTMLCanvasElement>document.getElementById("pixelate")
-
-    const vid = <HTMLVideoElement>el.querySelector('video')
-    const height = parseFloat(getComputedStyle(el).height.slice(0, -2));
+    const vid = <HTMLVideoElement>player.el().querySelector('video')
+    const height = player.currentHeight()
     const width = height * vid.videoWidth / vid.videoHeight
+    const ratio = height / vid.videoHeight
     const pixelateWidth = (positions.rightX - positions.leftX) * width / 100
     const pixelateHeight = (positions.rightY - positions.leftY) * height / 100
     console.log(width, height, pixelateWidth, pixelateHeight)
     canvas.width = pixelateWidth
     canvas.height = pixelateHeight
     const ctx = canvas.getContext('2d')
-    ctx?.scale(window.devicePixelRatio, window.devicePixelRatio)
+    ctx?.scale(ratio, ratio)
     if (!ctx)
         throw new Error("ctx is null")
     setInterval(() => {

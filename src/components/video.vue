@@ -25,8 +25,8 @@ let fullscreen = ref(false)
 let pixelatePosition: Ref<pixelatePositions> = ref({
     leftX: 0,
     leftY: 0,
-    rightX: 0,
-    rightY: 0
+    rightX: 100,
+    rightY: 100
 })
 
 let originalPosition: Ref<pixelatePositions>
@@ -155,7 +155,7 @@ onUnmounted(() => {
                         取消
                     </v-btn>
                     <v-btn variant="tonal" color="blue-darken-1" @click="() => {
-                        addPixelate(playerInstance?.el(), pixelatePosition)
+                        addPixelate(playerInstance, pixelatePosition)
                         pixelateDialogVisible = false
                         isPixelated = true
                     }">
