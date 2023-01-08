@@ -1,20 +1,11 @@
-
-export default function invertColor(el: Element | undefined) {
-    if (typeof el === 'undefined')
-        throw new Error('bar is undefined');
+import type { VideoJsPlayer } from "video.js"
+export default function invertColor(player: VideoJsPlayer) {
     let canv = <HTMLCanvasElement>document.getElementById("invert")
-    let cxt = <CanvasRenderingContext2D>canv.getContext('2d')
-    const vid = <HTMLVideoElement>el.querySelector('video')
+    let cxt = <CanvasRenderingContext2D>canv.getContext('2d', { willReadFrequently: true })
 
-    const width = parseFloat(getComputedStyle(el).width.slice(0, -2));
-    const height = parseFloat(getComputedStyle(el).height.slice(0, -2));
-    canv.width = width;
-    canv.height = height;
-
-    let intervalID = setInterval(() => {
-        effectInvert();
-    }, 20);
-
+    const vid = <HTMLVideoElement>player.el().querySelector('video')
+    canv.width = vid.videoWidth;
+    canv.height = vid.videoHeight;
     function effectInvert() {
         cxt.drawImage(vid, 0, 0, canv.width, canv.height);
         let vidData = cxt.getImageData(0, 0, canv.width, canv.height);
@@ -26,10 +17,10 @@ export default function invertColor(el: Element | undefined) {
             vidData.data[z + 3] = 255;
         }
         cxt.putImageData(vidData, 0, 0);
+        requestAnimationFrame(effectInvert)
     }
-    vid.addEventListener('play', function () { let x = setInterval(function () { effectInvert() }, 20); }, false);
-    vid.addEventListener('pause', function () { clearInterval(intervalID); }, false);
-    vid.addEventListener('ended', function () { clearInterval(intervalID); }, false);
+    requestAnimationFrame(effectInvert)
+
     canv.addEventListener('click', function () {
         if (vid.paused) {
             vid.play();
