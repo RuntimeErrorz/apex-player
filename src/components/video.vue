@@ -22,9 +22,9 @@ let snackbar = ref(false)
 
 watch(isInverted, () => {
     if (isPixelated.value) {
-        setTimeout(() => {
-            addPixelate(playerInstance.value, pixelatePosition.value) //vue.NextTick
-        }, 200)
+        nextTick(() => {
+            addPixelate(playerInstance.value, pixelatePosition.value) //nextTick无用？
+        })
     }
 })
 
@@ -138,14 +138,14 @@ onUnmounted(() => {
         <video id="video1" class="video-js videosize vjs-static-controls" width="640" height="264" controls
             preload="auto" data-setup='{ "inactivityTimeout": 0 }'>
         </video>
+        <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         <Transition name="slide-fade">
-            <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         </Transition>
     </div>
     <v-dialog z-index="1003" v-model="pixelateDialogVisible" persistent width="60vw">
         <v-card>
             <v-card-title style="margin-left: 10px; margin-top: 1vh;">
-                <span class="text-h6">选择马赛克区域（左下为原点），马赛克区域可以直接涂抹</span>
+                <span class="text-h6">选择马赛克区域（左下为原点），<strong style="color: #ef5350;">马赛克区域可以直接涂抹以选择</strong></span>
             </v-card-title>
             <v-card-text>
                 <v-container>
@@ -194,7 +194,7 @@ onUnmounted(() => {
             </v-card-text>
             <v-divider></v-divider>
             <span class="font-weight-thin" style="margin-left: 26px; margin-top: 20px; font-size: 1.1rem;">
-                初始默认值为左下X、Y坐标百分比为0；右上X、Y坐标百分比为50，即对左下角打码。
+                初始默认值为左下X、Y坐标百分比为0；右上X、Y坐标百分比为50，即对左下四分之一部分打码。
             </span>
             <v-card-actions style="margin-bottom: 5px; margin-top: 3vh;">
                 <v-spacer></v-spacer>
