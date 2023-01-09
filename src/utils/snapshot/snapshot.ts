@@ -17,7 +17,6 @@ export class RecorderParams {
   }
 }
 
-
 function downloadFile(blob: string, fileType: string) {
   const a = document.createElement("a");
   a.style.display = "none";
@@ -114,7 +113,7 @@ export function recordHandle(recordDom: HTMLDivElement, params: RecorderParams, 
     }
     params.recorder = new RecordRTC(params.canvas, {
       type: "canvas",
-      mimeType: "video/webm;codecs=vp8",
+      mimeType: "video/mp4",
     });
     params.recorder.startRecording();
     drawMedia(params);
@@ -123,7 +122,7 @@ export function recordHandle(recordDom: HTMLDivElement, params: RecorderParams, 
     recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`
     params.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(<Blob>params.recorder?.getBlob());
-      downloadFile(url, "webm");
+      downloadFile(url, "mp4");
       if (!params.animationFrame)
         throw Error("erro")
       cancelAnimationFrame(params.animationFrame);
@@ -155,7 +154,7 @@ export default function addSnapshot() {
           </div>
         `
       })
-      divDom.setAttribute('style', 'z-index:10000')
+      divDom.setAttribute('style', 'z-index:1001')
       return divDom
     },
   })

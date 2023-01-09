@@ -105,7 +105,8 @@ onMounted(() => {
     playerInstance.value = videojs(playerID.value, props.options, initPlayer)
     const [screenshotDom, recordDom] = document.getElementsByClassName("vjs-custom-bar")[0].querySelectorAll('div')
     screenshotDom.onclick = () => screenshotHandle(playerInstance, isPixelated.value, isInverted.value);
-    recordDom.onclick = () => recordHandle(recordDom, new RecorderParams(<Ref<VideoJsPlayer>>playerInstance, null, null, null, false), isPixelated.value, isInverted.value)
+    let recorderParam = new RecorderParams(<Ref<VideoJsPlayer>>playerInstance, null, null, null, false)
+    recordDom.onclick = () => recordHandle(recordDom, recorderParam, isPixelated.value, isInverted.value)
 
     window.onresize = () => {
         if (isPixelated.value) {
@@ -141,7 +142,7 @@ onUnmounted(() => {
             <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         </Transition>
     </div>
-    <v-dialog z-index="20000" v-model="pixelateDialogVisible" persistent width="60vw">
+    <v-dialog z-index="1003" v-model="pixelateDialogVisible" persistent width="60vw">
         <v-card>
             <v-card-title style="margin-left: 10px; margin-top: 1vh;">
                 <span class="text-h6">选择马赛克区域（左下为原点），马赛克区域可以直接涂抹</span>
