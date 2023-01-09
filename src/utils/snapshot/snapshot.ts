@@ -32,17 +32,10 @@ function downloadFile(blob: string, fileType: string) {
   }, 1000);
 }
 
-function screenshotHandle(playerInstance: Ref<VideoJsPlayer | undefined>) {
+function downloadViaCanvas(canvas: HTMLCanvasElement, src: HTMLCanvasElement | HTMLVideoElement) {
   const fileType = "png";
-  const video = playerInstance.value?.el().querySelector('video')
-  const canvas = document.createElement("canvas");
-  if (!video)
-    throw new Error('undefined');
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
   canvas
-    .getContext("2d")?.drawImage(video, 0, 0, canvas.width, canvas.height); // 图片大小和视频分辨率一致
+    .getContext("2d")?.drawImage(src, 0, 0, canvas.width, canvas.height); // 图片大小和视频分辨率一致
   const strDataURL = canvas.toDataURL("image/" + fileType); // canvas中video中取一帧图片并转成dataURL
   let arr = strDataURL.split(",")
   let mimeArrar = arr[0].match(/:(.*?);/)
@@ -62,6 +55,46 @@ function screenshotHandle(playerInstance: Ref<VideoJsPlayer | undefined>) {
   downloadFile(url, "png");
 }
 
+export function screenshotHandle(playerInstance: Ref<VideoJsPlayer | undefined>, isPixelated: boolean, isInverted: boolean) {
+  const canvas = document.createElement("canvas");
+  let video
+  if (isInverted && isPixelated) {
+    video = <HTMLCanvasElement>document.getElementById("invert")
+    if (!video)
+      throw new Error('undefined');
+    canvas.width = video.width;
+    canvas.height = video.height;
+    downloadViaCanvas(canvas, video)
+    video = <HTMLCanvasElement>document.getElementById("pixelate")
+    canvas.width = video.width;
+    canvas.height = video.height;
+    downloadViaCanvas(canvas, video)
+    return;
+  }
+  if (isInverted) {
+    video = <HTMLCanvasElement>document.getElementById("invert")
+    if (!video)
+      throw new Error('undefined');
+    canvas.width = video.width;
+    canvas.height = video.height;
+  }
+  else if (isPixelated) {
+    video = <HTMLCanvasElement>document.getElementById("pixelate")
+    if (!video)
+      throw new Error('undefined');
+    canvas.width = video.width;
+    canvas.height = video.height;
+  }
+  else {
+    video = playerInstance.value?.el().querySelector('video')
+    if (!video)
+      throw new Error('undefined');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+  }
+  downloadViaCanvas(canvas, video)
+}
+
 function drawMedia(params: RecorderParams) {
   const ctx = params.canvas?.getContext("2d")
   const video = params.player.value?.el().querySelector('video')
@@ -73,9 +106,8 @@ function drawMedia(params: RecorderParams) {
   params.animationFrame = requestAnimationFrame(() => drawMedia(params));
 }
 
-function recordHandle(recordDom: HTMLDivElement, params: RecorderParams) {
+export function recordHandle(recordDom: HTMLDivElement, params: RecorderParams, isPixelated: boolean, isInverted: boolean) {
   if (!params.isRecording) {
-    console.log("ye")
     recordDom.innerHTML = `<i class="record-process"></i><span class="ml10">结束</span>`
     if (!params.canvas) {
       params.canvas = document.createElement("canvas");
@@ -86,7 +118,7 @@ function recordHandle(recordDom: HTMLDivElement, params: RecorderParams) {
     });
     params.recorder.startRecording();
     drawMedia(params);
-  } 
+  }
   else {
     recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`
     params.recorder?.stopRecording(() => {
@@ -102,11 +134,10 @@ function recordHandle(recordDom: HTMLDivElement, params: RecorderParams) {
   params.isRecording = !params.isRecording
 }
 
-export default function addSnapshot(params: RecorderParams) {
+export default function addSnapshot() {
   let Component = videojs.getComponent("Component");
   // The videojs.extend function can be used instead of ES6 classes.
   let CustomBar = videojs.extend(Component, {
-
     createEl: function () {
       // <img src="${cameraImg}" style="width:13px" />
       // <i class="el-icon-camera-solid"></i>
@@ -124,9 +155,7 @@ export default function addSnapshot(params: RecorderParams) {
           </div>
         `
       })
-      const [screenshotDom, recordDom] = divDom.querySelectorAll('div')
-      screenshotDom.onclick = () => screenshotHandle(params.player);
-      recordDom.onclick = () => recordHandle(recordDom, params)
+      divDom.setAttribute('style', 'z-index:10000')
       return divDom
     },
   })

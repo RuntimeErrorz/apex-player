@@ -35,7 +35,7 @@
 
 .video-js .vjs-mouse-display:after,
 .video-js .vjs-play-progress:after {
-    padding: 0 .4em .3em !important
+    padding: 0 .4em .3em
 }
 
 .video-js.vjs-ended .vjs-loading-spinner {
@@ -63,7 +63,7 @@
 
 .video-js {
     font-size: 14px;
-    overflow: hidden
+    /* overflow: hidden */
 }
 
 .video-js .vjs-control {
@@ -171,8 +171,8 @@
 }
 
 .video-js .vjs-progress-control:hover {
-    height: 1em;
-    top: -1em
+    height: 1.5em;
+    top: -1.5em
 }
 
 .video-js .vjs-control-bar {
@@ -279,7 +279,7 @@
 }
 
 .video-js .vjs-big-play-button {
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.45);
     font-size: 3.5em;
     border-radius: 50%;
     height: 2em !important;
@@ -290,63 +290,24 @@
 .video-js:hover .vjs-big-play-button,
 .video-js .vjs-big-play-button:focus,
 .video-js .vjs-big-play-button:active {
-    background-color: rgba(0, 0, 0, 0.35)
+    background-color: rgba(36, 131, 213, 0.9)
 }
 
 .video-js .vjs-loading-spinner {
-    border-color: rgba(255, 255, 255, 0.7)
+    border-color: rgba(36, 131, 213, 0.8)
 }
 
 .video-js .vjs-control-bar2 {
-    background-color: transparent
+    background-color: #000000
 }
 
 .video-js .vjs-control-bar {
-    background-color: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
     color: #ffffff;
-    font-size: 18px
+    font-size: 14px
 }
 
 .video-js .vjs-play-progress,
 .video-js .vjs-volume-level {
     background-color: #2483d5
 }
-
-.video-js .vjs-big-play-button {
-    height: 2em !important;
-    width: 2em !important;
-    line-height: 1.9em !important;
-    margin-top: -1em !important;
-    margin-left: -1em;
-    border-width: 3px
-}
-
-.video-js .vjs-icon-play:before,
-.video-js .vjs-big-play-button:before {
-    font-size: 50px;
-}
-
-.video-js .vjs-progress-holder {
-    font-size: 1.7em;
-    border-radius: 10px;
-}
-
-.video-js .vjs-progress-holder .vjs-play-progress,
-.video-js .vjs-progress-holder .vjs-load-progress,
-.video-js .vjs-progress-holder .vjs-load-progress div,
-.video-js .vjs-slider,
-.vjs-volume-level {
-    border-radius: 10px;
-}
-
-.video-js .vjs-load-progress {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-.vjs-playback-rate {
-    margin-right: 0.6em !important;
-}
-
-/* .vjs-control-bar {
-    margin-top: 20px !important;
-} */

@@ -6,13 +6,6 @@
   width: 100vw;
 }
 
-.container2 {
-  margin: 2vh 0;
-  display: flex;
-  /* justify-content: center;
-  align-items: center; */
-  width: 30vw;
-}
 
 .videosize {
   margin: 0 2vw;
@@ -25,6 +18,7 @@
   flex: 1;
   max-width: 46.3vw;
 }
+
 .vjs-invert-bt {
   cursor: pointer;
   font-size: 17pt !important;
@@ -53,24 +47,5 @@
 
 .slide-fade-leave-to {
   transform: translateX(5vw);
-  opacity: 0;
-}
-
-
-.vertical-slide-enter-from {
-  transform: translateY(10vh);
-  opacity: 1;
-}
-
-.vertical-slide-enter-active {
-  transition: all 0.5s ease-out;
-}
-
-.vertical-slide-leave-active {
-  transition: all 2s ease-out;
-}
-
-.vertical-slide-leave-to {
-  transform: translateY(50vh);
   opacity: 0;
 }

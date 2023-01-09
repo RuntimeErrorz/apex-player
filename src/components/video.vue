@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue"
+import { onMounted, onUnmounted, ref, watch, nextTick } from "vue"
 import type { Ref } from "vue"
 import videojs, { type VideoJsPlayer } from "video.js"
 import addQuality from "@/utils/quality/qualityPlugin.js"
 import addSnapshot from "@/utils/snapshot/snapshot.js"
-import { RecorderParams } from "@/utils/snapshot/snapshot.js"
+import { RecorderParams, screenshotHandle, recordHandle } from "@/utils/snapshot/snapshot.js"
 import invertColor from "@/utils/invert/invert.js"
 import addPixelate from "@/utils/pixelate/pixelate.js"
 import type { pixelatePositions } from "@/utils/pixelate/pixelate.js"
@@ -17,13 +17,35 @@ import "@/assets/css/video.css"
 let isPixelated = ref(false)
 let isInverted = ref(false)
 let fullscreen = ref(false)
-let volume = ref(0)
+let pixelateDialogVisible = ref(false)
+let snackbar = ref(false)
+
+watch(isInverted, () => {
+    if (isPixelated.value) {
+        setTimeout(() => {
+            addPixelate(playerInstance.value, pixelatePosition.value) //vue.NextTick
+        }, 200)
+    }
+})
+
+watch(isPixelated, (newValue) => {
+    const controlBar = document.getElementsByClassName("vjs-control-bar")[0]
+    if (!playerInstance.value)
+        throw new Error()
+    if (newValue) {
+        snackbar.value = true
+        controlBar.setAttribute('style', `position: relative;top: ${playerInstance.value.currentHeight() + 7}px; background-color:black!important`)
+    }
+    else {
+        controlBar.setAttribute('style', '')
+    }
+})
 
 let pixelatePosition: Ref<pixelatePositions> = ref({
     leftX: 0,
     leftY: 0,
-    rightX: 100,
-    rightY: 100
+    rightX: 50,
+    rightY: 50
 })
 
 let originalPosition: Ref<pixelatePositions>
@@ -46,8 +68,10 @@ function initPlayer() {
     pixelateButton.addClass("vjs-pixelate-bt")
     pixelateButton.el().innerHTML = "Pixelate"
     pixelateButton.el().addEventListener("click", () => {
-        if (fullscreen)
+        if (fullscreen.value)
             playerInstance.value?.exitFullscreen();
+        originalPosition = JSON.parse(JSON.stringify(pixelatePosition.value))
+        pixelateDialogVisible.value = true
     }
     )
 
@@ -57,17 +81,8 @@ function initPlayer() {
     })
     playerInstance.value?.on('fullscreenchange', () => {
         fullscreen.value = !fullscreen.value
-    })
-
-    document.getElementById('#vmr_video')?.addEventListener('mousemove', (event) => {
-        let inactivityTimeout: number | null = null;
-        playerInstance.value?.controls(true)
-        if (inactivityTimeout != null) {
-            clearTimeout(inactivityTimeout);
-        }
-        inactivityTimeout = setTimeout(function () {
-            playerInstance.value?.controls(false)
-        }, 0);
+        if (isPixelated.value)
+            isPixelated.value = !isPixelated.value
     })
 }
 
@@ -86,9 +101,21 @@ function invert() {
 
 onMounted(() => {
     addQuality();
-    addSnapshot(new RecorderParams(<Ref<VideoJsPlayer>>playerInstance, null, null, null, false));
+    addSnapshot();
     playerInstance.value = videojs(playerID.value, props.options, initPlayer)
+    const [screenshotDom, recordDom] = document.getElementsByClassName("vjs-custom-bar")[0].querySelectorAll('div')
+    screenshotDom.onclick = () => screenshotHandle(playerInstance, isPixelated.value, isInverted.value);
+    recordDom.onclick = () => recordHandle(recordDom, new RecorderParams(<Ref<VideoJsPlayer>>playerInstance, null, null, null, false), isPixelated.value, isInverted.value)
+
+    window.onresize = () => {
+        if (isPixelated.value) {
+            addPixelate(playerInstance.value, pixelatePosition.value)
+            const controlBar = document.getElementsByClassName("vjs-control-bar")[0]
+            controlBar.setAttribute('style', `position: relative;top: ${playerInstance.value.currentHeight() + 7}px; background-color:black!important`) //加防抖
+        }
+    }
 })
+
 onUnmounted(() => {
     if (playerInstance.value) {
         playerInstance.value.dispose()
@@ -97,84 +124,99 @@ onUnmounted(() => {
 </script>
  
 <template>
+    <canvas v-show="isPixelated" id="pixelate" class="pixelate"></canvas>
+    <v-snackbar v-model="snackbar" :timeout="3000">
+        您可以通过鼠标来涂抹马赛克。
+        <template v-slot:actions>
+            <v-btn color="blue" variant="text" @click="snackbar = false">
+                Close
+            </v-btn>
+        </template>
+    </v-snackbar>
     <div class="container" id="container">
-        <video id="video1" class="video-js videosize"></video>
+        <video id="video1" class="video-js videosize vjs-static-controls" width="640" height="264" controls
+            preload="auto" data-setup='{ "inactivityTimeout": 0 }'>
+        </video>
         <Transition name="slide-fade">
             <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         </Transition>
     </div>
-    <div>
-        <v-container>
-            <v-card>
-                <v-card-title style="margin-left: 10px; margin-top: 1vh;">
-                    <span class="text-h6">在画面上图画或拖动以选择或输入马赛克区域（左下为原点）</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-slider></v-slider>
-                            <v-col cols="6">
-                                <v-slider label="区域左下X坐标百分比" v-model="pixelatePosition.leftX" max="100" min="0">
-                                    <template v-slot:append>
-                                        <v-text-field v-model="pixelatePosition.leftX" hide-details single-line
-                                            density="compact" type="number" style="width: 100px"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-col>
-                            <v-col cols="6">
-                                <v-slider label="区域右上X坐标百分比" v-model="pixelatePosition.rightX" class="align-center"
-                                    max="100" :min="0" hide-details>
-                                    <template v-slot:append>
-                                        <v-text-field v-model="pixelatePosition.rightX" hide-details single-line
-                                            density="compact" type="number" style="width: 100px"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="6">
-                                <v-slider label="区域左下Y坐标百分比" v-model="pixelatePosition.leftY" class="align-center"
-                                    max="100" :min="0" hide-details>
-                                    <template v-slot:append>
-                                        <v-text-field v-model="pixelatePosition.leftY" hide-details single-line
-                                            density="compact" type="number" style="width: 100px"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-col>
-                            <v-col cols="6">
-                                <v-slider label="区域右上Y坐标百分比" v-model="pixelatePosition.rightY" class="align-center"
-                                    max="100" :min="0" hide-details>
-                                    <template v-slot:append>
-                                        <v-text-field v-model="pixelatePosition.rightY" hide-details single-line
-                                            density="compact" type="number" style="width: 100px"></v-text-field>
-                                    </template>
-                                </v-slider>
-                            </v-col>
-                        </v-row>
+    <v-dialog z-index="20000" v-model="pixelateDialogVisible" persistent width="60vw">
+        <v-card>
+            <v-card-title style="margin-left: 10px; margin-top: 1vh;">
+                <span class="text-h6">选择马赛克区域（左下为原点），马赛克区域可以直接涂抹</span>
+            </v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-slider label="区域左下X坐标百分比" v-model="pixelatePosition.leftX" class="align-center" max="100"
+                                :min="0" hide-details>
+                                <template v-slot:append>
+                                    <v-text-field v-model="pixelatePosition.leftX" hide-details single-line
+                                        density="compact" type="number" style="width: 100px"></v-text-field>
+                                </template>
+                            </v-slider>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-slider label="区域右上X坐标百分比" v-model="pixelatePosition.rightX" class="align-center"
+                                max="100" :min="0" hide-details>
+                                <template v-slot:append>
+                                    <v-text-field v-model="pixelatePosition.rightX" hide-details single-line
+                                        density="compact" type="number" style="width: 100px"></v-text-field>
+                                </template>
+                            </v-slider>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-slider label="区域左下Y坐标百分比" v-model="pixelatePosition.leftY" class="align-center" max="100"
+                                :min="0" hide-details>
+                                <template v-slot:append>
+                                    <v-text-field v-model="pixelatePosition.leftY" hide-details single-line
+                                        density="compact" type="number" style="width: 100px"></v-text-field>
+                                </template>
+                            </v-slider>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-slider label="区域右上Y坐标百分比" v-model="pixelatePosition.rightY" class="align-center"
+                                max="100" :min="0" hide-details>
+                                <template v-slot:append>
+                                    <v-text-field v-model="pixelatePosition.rightY" hide-details single-line
+                                        density="compact" type="number" style="width: 100px"></v-text-field>
+                                </template>
+                            </v-slider>
+                        </v-col>
+                    </v-row>
 
-                    </v-container>
-                </v-card-text>
-                <v-divider></v-divider>
-                <span class="font-weight-thin" style="margin-left: 26px; margin-top: 20px; font-size: 1rem;">
-                    初始默认值为左下X、Y坐标百分比为0；右上X、Y坐标百分比为100，即对全屏打码。
-                </span>
-                <v-card-actions style="margin-bottom: 5px; margin-top: 3vh;">
-                    <v-spacer></v-spacer>
-                    <v-btn variant="tonal" color="blue-darken-1" @click="() => {
-                        addPixelate(playerInstance, pixelatePosition)
-                        isPixelated = true
-                    }">
-                        保存
-                    </v-btn>
-                    <v-btn color="red darken-1" variant="tonal" @click="() => {
-                        isPixelated = false
-                    }">
-                        关闭马赛克
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-container>
-        <canvas v-show="isPixelated" id="pixelate" class="pixelate"></canvas>
-    </div>
-
+                </v-container>
+            </v-card-text>
+            <v-divider></v-divider>
+            <span class="font-weight-thin" style="margin-left: 26px; margin-top: 20px; font-size: 1.1rem;">
+                初始默认值为左下X、Y坐标百分比为0；右上X、Y坐标百分比为50，即对左下角打码。
+            </span>
+            <v-card-actions style="margin-bottom: 5px; margin-top: 3vh;">
+                <v-spacer></v-spacer>
+                <v-btn variant="tonal" @click="() => {
+                    pixelateDialogVisible = false
+                    pixelatePosition = originalPosition;
+                }">
+                    取消
+                </v-btn>
+                <v-btn variant="tonal" color="blue-darken-1" @click="() => {
+                    addPixelate(playerInstance, pixelatePosition)
+                    pixelateDialogVisible = false
+                    isPixelated = true
+                }">
+                    保存
+                </v-btn>
+                <v-btn v-show="isPixelated" color="red darken-1" variant="tonal" @click="() => {
+                    isPixelated = false
+                    pixelateDialogVisible = false
+                }">
+                    关闭马赛克
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>

@@ -14,10 +14,29 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
     const canvas = <HTMLCanvasElement>document.getElementById("pixelate")
     const vid = <HTMLVideoElement>player.el().querySelector('video')
 
-    let height = player.currentHeight()
-    const ratio = height / vid.videoHeight
+    let height: number
+    let width: number
+    let ratio: number
+    const originRatio = vid.videoWidth / vid.videoHeight
+    let currentRatio = player.currentWidth() / player.currentHeight()
+    let top = vid.offsetTop + vid.offsetParent?.offsetTop
+    let left = vid.offsetLeft + vid.offsetParent?.offsetLeft
 
-    const width = height * vid.videoWidth / vid.videoHeight
+
+    if (currentRatio > originRatio) {
+        height = player.currentHeight()
+        width = height * vid.videoWidth / vid.videoHeight
+        ratio = height / vid.videoHeight
+        left += (player.currentWidth() - width) / 2
+        canvas.setAttribute("style", `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`)
+    }
+    else {
+        width = player.currentWidth()
+        height = width * vid.videoHeight / vid.videoWidth
+        ratio = width / vid.videoWidth
+        top += (player.currentHeight() - height) / 2
+        canvas.setAttribute("style", `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`)
+    }
 
     let ctx = canvas.getContext('2d')
     if (!ctx)
@@ -36,8 +55,13 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
         throw new Error("")
     pathContext.lineCap = "round"
     pathContext.lineJoin = "round"
-    pathContext.lineWidth = 10
-    pathContext.strokeStyle = "red"
+    pathContext.lineWidth = 20
+
+    const x = width * positions.leftX / 100
+    const y = height * (100 - positions.rightY) / 100
+    const w = (positions.rightX - positions.leftX) / 100 * width
+    const h = (positions.rightY - positions.leftY) / 100 * height
+    pathContext.fillRect(x / ratio, y / ratio, w / ratio, h / ratio)
 
     canvas.addEventListener("mousedown", mouseHandle)
     function mouseHandle(e: MouseEvent) {
@@ -53,14 +77,14 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
         }
         pathContext?.stroke()
     }
-    canvas.addEventListener("click", () => {
+    canvas.onclick = () => {
         if (vid.paused) {
             vid.play();
         }
         else {
             vid.pause();
         }
-    })
+    }
     ctx.scale(ratio, ratio)
     function draw() {
         sourceContext?.drawImage(vid, 0, 0)
