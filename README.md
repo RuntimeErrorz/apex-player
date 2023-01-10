@@ -1,6 +1,7 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 
 <!-- PROJECT LOGO -->
+
 <div align="center">
 <h3 align="center">基于Video.js的深度定制播放器</h3>
 
@@ -39,7 +40,7 @@
 
 ## 项目简介
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]]
 
 本项目是一个基于Video.js深度构建的多功能播放器。
 
@@ -90,13 +91,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 * Résumé：https://github.com/RuntimeErrorz/apex-player/blob/master/曾德御简历.pdf
 
 ## 致谢
+
 * [GitHub Pages](https://pages.github.com)
 * [Materialize CSS](https://github.com/dogfalo/materialize)
 * [Stack Overflow](https://stackoverflow.com/)
 * [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
-
 * [Choose an Open Source License](https://choosealicense.com)
-
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
@@ -104,3 +104,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Vite-url]: "https://vitejs.cn/logo.svg"
 [Vuetify]: "https://next.vuetifyjs.com/en/"
 [Vuetify-url]: "https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-light.svg"
+[product-screenshot]: README_Pic/screenshot.png
