@@ -34,7 +34,7 @@
 
 ## 项目简介
 
-![Product Name Screen Shot][product-screenshot](https://runtimeerrorz.github.io/player/)
+![Product Name Screen Shot][product-screenshot]
 
 本项目是一个基于Video.js深度构建的多功能播放器。
 
@@ -95,10 +95,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/ 
 
-[Vite.js]: "https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite"
-[Vite-url]: "https://vitejs.cn/"
+[Vite.js]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite
+[Vite-url]: https://vitejs.cn/
 
-[Vuetify.js]: "[https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite](https://img.shields.io/badge/Vuetify-ffffff?style=for-the-badge&logo=vuetify&logoColor=1697F6)"
-[Vuetify-url]: "https://next.vuetifyjs.com/"
+[Vuetify.js]: https://img.shields.io/badge/Vuetify-aeddff?style=for-the-badge&logo=vuetify&logoColor=1697F6
+[Vuetify-url]: https://next.vuetifyjs.com/
 
 [product-screenshot]: README_PIC/screenshot.png
