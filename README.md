@@ -40,7 +40,7 @@
 
 ## 项目简介
 
-[![Product Name Screen Shot][product-screenshot]]
+![Product Name Screen Shot][product-screenshot]
 
 本项目是一个基于Video.js深度构建的多功能播放器。
 
