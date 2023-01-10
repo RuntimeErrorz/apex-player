@@ -40,9 +40,9 @@
 
 ### 技术栈
 
-* [![Vue][Vue.js]][Vue-url]
-* [![Vite][Vite.js]][Vite-url]
-* [![Vuetify][Vuetify.js]][Vuetify-url]
+* [Vue][Vue-url]
+* [Vite][Vite-url]
+* [Vuetify][Vuetify-url]
 
 ## 项目配置
 
@@ -63,13 +63,17 @@ npm run dev
 - [X] 录屏功能
 - [X] 反色播放
 - [X] 部分打码（包括涂抹选择与输入位置选择打码区域）
+- [X] mov播放
+- [X] 支持编码格式为H.265格式视频播放（Chrome在版本号107以上和Edge版本号12开始已经支持HEVC https://caniuse.com/?search=hevc）
+- [X] 支持直播
+  - [ ] HLS
+  - [ ] RTMP（强依赖Flash，应该也没办法支持了）
 
 ### 未来计划
 
-- [X] 支持mov与flv格式的视频播放
-- [X] 支持编码格式为H.265格式视频播放
-- [X] 支持直播
-- [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑（大作业内容中并未细化）
+- [ ] flv格式的视频播放
+- [ ] 引入h265web.js提高播放HEVC视频兼容性
+- [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
 
 ## 开源许可证
 
@@ -93,12 +97,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 * [Choose an Open Source License](https://choosealicense.com)
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/ 
-
+[Vue-url]: https://vuejs.org/
 [Vite.js]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite
 [Vite-url]: https://vitejs.cn/
-
 [Vuetify.js]: https://img.shields.io/badge/Vuetify-aeddff?style=for-the-badge&logo=vuetify&logoColor=1697F6
 [Vuetify-url]: https://next.vuetifyjs.com/
-
 [product-screenshot]: README_PIC/screenshot.png

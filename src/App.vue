@@ -6,16 +6,17 @@
 <script setup lang='ts'>
 import sd from "@/assets/videos/sd.mp4"
 import hd from "@/assets/videos/hd.mp4"
+import hevc from "@/assets/videos/hevc.mp4"
 import MyVideo from "./components/video.vue"
 const srcs = [
   {
-    src: sd,
+    src: hevc,
     type: 'video/mp4',
     label: 'SD',
     res: 360
   },
   {
-    src: hd,
+    src: hevc,
     type: 'video/mp4',
     label: 'HD',
     res: 720
