@@ -104,4 +104,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Vite-url]: "https://vitejs.cn/logo.svg"
 [Vuetify]: "https://next.vuetifyjs.com/en/"
 [Vuetify-url]: "https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-light.svg"
-[product-screenshot]: README_Pic/screenshot.png
+[product-screenshot]: README_PIC/screenshot.png
