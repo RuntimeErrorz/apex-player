@@ -61,12 +61,12 @@ const playerInstance: Ref<VideoJsPlayer | undefined> = ref()
 function initPlayer() {
     let invertButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
     invertButton.addClass("vjs-invert-bt")
-    invertButton.el().innerHTML = "Invert"
+    invertButton.el().innerHTML = "反色"
     invertButton.el().addEventListener("click", invert)
 
     let pixelateButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
     pixelateButton.addClass("vjs-pixelate-bt")
-    pixelateButton.el().innerHTML = "Pixelate"
+    pixelateButton.el().innerHTML = "打码"
     pixelateButton.el().addEventListener("click", () => {
         if (fullscreen.value)
             playerInstance.value?.exitFullscreen();

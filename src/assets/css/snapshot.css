@@ -28,7 +28,7 @@
 }
 
 .snapshot-img {
-  width: 25pt;
+  width: 20pt;
   margin-right: 10px;
 }
 
@@ -38,7 +38,7 @@
 
 .ml10 {
   flex: 1;
-  font-size: 25pt !important;
+  font-size: 20pt !important;
 }
 
 .ac {
