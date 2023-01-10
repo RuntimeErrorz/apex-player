@@ -1,16 +1,10 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-
-<!-- PROJECT LOGO -->
-
 <div align="center">
 <h3 align="center">基于Video.js的深度定制播放器</h3>
 
 <p align="center">
-    <a href="https://github.com/othneildrew/Best-README-Template">在线演示</a>
+    <a href="https://runtimeerrorz.github.io/player/">在线演示</a>
   </p>
 </div>
-
-<!-- TABLE OF CONTENTS -->
 
 <details>
   <summary>目录</summary>
@@ -40,15 +34,15 @@
 
 ## 项目简介
 
-![Product Name Screen Shot][product-screenshot]
+![Product Name Screen Shot][product-screenshot](https://runtimeerrorz.github.io/player/)
 
 本项目是一个基于Video.js深度构建的多功能播放器。
 
 ### 技术栈
 
-* [Vue][Vue-url]
-* [Vite][Vite-url]
-* [Vuetify][Vuetify-url]
+* [![Vue][Vue.js]][Vue-url]
+* [![Vite][Vite.js]][Vite-url]
+* [![Vuetify][Vuetify.js]][Vuetify-url]
 
 ## 项目配置
 
@@ -99,9 +93,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 * [Choose an Open Source License](https://choosealicense.com)
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Vite]: "https://vitejs.cn/"
-[Vite-url]: "https://vitejs.cn/logo.svg"
-[Vuetify]: "https://next.vuetifyjs.com/en/"
-[Vuetify-url]: "https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-light.svg"
+[Vue-url]: https://vuejs.org/ 
+
+[Vite.js]: "https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite"
+[Vite-url]: "https://vitejs.cn/"
+
+[Vuetify.js]: "[https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite](https://img.shields.io/badge/Vuetify-ffffff?style=for-the-badge&logo=vuetify&logoColor=1697F6)"
+[Vuetify-url]: "https://next.vuetifyjs.com/"
+
 [product-screenshot]: README_PIC/screenshot.png
