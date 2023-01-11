@@ -1,11 +1,11 @@
 <template>
-  <v-dialog v-model="dialog" persistent style="width: 60vw;">
+  <v-dialog v-model="dialog" style="width: 60vw;">
     <v-card>
       <v-card-title>
         <span class="text-h5">选择视频源</span>
       </v-card-title>
       <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-        <v-tab v-for="item in items" :value="item">
+        <v-tab v-for="item in tabTitleItems" :value="item">
           {{ item }}
         </v-tab>
       </v-tabs>
@@ -64,7 +64,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in urls" :key="item.format">
+                <tr v-for="item in recommendURL" :key="item.format">
                   <td>{{ item.format }}</td>
                   <td>{{ item.url }}</td>
                 </tr>
@@ -79,11 +79,10 @@
         <v-btn variant="tonal" @click="() => { dialog = false, srcs = reactive([...defaultSrcs]) }">
           使用默认值
         </v-btn>
-        <v-btn variant="tonal" color="green-darken-1" @click="() => { dialog = false, srcs = handleFile(fileSrcs) }">
+        <v-btn variant="tonal" color="green-darken-1" @click="() => { dialog = false, srcs = createBlob(fileSrcs) }">
           上传文件
         </v-btn>
-        <v-btn variant="tonal" color="blue-darken-1"
-          @click="() => { dialog = false, srcs = addType(urlSrcs) }">
+        <v-btn variant="tonal" color="blue-darken-1" @click="() => { dialog = false, srcs = addType(urlSrcs) }">
           使用URL
         </v-btn>
       </v-card-actions>
@@ -98,33 +97,39 @@ import { ref, reactive } from "vue"
 import sd from "@/assets/videos/sd.mp4"
 import hd from "@/assets/videos/hd.mp4"
 import MyVideo from "./components/video.vue"
-const dialog = ref(true)
-const tab = ref(null)
-const items = reactive(['上传文件', '使用URL'])
+const dialog = ref(true) //对象框显示控制
+const tab = ref(null) //tab切换所需
+const tabTitleItems = reactive(['上传文件', '使用URL']) //tab标题
 
-const filenameToMimeType = {
-  'flv': "video/x-flv",
-  'mp4': "video/mp4",
-  'mov': "video/mp4",
-  'm3u8': "application/x-mpegurl"
+interface ImimeTypesMap { 
+  flv: string
+  mp4: string
+  mov: string
+  m3u8: string
 }
 
+const mimeTypesMap: ImimeTypesMap = { //根据文件类型转化MediaType
+  flv: "video/x-flv",
+  mp4: "video/mp4",
+  mov: "video/mp4",
+  m3u8: "application/x-mpegurl"
+}
 
-interface srcInterface {
+interface Isrc {
   src: string;
   type: string;
   label: string;
 }
 
-let srcs: Array<srcInterface>
+let srcs: Array<Isrc> //真正播放传参的源
 
-let urlSrcs = reactive([{
+let urlSrcs = reactive([{//输入的URL数组
   src: "",
   type: '',
   label: '',
 },])
 
-let fileSrcs = reactive([
+let fileSrcs = reactive([//输入的文件数组
   {
     files: [],
     type: '',
@@ -132,7 +137,7 @@ let fileSrcs = reactive([
   }
 ])
 
-const urls = [
+const recommendURL = [ //供参考的视频源
   {
     format: "H.264/MPEG-4 AVC",
     url: "https://vjs.zencdn.net/v/oceans.mp4"
@@ -155,20 +160,13 @@ const urls = [
   },
 ]
 
-const addType = (srcs: Array<srcInterface>) => {
-  for (const src of srcs) {
-    const format = src.src.split(".").pop()
-    if (format === 'm3u8')
-      src.type = "application/x-mpegurl"
-    else if (format === 'flv')
-      src.type = "video/x-flv"
-    else
-      src.type = "video/mp4"
-  }
+const addType = (srcs: Array<Isrc>) => {//对URL形式的源添加类型字段
+  for (const src of srcs)
+    src.type = mimeTypesMap[<string>src.src.split(".").pop() as keyof typeof mimeTypesMap]
   return srcs
 }
 
-const resetSource = () => {
+const resetSource = () => { //组件换源，需要清空源
   urlSrcs = reactive([{
     src: "",
     type: '',
@@ -186,19 +184,19 @@ const resetSource = () => {
   dialog.value = true
 }
 
-function handleFile(fileList: Array<{ files: Array<File>, type: string, label: string }>) {
+function createBlob(fileList: Array<{ files: Array<File>, type: string, label: string }>) { //将上传的文件转化为Blob
   let newArray = []
   for (const file of fileList) {
     newArray.push({
       src: URL.createObjectURL(file.files[0]),
-      type: filenameToMimeType[<string>file.files[0].name.split('.').pop()],
+      type: mimeTypesMap[<string>file.files[0].name.split('.').pop() as keyof typeof mimeTypesMap],
       label: file.label
     })
   }
   return reactive(newArray)
 }
 
-let defaultSrcs = [{
+let defaultSrcs = [{ //默认值用于展示清晰度切换
   src: sd,
   type: 'video/mp4',
   label: 'SD',
@@ -209,7 +207,7 @@ let defaultSrcs = [{
   label: 'HD',
 }]
 
-const options = {
+const options = { //videojs选项
   flvjs: {
     mediaDataSource: {
       isLive: false,
@@ -230,7 +228,7 @@ const options = {
     }
   },
   playbackRates: [0.5, 1, 1.5, 2]
-}
+} 
 </script>
 <style>
 
