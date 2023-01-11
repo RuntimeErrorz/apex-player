@@ -88,6 +88,13 @@ const changeDialog = () => {
       label: '',
     },
   ]
+  fileSrcs = [
+    {
+      files: [],
+      type: 'video/mp4',
+      label: ''
+    }
+  ]
 }
 
 function handleFile(fileList: Array<{ files: Array<File>, type: string, label: string }>) {
