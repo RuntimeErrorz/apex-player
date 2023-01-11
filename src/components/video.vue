@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch, nextTick } from "vue"
+import { defineEmits } from "vue"
 import type { Ref } from "vue"
 import videojs, { type VideoJsPlayer } from "video.js"
 import addQuality from "@/utils/quality/qualityPlugin.js"
@@ -19,6 +20,8 @@ let isInverted = ref(false)
 let fullscreen = ref(false)
 let pixelateDialogVisible = ref(false)
 let snackbar = ref(false)
+
+const emit = defineEmits(['changeDialog'])
 
 watch(isInverted, () => {
     if (isPixelated.value) {
@@ -55,6 +58,10 @@ const props = defineProps<{
     options: Object
 }>()
 
+watch(props, () => {
+    playerInstance.value?.updateSrc(props.srcs)
+})
+
 const playerID = ref('video1')
 const playerInstance: Ref<VideoJsPlayer | undefined> = ref()
 
@@ -75,7 +82,14 @@ function initPlayer() {
     }
     )
 
-    playerInstance.value?.updateSrc(props.srcs)
+    let resetSourceButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
+    resetSourceButton.addClass("vjs-pixelate-bt")
+    resetSourceButton.el().innerHTML = "换源"
+    resetSourceButton.el().addEventListener("click", () => {
+        emit('changeDialog')
+    }
+    )
+
     playerInstance.value?.on('resolutionchange', function () {
         console.info('Source changed to %s', playerInstance.value?.src())
     })
@@ -135,11 +149,11 @@ onUnmounted(() => {
         </template>
     </v-snackbar>
     <div class="container" id="container">
-        <video id="video1" class="video-js videosize vjs-static-controls" width="640" height="264" controls
-            preload="auto" data-setup='{ "inactivityTimeout": 0 }'>
+        <video id="video1" crossorigin="anonymous" class="video-js videosize vjs-static-controls" width="640"
+            height="264" controls preload="auto" data-setup='{ "inactivityTimeout": 0 }'>
         </video>
-        <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         <Transition name="slide-fade">
+            <canvas v-show="isInverted" id="invert" class="invert"></canvas>
         </Transition>
     </div>
     <v-dialog z-index="1003" v-model="pixelateDialogVisible" persistent width="60vw">
