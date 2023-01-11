@@ -57,6 +57,8 @@ npm run dev
 
 ### 已实现
 
+- [X] 上传文件
+- [X] 根据URL播放
 - [X] 视频播放
 - [X] 切换清晰度并记忆进度
 - [X] 截屏功能（包括反转与马赛克后截屏）
@@ -96,6 +98,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 * [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
 * [Choose an Open Source License](https://choosealicense.com)
 * https://materialdesignicons.com/
+* https://file-examples.com/wp-content/uploads/2018/04/file_example_MOV_480_700kB.mov
+* ffmpeg
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/

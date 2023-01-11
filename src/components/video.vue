@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import videojs, { type VideoJsPlayer } from "video.js"
+import 'videojs-flvjs-es6'
 import { onMounted, onUnmounted, ref, watch, nextTick } from "vue"
 import { defineEmits } from "vue"
 import type { Ref } from "vue"
-import videojs, { type VideoJsPlayer } from "video.js"
+
 import addQuality from "@/utils/quality/qualityPlugin.js"
 import addSnapshot from "@/utils/snapshot/snapshot.js"
 import { RecorderParams, screenshotHandle, recordHandle } from "@/utils/snapshot/snapshot.js"
@@ -21,12 +23,12 @@ let fullscreen = ref(false)
 let pixelateDialogVisible = ref(false)
 let snackbar = ref(false)
 
-const emit = defineEmits(['changeDialog'])
+const emit = defineEmits(['resetSource'])
 
 watch(isInverted, () => {
     if (isPixelated.value) {
         nextTick(() => {
-            addPixelate(playerInstance.value, pixelatePosition.value) //nextTick无用？
+            addPixelate(playerInstance.value, pixelatePosition.value) //nextTick有时失效，初步考虑性能问题
         })
     }
 })
@@ -86,7 +88,7 @@ function initPlayer() {
     resetSourceButton.addClass("vjs-pixelate-bt")
     resetSourceButton.el().innerHTML = "换源"
     resetSourceButton.el().addEventListener("click", () => {
-        emit('changeDialog')
+        emit('resetSource')
     }
     )
 

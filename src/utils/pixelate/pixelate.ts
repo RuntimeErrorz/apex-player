@@ -37,7 +37,7 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
         top += (player.currentHeight() - height) / 2
         canvas.setAttribute("style", `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`)
     }
-
+    console.log(width, height, currentRatio, originRatio)
     let ctx = canvas.getContext('2d')
     if (!ctx)
         throw new Error()
