@@ -95,6 +95,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 * [Stack Overflow](https://stackoverflow.com/)
 * [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
 * [Choose an Open Source License](https://choosealicense.com)
+* https://materialdesignicons.com/
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
