@@ -326,10 +326,10 @@ onUnmounted(() => {
           variant="tonal"
           color="blue-darken-1"
           @click="() => {
-                    addPixelation(<VideoJsPlayer>playerInstance, pixelatePosition)
-                    pixelateDialogVisible = false
-                    isPixelated = true
-                }"
+          addPixelation(<VideoJsPlayer>playerInstance, pixelatePosition)
+          pixelateDialogVisible = false
+          isPixelated = true
+        }"
         >
           保存
         </v-btn>
@@ -367,7 +367,7 @@ onUnmounted(() => {
 }
 
 .invert {
-  flex: 1;
+  width: 46vw;
   margin: 0 2vw;
 }
 
