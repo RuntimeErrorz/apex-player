@@ -182,27 +182,29 @@ const resetSource = () => { //组件换源，需要清空源
 }
 
 function createBlob(fileList: Array<{ files: Array<File>, type: string, label: string }>) { //将上传的文件转化为Blob
-  let newArray = []
+  let temp = []
   for (const file of fileList) {
-    newArray.push({
+    temp.push({
       src: URL.createObjectURL(file.files[0]),
       type: mimeTypesMap[<string>file.files[0].name.split('.').pop() as keyof typeof mimeTypesMap],
       label: file.label
     })
   }
-  return reactive(newArray)
+  return reactive(temp)
 }
 
-let defaultSrcs = [{ //默认值用于展示清晰度切换
-  src: sd,
-  type: 'video/mp4',
-  label: 'SD',
-},
-{
-  src: hd,
-  type: 'video/mp4',
-  label: 'HD',
-}]
+let defaultSrcs = [
+  {
+    src: hd,
+    type: 'video/mp4',
+    label: 'HD',
+  },
+  { //默认值用于展示清晰度切换
+    src: sd,
+    type: 'video/mp4',
+    label: 'SD',
+  }
+]
 
 const options = { //videojs选项
   flvjs: {

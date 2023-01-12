@@ -17,7 +17,6 @@
   cursor: pointer;
 }
 
-/* 开始录制 闪烁 */
 .record-process {
   height: 25pt;
   width: 25pt;
@@ -64,7 +63,6 @@
 }
 
 .vjs-has-started .vjs-custom-bar {
-  /* display: flex; */
   visibility: visible;
   opacity: 1;
   transition: visibility 0.1s, opacity 0.1s;
@@ -92,7 +90,6 @@
 .vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-custom-bar {
   opacity: 0;
   visibility: visible;
-  /*visibility: hidden;*/
 }
 
 .vjs-has-started.vjs-no-flex .vjs-custom-bar {
