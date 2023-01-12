@@ -1,43 +1,55 @@
+/**
+ * ------------------------------------------------------------------
+ * 此ES Module导出了Pixelate接口、以及addPiexelation函数；
+ * 另外定义了pixelate函数、createImgData函数
+ * ------------------------------------------------------------------
+ */
+
 import type { VideoJsPlayer } from "video.js";
 
-export interface pixelatePositions {
+export interface PixelatePosition { //请注意这里的数字均为百分比
     leftX: number;
     leftY: number;
     rightX: number;
     rightY: number;
 }
 
-export default function addPixelate(player: VideoJsPlayer | undefined, positions: pixelatePositions) {
-    if (!player)
-        throw new Error("Pixelate is null")
-
+/** 
+ * 接受播放器实例和马赛克位置，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择买塞克位置的功能。
+ *@param    {VideoJsPlayer}     player      播放器实例
+ *@param    {PixelatePosition}  positions   马赛克位置
+ *@returns  void
+ *@date     2023-01-12
+ *@author   RuntimeErroz<dariuszeng@qq.com>
+**/
+export default function addPixelation(player: VideoJsPlayer, positions: PixelatePosition) {
     const canvas = <HTMLCanvasElement>document.getElementById("pixelate")
-    const vid = <HTMLVideoElement>player.el().querySelector('video')
+    const video = <HTMLVideoElement>player.el().querySelector('video')
 
     let height: number
     let width: number
     let ratio: number
-    const originRatio = vid.videoWidth / vid.videoHeight
-    let currentRatio = player.currentWidth() / player.currentHeight()
-    let top = vid.offsetTop + vid.offsetParent?.offsetTop
-    let left = vid.offsetLeft + vid.offsetParent?.offsetLeft
+    const originRatio = video.videoWidth / video.videoHeight
+    const currentRatio = player.currentWidth() / player.currentHeight()
 
+    let videoParent = <HTMLElement>video.offsetParent
+    let top = video.offsetTop + videoParent.offsetTop
+    let left = video.offsetLeft + videoParent.offsetLeft
 
     if (currentRatio > originRatio) {
         height = player.currentHeight()
-        width = height * vid.videoWidth / vid.videoHeight
-        ratio = height / vid.videoHeight
+        width = height * video.videoWidth / video.videoHeight
+        ratio = height / video.videoHeight
         left += (player.currentWidth() - width) / 2
         canvas.setAttribute("style", `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`)
     }
     else {
         width = player.currentWidth()
-        height = width * vid.videoHeight / vid.videoWidth
-        ratio = width / vid.videoWidth
+        height = width * video.videoHeight / video.videoWidth
+        ratio = width / video.videoWidth
         top += (player.currentHeight() - height) / 2
         canvas.setAttribute("style", `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`)
     }
-    console.log(width, height, currentRatio, originRatio)
     let ctx = canvas.getContext('2d')
     if (!ctx)
         throw new Error()
@@ -78,16 +90,16 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
         pathContext?.stroke()
     }
     canvas.onclick = () => {
-        if (vid.paused) {
-            vid.play();
+        if (video.paused) {
+            video.play();
         }
         else {
-            vid.pause();
+            video.pause();
         }
     }
     ctx.scale(ratio, ratio)
     function draw() {
-        sourceContext?.drawImage(vid, 0, 0)
+        sourceContext?.drawImage(video, 0, 0)
         let sourceImgData = sourceContext?.getImageData(0, 0, width, height)
         if (!ctx)
             throw new Error("")
@@ -104,6 +116,14 @@ export default function addPixelate(player: VideoJsPlayer | undefined, positions
     requestAnimationFrame(draw)
 }
 
+/** 
+ * 接受ImageData的长和宽，返回一个空的ImgData。
+ *@param    {number}      width      所需ImgData的宽度
+ *@param    {number}      height     所需ImgData的高度
+ *@returns  {ImgData}     马赛克数据
+ *@date     2023-01-12
+ *@author   RuntimeErroz<dariuszeng@qq.com>
+**/
 function createImageData(width: number, height: number) {
     let canvas = document.createElement('canvas')
     canvas.width = width;
@@ -113,20 +133,28 @@ function createImageData(width: number, height: number) {
     return imageData;
 }
 
-
-function pixelate(srcImageData: ImageData, mosaicWidth: number, mosaicHeight: number) {
+/** 
+ * 接受ImageData类型的源数据和马赛克的长与宽，返回打码后的ImgData。
+ *@param    {ImageData}   srcImageData         源数据
+ *@param    {number}      pixelationWidth      马赛克宽度
+ *@param    {number}      pixelationHeight     马赛克高度
+ *@returns  {ImgData}     马赛克数据
+ *@date     2023-01-12
+ *@author   RuntimeErroz<dariuszeng@qq.com>
+**/
+function pixelate(srcImageData: ImageData, pixelationWidth: number, pixelationHeight: number) {
     let srcData = srcImageData.data,
         imgWidth = srcImageData.width,
         imgHeight = srcImageData.height,
         imageData = createImageData(imgWidth, imgHeight),
         data = imageData?.data, w, h, r, g, b, pixelIndex, pixelCount;
 
-    for (let x = 0; x < imgWidth; x += mosaicWidth) {
-        if (mosaicWidth <= imgWidth - x) { w = mosaicWidth; }
+    for (let x = 0; x < imgWidth; x += pixelationWidth) {
+        if (pixelationWidth <= imgWidth - x) { w = pixelationWidth; }
         else { w = imgWidth - x; }
 
-        for (let y = 0; y < imgHeight; y += mosaicHeight) {
-            if (mosaicHeight <= imgHeight - y) { h = mosaicHeight; }
+        for (let y = 0; y < imgHeight; y += pixelationHeight) {
+            if (pixelationHeight <= imgHeight - y) { h = pixelationHeight; }
             else { h = imgHeight - y; }
 
             r = g = b = 0;
@@ -139,7 +167,7 @@ function pixelate(srcImageData: ImageData, mosaicWidth: number, mosaicHeight: nu
                 }
             }
 
-            pixelCount = w * h; // モザイクのピクセル数            
+            pixelCount = w * h;
             r = Math.round(r / pixelCount);
             g = Math.round(g / pixelCount);
             b = Math.round(b / pixelCount);

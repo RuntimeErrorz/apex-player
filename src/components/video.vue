@@ -6,13 +6,13 @@ import { defineEmits } from "vue"
 import type { Ref } from "vue"
 
 import addQuality from "@/utils/quality/qualityPlugin.js"
-import addSnapshot from "@/utils/snapshot/snapshot.js"
+import customiseSidebar from "@/utils/snapshot/snapshot.js"
 import { RecorderParams, screenshotHandle, recordHandle } from "@/utils/snapshot/snapshot.js"
 import invertColor from "@/utils/invert/invert.js"
-import addPixelate from "@/utils/pixelate/pixelate.js"
-import type { pixelatePositions } from "@/utils/pixelate/pixelate.js"
+import addPixelation from "@/utils/pixelate/pixelate.js"
+import type { PixelatePosition } from "@/utils/pixelate/pixelate.js"
 
-import "@/assets/css/quality.css" 
+import "@/assets/css/quality.css"
 import "@/assets/css/snapshot.css"
 import "@/assets/css/skin.css"
 import "@/assets/css/video.css"
@@ -23,17 +23,32 @@ let fullscreen = ref(false)
 let pixelateDialogVisible = ref(false)
 let snackbar = ref(false)
 
-const emit = defineEmits(['resetSource'])
+let pixelatePosition: Ref<PixelatePosition> = ref({ //打码的位置
+    leftX: 0,
+    leftY: 0,
+    rightX: 50,
+    rightY: 50
+})
 
-watch(isInverted, () => {
+let originalPosition: Ref<PixelatePosition> //临时变量用于储存源位置
+
+const props = defineProps<{ //父组件传来的用于初始化video的值
+    srcs: Array<Object>,
+    options: Object
+}>()
+const playerID = ref('video1')
+const playerInstance: Ref<VideoJsPlayer | undefined> = ref() //播放器实例
+const emit = defineEmits(['resetSource']) //子组件emit重设源
+
+watch(isInverted, () => { //监视反色状态变化时重绘马赛克
     if (isPixelated.value) {
         nextTick(() => {
-            addPixelate(playerInstance.value, pixelatePosition.value) //nextTick有时失效，初步考虑性能问题
+            addPixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value) //nextTick有时失效，初步考虑性能问题
         })
     }
 })
 
-watch(isPixelated, (newValue) => {
+watch(isPixelated, (newValue) => { //监视打码移动control bar到下方
     const controlBar = document.getElementsByClassName("vjs-control-bar")[0]
     if (!playerInstance.value)
         throw new Error()
@@ -46,28 +61,13 @@ watch(isPixelated, (newValue) => {
     }
 })
 
-let pixelatePosition: Ref<pixelatePositions> = ref({
-    leftX: 0,
-    leftY: 0,
-    rightX: 50,
-    rightY: 50
-})
-
-let originalPosition: Ref<pixelatePositions>
-
-const props = defineProps<{
-    srcs: Array<Object>,
-    options: Object
-}>()
-
-watch(props, () => {
+watch(props, () => { //当源变化时，更新源
     playerInstance.value?.updateSrc(props.srcs)
 })
 
-const playerID = ref('video1')
-const playerInstance: Ref<VideoJsPlayer | undefined> = ref()
 
-function initPlayer() {
+
+function initPlayer() { //初始化实例的回调函数。添加反色、打码、换源按钮，并监听全屏更换
     let invertButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
     invertButton.addClass("vjs-invert-bt")
     invertButton.el().innerHTML = "反色"
@@ -92,9 +92,6 @@ function initPlayer() {
     }
     )
 
-    playerInstance.value?.on('resolutionchange', function () {
-        console.info('Source changed to %s', playerInstance.value?.src())
-    })
     playerInstance.value?.on('fullscreenchange', () => {
         fullscreen.value = !fullscreen.value
         if (isPixelated.value)
@@ -102,7 +99,7 @@ function initPlayer() {
     })
 }
 
-function invert() {
+function invert() { //反色控制函数
     if (!isInverted.value) {
         isInverted.value = true;
         if (fullscreen.value) {
@@ -115,9 +112,9 @@ function invert() {
     }
 }
 
-onMounted(() => {
+onMounted(() => { //添加质量插件，添加截图与录像，监听resize
     addQuality();
-    addSnapshot();
+    customiseSidebar();
     playerInstance.value = videojs(playerID.value, props.options, initPlayer)
     const [screenshotDom, recordDom] = document.getElementsByClassName("vjs-custom-bar")[0].querySelectorAll('div')
     screenshotDom.onclick = () => screenshotHandle(playerInstance, isPixelated.value, isInverted.value);
@@ -126,7 +123,7 @@ onMounted(() => {
 
     window.onresize = () => {
         if (isPixelated.value) {
-            addPixelate(playerInstance.value, pixelatePosition.value)
+            addPixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value)
             const controlBar = document.getElementsByClassName("vjs-control-bar")[0]
             controlBar.setAttribute('style', `position: relative;top: ${playerInstance.value.currentHeight() + 7}px; background-color:black!important`) //加防抖
         }
@@ -221,7 +218,7 @@ onUnmounted(() => {
                     取消
                 </v-btn>
                 <v-btn variant="tonal" color="blue-darken-1" @click="() => {
-                    addPixelate(playerInstance, pixelatePosition)
+                    addPixelation(<VideoJsPlayer>playerInstance, pixelatePosition)
                     pixelateDialogVisible = false
                     isPixelated = true
                 }">

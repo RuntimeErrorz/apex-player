@@ -1,13 +1,28 @@
+/**
+ * ------------------------------------------------------------------
+ * 此ES Module导出了函数名为invertColor的函数。
+ * ------------------------------------------------------------------
+ */
+
 import type { VideoJsPlayer } from "video.js"
-export default function invertColor(player: VideoJsPlayer) {
+
+/** 
+ * 接受一个播放器实例，将其中的画面反色显示到ID为invert的canvas元素上。
+ *@param    {VideoJsPlayer}  player   播放器实例
+ *@returns  void
+ *@date     2023-01-12
+ *@author   RuntimeErroz<dariuszeng@qq.com>
+**/
+export default function invertColor(player: VideoJsPlayer) { 
     let canv = <HTMLCanvasElement>document.getElementById("invert")
     let cxt = <CanvasRenderingContext2D>canv.getContext('2d', { willReadFrequently: true })
+    const video = <HTMLVideoElement>player.el().querySelector('video')
 
-    const vid = <HTMLVideoElement>player.el().querySelector('video')
-    canv.width = vid.videoWidth;
-    canv.height = vid.videoHeight;
+    canv.width = video.videoWidth;
+    canv.height = video.videoHeight;
+
     function effectInvert() {
-        cxt.drawImage(vid, 0, 0, canv.width, canv.height);
+        cxt.drawImage(video, 0, 0, canv.width, canv.height);
         let vidData = cxt.getImageData(0, 0, canv.width, canv.height);
 
         for (let z = 0; z < vidData.data.length; z += 4) {
@@ -22,11 +37,11 @@ export default function invertColor(player: VideoJsPlayer) {
     requestAnimationFrame(effectInvert)
 
     canv.addEventListener('click', function () {
-        if (vid.paused) {
-            vid.play();
+        if (video.paused) {
+            video.play();
         }
         else {
-            vid.pause();
+            video.pause();
         }
     });
 }
