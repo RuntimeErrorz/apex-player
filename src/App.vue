@@ -1,47 +1,59 @@
 <template>
-  <v-dialog v-model="dialog" style="width: 60vw;">
+  <v-dialog v-model="dialog" style="width: 60vw">
     <v-card>
       <v-card-title>
         <span class="text-h5">选择视频源</span>
       </v-card-title>
       <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-        <v-tab v-for="item in tabTitleItems" :value="item">
+        <v-tab v-for="item in tabTitleItems" :value="item" :key="item">
           {{ item }}
         </v-tab>
       </v-tabs>
       <v-window v-model="tab">
         <v-window-item value="使用URL">
-          <v-container style="margin-top: 1em;">
+          <v-container style="margin-top: 1em">
             <v-row v-for="(item, i) in urlSrcs" :key="i">
               <v-col cols="7">
-                <v-text-field label="URL" v-model="item.src"
-                  placeholder="https://vjs.zencdn.net/v/oceans.mp4"></v-text-field>
+                <v-text-field
+                  label="URL"
+                  v-model="item.src"
+                  placeholder="https://vjs.zencdn.net/v/oceans.mp4"
+                ></v-text-field>
               </v-col>
-              <v-col cols="4"><v-text-field v-model="item.label" label="清晰度" placeholder="1080P"></v-text-field>
+              <v-col cols="4"
+                ><v-text-field
+                  v-model="item.label"
+                  label="清晰度"
+                  placeholder="1080P"
+                ></v-text-field>
               </v-col>
               <v-col cols="1">
-                <v-btn icon size="large" @click="() => {
-                  srcs.push({
-                    src: '', type: '', label: ''
-                  })
-                }">
+                <v-btn
+                  icon
+                  size="large"
+                  @click="
+                    () => {
+                      srcs.push({
+                        src: '',
+                        type: '',
+                        label: ''
+                      });
+                    }
+                  "
+                >
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
-            <v-card-title style="margin-top: 1em;">
+            <v-card-title style="margin-top: 1em">
               <span>供参考的视频源</span>
-            </v-card-title> <v-divider>
-            </v-divider>
+            </v-card-title>
+            <v-divider> </v-divider>
             <v-table>
               <thead>
                 <tr>
-                  <th class="text-left">
-                    格式
-                  </th>
-                  <th class="text-left">
-                    URL
-                  </th>
+                  <th class="text-left">格式</th>
+                  <th class="text-left">URL</th>
                 </tr>
               </thead>
               <tbody>
@@ -54,18 +66,36 @@
           </v-container>
         </v-window-item>
         <v-window-item value="上传文件">
-          <v-container style="margin-top: 1em;">
+          <v-container style="margin-top: 1em">
             <v-row v-for="(item, i) in fileSrcs" :key="i">
-              <v-col cols="7"> <v-file-input label="上传文件" v-model="item.files"></v-file-input>
+              <v-col cols="7">
+                <v-file-input
+                  label="上传文件"
+                  v-model="item.files"
+                ></v-file-input>
               </v-col>
-              <v-col cols="4"><v-text-field v-model="item.label" label="清晰度" placeholder="1080P" file></v-text-field>
+              <v-col cols="4"
+                ><v-text-field
+                  v-model="item.label"
+                  label="清晰度"
+                  placeholder="1080P"
+                  file
+                ></v-text-field>
               </v-col>
               <v-col cols="1">
-                <v-btn icon size="large" @click="() => {
-                  fileSrcs.push({
-                    files: [], type: '', label: ''
-                  })
-                }">
+                <v-btn
+                  icon
+                  size="large"
+                  @click="
+                    () => {
+                      fileSrcs.push({
+                        files: [],
+                        type: '',
+                        label: ''
+                      });
+                    }
+                  "
+                >
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </v-col>
@@ -75,42 +105,66 @@
       </v-window>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn variant="tonal" @click="() => { dialog = false, srcs = reactive([...defaultSrcs]) }">
+        <v-btn
+          variant="tonal"
+          @click="
+            () => {
+              (dialog = false), (srcs = reactive([...defaultSrcs]));
+            }
+          "
+        >
           使用默认值
         </v-btn>
-        <v-btn variant="tonal" color="green-darken-1" @click="() => { dialog = false, srcs = createBlob(fileSrcs) }">
+        <v-btn
+          variant="tonal"
+          color="green-darken-1"
+          @click="
+            () => {
+              (dialog = false), (srcs = createBlob(fileSrcs));
+            }
+          "
+        >
           上传文件
         </v-btn>
-        <v-btn variant="tonal" color="blue-darken-1" @click="() => { dialog = false, srcs = addType(urlSrcs) }">
+        <v-btn
+          variant="tonal"
+          color="blue-darken-1"
+          @click="
+            () => {
+              (dialog = false), (srcs = addType(urlSrcs));
+            }
+          "
+        >
           使用URL
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <MyVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
+  <CustomVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
 </template>
-<script setup lang='ts'>
-import { ref, reactive } from "vue"
-import sd from "@/assets/videos/sd.mp4"
-import hd from "@/assets/videos/hd.mp4"
-import MyVideo from "./components/video.vue"
-const dialog = ref(true) //对象框显示控制
-const tab = ref(null) //tab切换所需
-const tabTitleItems = reactive(['使用URL', '上传文件']) //tab标题
+<script setup lang="ts">
+import {ref, reactive} from 'vue';
+import sd from '@/assets/videos/sd.mp4';
+import hd from '@/assets/videos/hd.mp4';
+import CustomVideo from './components/custom-video.vue';
+const dialog = ref(true); //对象框显示控制
+const tab = ref(null); //tab切换所需
+const tabTitleItems = reactive(['使用URL', '上传文件']); //tab标题
 
 interface ImimeTypesMap {
-  flv: string
-  mp4: string
-  mov: string
-  m3u8: string
+  flv: string;
+  mp4: string;
+  mov: string;
+  m3u8: string;
 }
 
-const mimeTypesMap: ImimeTypesMap = { //根据文件类型转化MediaType
-  flv: "video/x-flv",
-  mp4: "video/mp4",
-  mov: "video/mp4",
-  m3u8: "application/x-mpegurl"
-}
+const mimeTypesMap: ImimeTypesMap = {
+  //根据文件类型转化MediaType
+  flv: 'video/x-flv',
+  mp4: 'video/mp4',
+  mov: 'video/mp4',
+  m3u8: 'application/x-mpegurl'
+};
 
 interface Isrc {
   src: string;
@@ -118,57 +172,69 @@ interface Isrc {
   label: string;
 }
 
-let srcs: Array<Isrc> //真正播放传参的源
+let srcs: Array<Isrc>; //真正播放传参的源
 
-let urlSrcs = reactive([{//输入的URL数组
-  src: "",
-  type: '',
-  label: '',
-},])
+let urlSrcs = reactive([
+  {
+    //输入的URL数组
+    src: '',
+    type: '',
+    label: ''
+  }
+]);
 
-let fileSrcs = reactive([//输入的文件数组
+let fileSrcs = reactive([
+  //输入的文件数组
   {
     files: [],
     type: '',
     label: ''
   }
-])
+]);
 
-const recommendURL = [ //供参考的视频源
+const recommendURL = [
+  //供参考的视频源
   {
-    format: "H.264/MPEG-4 AVC",
-    url: "https://vjs.zencdn.net/v/oceans.mp4"
+    format: 'H.264/MPEG-4 AVC',
+    url: 'https://vjs.zencdn.net/v/oceans.mp4'
   },
   {
-    format: "HEVC/H.265",
-    url: "https://vjs.zencdn.net/v/oceans.mp4"
+    format: 'HEVC/H.265',
+    url: 'https://vjs.zencdn.net/v/oceans.mp4'
   },
   {
-    format: "MOV/QuickTime",
-    url: "https://vjs.zencdn.net/v/oceans.mp4"
+    format: 'MOV/QuickTime',
+    url: 'https://vjs.zencdn.net/v/oceans.mp4'
   },
   {
-    format: "HLS",
-    url: "http://220.161.87.62:8800/hls/1/index.m3u8"
+    format: 'HLS',
+    url: 'http://220.161.87.62:8800/hls/1/index.m3u8'
   },
   {
-    format: "FLV",
-    url: "https://mister-ben.github.io/videojs-flvjs/bbb.flv"
-  },
-]
+    format: 'FLV',
+    url: 'https://mister-ben.github.io/videojs-flvjs/bbb.flv'
+  }
+];
 
-const addType = (srcs: Array<Isrc>) => {//对URL形式的源添加类型字段
+const addType = (srcs: Array<Isrc>) => {
+  //对URL形式的源添加类型字段
   for (const src of srcs)
-    src.type = mimeTypesMap[<string>src.src.split(".").pop() as keyof typeof mimeTypesMap]
-  return srcs
-}
+    src.type =
+      mimeTypesMap[
+        (<string>src.src.split('.').pop()) as keyof typeof mimeTypesMap
+      ];
+  return srcs;
+};
 
-const resetSource = () => { //组件换源，需要清空源
-  urlSrcs = reactive([{
-    src: "",
-    type: '',
-    label: '',
-  }])
+const resetSource = () => {
+  //组件换源，需要清空源
+  urlSrcs = reactive([
+    {
+      src: '',
+      type: '',
+      label: ''
+    }
+  ]);
 
   fileSrcs = reactive([
     {
@@ -176,43 +242,52 @@ const resetSource = () => { //组件换源，需要清空源
       type: '',
       label: ''
     }
-  ])
+  ]);
 
-  dialog.value = true
-}
+  dialog.value = true;
+};
 
-function createBlob(fileList: Array<{ files: Array<File>, type: string, label: string }>) { //将上传的文件转化为Blob
-  let temp = []
+function createBlob(
+  fileList: Array<{files: Array<File>; type: string; label: string}>
+) {
+  //将上传的文件转化为Blob
+  let temp = [];
   for (const file of fileList) {
     temp.push({
       src: URL.createObjectURL(file.files[0]),
-      type: mimeTypesMap[<string>file.files[0].name.split('.').pop() as keyof typeof mimeTypesMap],
+      type: mimeTypesMap[
+        (<string>(
+          file.files[0].name.split('.').pop()
+        )) as keyof typeof mimeTypesMap
+      ],
       label: file.label
-    })
+    });
   }
-  return reactive(temp)
+  return reactive(temp);
 }
 
 let defaultSrcs = [
   {
     src: hd,
     type: 'video/mp4',
-    label: 'HD',
+    label: 'HD'
   },
-  { //默认值用于展示清晰度切换
+  {
+    //默认值用于展示清晰度切换
     src: sd,
     type: 'video/mp4',
-    label: 'SD',
+    label: 'SD'
   }
-]
+];
 
-const options = { //videojs选项
+const options = {
+  //videojs选项
   flvjs: {
     mediaDataSource: {
       isLive: false,
       cors: true,
-      withCredentials: false,
-    },
+      withCredentials: false
+    }
   },
   autoplay: true,
   controls: true,
@@ -227,8 +302,6 @@ const options = { //videojs选项
     }
   },
   playbackRates: [0.5, 1, 1.5, 2]
-} 
+};
 </script>
-<style>
-
-</style>
+<style></style>
