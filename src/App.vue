@@ -88,9 +88,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <div>
-    <MyVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
-  </div>
+  <MyVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
 </template>
 <script setup lang='ts'>
 import { ref, reactive } from "vue"
@@ -101,7 +99,7 @@ const dialog = ref(true) //对象框显示控制
 const tab = ref(null) //tab切换所需
 const tabTitleItems = reactive(['上传文件', '使用URL']) //tab标题
 
-interface ImimeTypesMap { 
+interface ImimeTypesMap {
   flv: string
   mp4: string
   mov: string

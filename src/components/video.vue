@@ -12,7 +12,7 @@ import invertColor from "@/utils/invert/invert.js"
 import addPixelate from "@/utils/pixelate/pixelate.js"
 import type { pixelatePositions } from "@/utils/pixelate/pixelate.js"
 
-import "@/assets/css/quality.css"
+import "@/assets/css/quality.css" 
 import "@/assets/css/snapshot.css"
 import "@/assets/css/skin.css"
 import "@/assets/css/video.css"
@@ -104,14 +104,14 @@ function initPlayer() {
 
 function invert() {
     if (!isInverted.value) {
+        isInverted.value = true;
         if (fullscreen.value) {
             playerInstance.value?.exitFullscreen();
         }
         invertColor(<VideoJsPlayer>playerInstance.value)
-        isInverted.value = !isInverted.value;
     }
     else {
-        isInverted.value = !isInverted.value;
+        isInverted.value = false;
     }
 }
 
