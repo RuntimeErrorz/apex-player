@@ -2,7 +2,6 @@
 import videojs, { type VideoJsPlayer } from "video.js"
 import 'videojs-flvjs-es6'
 import { onMounted, onUnmounted, ref, watch, nextTick } from "vue"
-import { defineEmits } from "vue"
 import type { Ref } from "vue"
 
 import addQuality from "@/utils/quality/qualityPlugin.js"
@@ -15,7 +14,6 @@ import type { PixelatePosition } from "@/utils/pixelate/pixelate.js"
 import "@/assets/css/quality.css"
 import "@/assets/css/snapshot.css"
 import "@/assets/css/skin.css"
-import "@/assets/css/video.css"
 
 let isPixelated = ref(false)
 let isInverted = ref(false)
@@ -69,12 +67,12 @@ watch(props, () => { //当源变化时，更新源
 
 function initPlayer() { //初始化实例的回调函数。添加反色、打码、换源按钮，并监听全屏更换
     let invertButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
-    invertButton.addClass("vjs-invert-bt")
+    invertButton.addClass("vjs-custom-bt")
     invertButton.el().innerHTML = "反色"
     invertButton.el().addEventListener("click", invert)
 
     let pixelateButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
-    pixelateButton.addClass("vjs-pixelate-bt")
+    pixelateButton.addClass("vjs-custom-bt")
     pixelateButton.el().innerHTML = "打码"
     pixelateButton.el().addEventListener("click", () => {
         if (fullscreen.value)
@@ -85,7 +83,7 @@ function initPlayer() { //初始化实例的回调函数。添加反色、打码
     )
 
     let resetSourceButton = <videojs.Component>playerInstance.value?.controlBar.addChild("button");
-    resetSourceButton.addClass("vjs-pixelate-bt")
+    resetSourceButton.addClass("vjs-custom-bt")
     resetSourceButton.el().innerHTML = "换源"
     resetSourceButton.el().addEventListener("click", () => {
         emit('resetSource')
@@ -117,7 +115,7 @@ onMounted(() => { //添加质量插件，添加截图与录像，监听resize
     customiseSidebar();
     playerInstance.value = videojs(playerID.value, props.options, initPlayer)
     const [screenshotDom, recordDom] = document.getElementsByClassName("vjs-custom-bar")[0].querySelectorAll('div')
-    screenshotDom.onclick = () => screenshotHandle(playerInstance, isPixelated.value, isInverted.value);
+    screenshotDom.onclick = () => screenshotHandle(<Ref<VideoJsPlayer>>playerInstance, isPixelated.value, isInverted.value);
     let recorderParam = new RecorderParams(<Ref<VideoJsPlayer>>playerInstance, null, null, null, false)
     recordDom.onclick = () => recordHandle(recordDom, recorderParam, isPixelated.value, isInverted.value)
 
@@ -125,7 +123,8 @@ onMounted(() => { //添加质量插件，添加截图与录像，监听resize
         if (isPixelated.value) {
             addPixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value)
             const controlBar = document.getElementsByClassName("vjs-control-bar")[0]
-            controlBar.setAttribute('style', `position: relative;top: ${playerInstance.value.currentHeight() + 7}px; background-color:black!important`) //加防抖
+            if (playerInstance.value)
+                controlBar.setAttribute('style', `position: relative;top: ${playerInstance.value.currentHeight() + 7}px; background-color:black!important`) //加防抖
         }
     }
 })
@@ -148,7 +147,7 @@ onUnmounted(() => {
         </template>
     </v-snackbar>
     <div class="container" id="container">
-        <video id="video1" crossorigin="anonymous" class="video-js videosize vjs-static-controls" width="640"
+        <video id="video1" crossorigin="anonymous" class="video-js custom-video vjs-static-controls" width="640"
             height="264" controls preload="auto" data-setup='{ "inactivityTimeout": 0 }'>
         </video>
         <Transition name="slide-fade">
@@ -234,3 +233,46 @@ onUnmounted(() => {
         </v-card>
     </v-dialog>
 </template>
+
+<style>
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.custom-video {
+    margin: 0 2vw;
+    flex: 1;
+    height: 80vh;
+}
+
+.invert {
+    flex: 1;
+    margin: 0 2vw;
+}
+
+.video-js button.vjs-custom-bt {
+    font-size: 14pt;
+}
+
+.slide-fade-enter-from {
+    transform: translateX(5vw);
+    opacity: 1;
+}
+
+.slide-fade-enter-active {
+    transition: all 0.2s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.1s ease-out;
+}
+
+.slide-fade-leave-to {
+    transform: translateX(5vw);
+    opacity: 0;
+}
+</style>
