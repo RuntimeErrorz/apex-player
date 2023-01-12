@@ -170,14 +170,8 @@ function pixelate(
     imgWidth = srcImageData.width,
     imgHeight = srcImageData.height,
     imageData = createImageData(imgWidth, imgHeight),
-    data = imageData?.data,
-    w,
-    h,
-    r,
-    g,
-    b,
-    pixelIndex,
-    pixelCount;
+    data = imageData?.data;
+  let w, h, r, g, b, pixelIndex, pixelCount;
 
   for (let x = 0; x < imgWidth; x += pixelationWidth) {
     if (pixelationWidth <= imgWidth - x) {
