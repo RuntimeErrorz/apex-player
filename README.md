@@ -36,13 +36,13 @@
 
 ![Product Name Screen Shot][product-screenshot]
 
-本项目是一个基于Video.js深度构建的多功能播放器。
+本项目是一个基于 Video.js 深度构建的多功能播放器。
 
 ### 技术栈
 
-* [Vue][Vue-url]
-* [Vite][Vite-url]
-* [Vuetify][Vuetify-url]
+- [Vue][Vue-url]
+- [Vite][Vite-url]
+- [Vuetify][Vuetify-url]
 
 ## 项目配置
 
@@ -96,49 +96,49 @@ npm run dev
 
 ### 已实现
 
-- [X] 上传文件播放
-- [X] 根据URL播放
-- [X] 使用默认源播放
-- [X] 切换清晰度并记忆进度
-- [X] 多场景截屏（包括反转与马赛克后截屏）
-- [X] 实时录屏
-- [X] 反色播放
-- [X] 多用途部分打码（包括涂抹选择与输入位置选择打码区域）
-- [X] flv播放
-- [X] mov播放
-- [X] 支持编码格式为H.265格式视频播放（Chrome在版本号107以上和Edge版本号12开始已经支持HEVC https://caniuse.com/?search=hevc）
-- [X] 支持直播
-  - [X] HLS
+- [x] 上传文件播放
+- [x] 根据 URL 播放
+- [x] 使用默认源播放
+- [x] 切换清晰度并记忆进度
+- [x] 多场景截屏（包括反转与马赛克后截屏）
+- [x] 实时录屏
+- [x] 反色播放
+- [x] 多用途部分打码（包括涂抹选择与输入位置选择打码区域）
+- [x] flv 播放
+- [x] mov 播放
+- [x] 支持编码格式为 H.265 格式视频播放（Chrome 在版本号 107 以上和 Edge 版本号 12 开始已经支持 HEVC https://caniuse.com/?search=hevc）
+- [x] 支持直播
+  - [x] HLS
 
 ### 未来计划
 
-- [ ] 引入h265web.js来提高播放HEVC视频兼容性
+- [ ] 引入 h265web.js 来提高播放 HEVC 视频兼容性
 - [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
 
 ## 开源许可证
 
-在GPLv3协议下分发，更多信息请参考 `LICENSE`。
+在 GPLv3 协议下分发，更多信息请参考 `LICENSE`。
 
 ## 联系我
 
 曾德御 电子科技大学信息与软件工程学院
 
-* Tel：15102801677
-* Email：dariuszeng@qq.com
-* Blog：https://runtimeerrorz.github.io/
-* Résumé：https://github.com/RuntimeErrorz/apex-player/blob/master/曾德御简历.pdf
+- Tel：15102801677
+- Email：dariuszeng@qq.com
+- Blog：https://runtimeerrorz.github.io/
+- Résumé：https://github.com/RuntimeErrorz/apex-player/blob/master/曾德御简历.pdf
 
 ## 致谢
 
-* [GitHub Pages](https://pages.github.com)
-* [Materialize CSS](https://github.com/dogfalo/materialize)
-* [Stack Overflow](https://stackoverflow.com/)
-* [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
-* [Choose an Open Source License](https://choosealicense.com)
-* [Material Design Icons](https://materialdesignicons.com/)
-* [File Examples](https://file-examples.com/)
-* [FFmpeg](https://ffmpeg.org/)
-* [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)
+- [GitHub Pages](https://pages.github.com)
+- [Materialize CSS](https://github.com/dogfalo/materialize)
+- [Stack Overflow](https://stackoverflow.com/)
+- [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
+- [Choose an Open Source License](https://choosealicense.com)
+- [Material Design Icons](https://materialdesignicons.com/)
+- [File Examples](https://file-examples.com/)
+- [FFmpeg](https://ffmpeg.org/)
+- [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)
 
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
