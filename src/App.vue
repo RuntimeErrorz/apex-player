@@ -10,25 +10,6 @@
         </v-tab>
       </v-tabs>
       <v-window v-model="tab">
-        <v-window-item value="上传文件">
-          <v-container style="margin-top: 1em;">
-            <v-row v-for="(item, i) in fileSrcs" :key="i">
-              <v-col cols="7"> <v-file-input label="上传文件" v-model="item.files"></v-file-input>
-              </v-col>
-              <v-col cols="4"><v-text-field v-model="item.label" label="清晰度" placeholder="1080P" file></v-text-field>
-              </v-col>
-              <v-col cols="1">
-                <v-btn icon size="large" @click="() => {
-                  fileSrcs.push({
-                    files: [], type: '', label: ''
-                  })
-                }">
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-window-item>
         <v-window-item value="使用URL">
           <v-container style="margin-top: 1em;">
             <v-row v-for="(item, i) in urlSrcs" :key="i">
@@ -72,8 +53,26 @@
             </v-table>
           </v-container>
         </v-window-item>
+        <v-window-item value="上传文件">
+          <v-container style="margin-top: 1em;">
+            <v-row v-for="(item, i) in fileSrcs" :key="i">
+              <v-col cols="7"> <v-file-input label="上传文件" v-model="item.files"></v-file-input>
+              </v-col>
+              <v-col cols="4"><v-text-field v-model="item.label" label="清晰度" placeholder="1080P" file></v-text-field>
+              </v-col>
+              <v-col cols="1">
+                <v-btn icon size="large" @click="() => {
+                  fileSrcs.push({
+                    files: [], type: '', label: ''
+                  })
+                }">
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-window-item>
       </v-window>
-
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn variant="tonal" @click="() => { dialog = false, srcs = reactive([...defaultSrcs]) }">
@@ -97,7 +96,7 @@ import hd from "@/assets/videos/hd.mp4"
 import MyVideo from "./components/video.vue"
 const dialog = ref(true) //对象框显示控制
 const tab = ref(null) //tab切换所需
-const tabTitleItems = reactive(['上传文件', '使用URL']) //tab标题
+const tabTitleItems = reactive(['使用URL', '上传文件']) //tab标题
 
 interface ImimeTypesMap {
   flv: string
