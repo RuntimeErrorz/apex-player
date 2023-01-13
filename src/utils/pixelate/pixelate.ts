@@ -5,7 +5,7 @@
  * ------------------------------------------------------------------
  */
 
-import type {VideoJsPlayer} from 'video.js';
+import type { VideoJsPlayer } from 'video.js';
 
 export interface PixelatePosition {
   //请注意这里的数字均为百分比
@@ -60,6 +60,8 @@ export default function addPixelation(
       `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`
     );
   }
+  if (ratio < 1)
+    ratio = 1
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error();
   const sourceLayer = document.createElement('canvas'); //整体三层canvas，一层源一层马赛克一层路径
@@ -75,12 +77,12 @@ export default function addPixelation(
     sourceLayer.width =
     pixelateLayer.width =
     pathLayer.width =
-      width;
+    width;
   canvas.height =
     sourceLayer.height =
     pixelateLayer.height =
     pathLayer.height =
-      height;
+    height;
 
   if (!pathContext) throw new Error('');
   pathContext.lineCap = 'round';
@@ -162,7 +164,7 @@ function createImageData(width: number, height: number) {
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
  **/
- function pixelate(
+function pixelate(
   srcImageData: ImageData,
   pixelationWidth: number,
   pixelationHeight: number

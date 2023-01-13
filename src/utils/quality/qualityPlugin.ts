@@ -1,7 +1,8 @@
-/*! videojs-resolution-switcher for VideoJS Version 7+ - 2020-7-17
+/* videojs-resolution-switcher for VideoJS Version 7+ - 2023-1-11
  * Copyright (c) 2016 Kasper Moskwiak
- * Modified by Bari Artz from Poko - https://facebook.com/pokonimeii
- * Licensed under the Apache-2.0 license. */
+ * Modified by RuntimeErroz
+ * Licensed under the Apache-2.0 license. 
+ */
 import videojs from 'video.js';
 
 export default function addQuality() {
