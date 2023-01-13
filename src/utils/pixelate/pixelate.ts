@@ -41,6 +41,7 @@ export default function addPixelation(
   let left = video.offsetLeft + videoParent.offsetLeft;
 
   if (currentRatio > originRatio) {
+    //根据视频长宽比例确定码的大小与移动control bar到整体视频下方
     height = player.currentHeight();
     width = (height * video.videoWidth) / video.videoHeight;
     ratio = height / video.videoHeight;
@@ -61,7 +62,7 @@ export default function addPixelation(
   }
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error();
-  const sourceLayer = document.createElement('canvas');
+  const sourceLayer = document.createElement('canvas'); //整体三层canvas，一层源一层马赛克一层路径
   const pixelateLayer = document.createElement('canvas');
   const pathLayer = document.createElement('canvas');
   const sourceContext = sourceLayer.getContext('2d', {
@@ -92,7 +93,7 @@ export default function addPixelation(
   const h = ((positions.rightY - positions.leftY) / 100) * height;
   pathContext.fillRect(x / ratio, y / ratio, w / ratio, h / ratio);
 
-  canvas.addEventListener('mousedown', mouseHandle);
+  canvas.addEventListener('mousedown', mouseHandle); //处理涂抹打码
   function mouseHandle(e: MouseEvent) {
     if (e.type === 'mousedown') {
       pathContext?.moveTo(e.offsetX / ratio, e.offsetY / ratio);
@@ -126,9 +127,9 @@ export default function addPixelation(
 
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(pathLayer, 0, 0, width, height);
-    ctx.globalCompositeOperation = 'source-in'; //马赛克层
+    ctx.globalCompositeOperation = 'source-in'; //马赛克图形只在涂抹路径和马赛克图层重合时绘制
     ctx.drawImage(pixelateLayer, 0, 0, width, height);
-    ctx.globalCompositeOperation = 'destination-over';
+    ctx.globalCompositeOperation = 'destination-over'; //在现有的画布内容后面绘制新的图形。
     ctx.drawImage(sourceLayer, 0, 0, width, height);
     requestAnimationFrame(draw);
   }
@@ -157,15 +158,15 @@ function createImageData(width: number, height: number) {
  *@param    {ImageData}   srcImageData         源数据
  *@param    {number}      pixelationWidth      马赛克宽度
  *@param    {number}      pixelationHeight     马赛克高度
- *@returns  {ImgData}     马赛克数据
+ *@returns  {ImageData}     马赛克数据
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
  **/
-function pixelate(
+ function pixelate(
   srcImageData: ImageData,
   pixelationWidth: number,
   pixelationHeight: number
-) {
+): ImageData {
   const srcData = srcImageData.data,
     imgWidth = srcImageData.width,
     imgHeight = srcImageData.height,
@@ -200,7 +201,7 @@ function pixelate(
       pixelCount = w * h;
       r = Math.round(r / pixelCount);
       g = Math.round(g / pixelCount);
-      b = Math.round(b / pixelCount);
+      b = Math.round(b / pixelCount); //具体实现通过平均所给马赛克长宽内的像素颜色而达到马赛克的效果
 
       if (data)
         for (let i = 0; i < w; i += 1) {
@@ -214,5 +215,5 @@ function pixelate(
         }
     }
   }
-  return imageData;
+  return <ImageData>imageData;
 }
