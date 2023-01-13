@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 
-//测试环境里面
+//Node.js不存在此类，特此补充。
 class ImgData {
     data: Uint8ClampedArray;
     width: number;
@@ -12,6 +12,7 @@ class ImgData {
     }
 }
 
+//详情参考原函数，此处为了测试方便作了些许简化。
 function pixelate(
     srcImageData: ImgData,
     pixelationWidth: number,
@@ -70,7 +71,7 @@ function pixelate(
 
 
 const srcData = new ImgData(new Uint8ClampedArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 8, 9, 10, 11, 12, 13, 14, 15, 16]), 4, 4)
-const destData = new ImgData(new Uint8ClampedArray([9, 7, 8, 4]), 2, 2)
+const destData = new ImgData(new Uint8ClampedArray([9, 7, 8, 4]), 2, 2)//此为手动计算
 
 console.log(pixelate(<ImageData>srcData, 2, 2).data)
 

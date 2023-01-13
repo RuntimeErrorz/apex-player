@@ -36,13 +36,14 @@
 
 ![Product Name Screen Shot][product-screenshot]
 
-本项目是一个基于 Video.js 深度构建的多功能播放器。
+本项目是一个基于 Video.js 深度自定义的现代播放器。
 
-### 技术栈
+### 技术选型
 
 - [Vue][Vue-url]
 - [Vite][Vite-url]
 - [Vuetify][Vuetify-url]
+- [Vitest][Vitest-rul]
 
 ## 项目配置
 
@@ -62,8 +63,7 @@ npm run dev
 │  │      min.css //videojs源样式
 │  │      quality.css // 清晰度切换插件样式
 │  │      skin.css //videojs皮肤
-│  │      snapshot.css //自定义截图按钮样式
-│  │      video.css //自定义播放器样式
+│  │      snapshot.css //静态截图按钮样式
 │  │
 │  ├─images
 │  │      camera.png
@@ -78,16 +78,20 @@ npm run dev
 │
 └─utils
     ├─invert
-    │      invert.ts //反色工具类
+    │      invert.ts //反色模块
+    │      invert.test.ts //反色模块测试
     │
     ├─pixelate
-    │      pixelate.ts //打码工具类
+    │      pixelate.ts //打码模块
+    │      pixelate.test.ts //打码测试模块
     │
     ├─quality
     │      qualityPlugin.ts //切换清晰度插件
     │
     └─snapshot
-            snapshot.ts //截图与录屏工具
+            snapshot.ts //多场景截图与录屏模块
+            snapshot.test.ts //多场景截图与录屏模块
+
 ```
 
 ## 使用
@@ -96,26 +100,56 @@ npm run dev
 
 ### 已实现
 
-- [x] 上传文件播放
-- [x] 根据 URL 播放
-- [x] 使用默认源播放
-- [x] 切换清晰度并记忆进度
-- [x] 多场景截屏（包括反转与马赛克后截屏）
-- [x] 实时录屏
-- [x] 反色播放
-- [x] 多用途部分打码（包括涂抹选择与输入位置选择打码区域）
-- [x] flv 播放
-- [x] mov 播放
-- [x] 支持编码格式为 H.265 格式视频播放（Chrome 在版本号 107 以上和 Edge 版本号 12 开始已经支持 HEVC https://caniuse.com/?search=hevc）
-- [x] 支持直播
-  - [x] HLS
-- [x] 搭建页面展示器
-- [x] 搭建静态文件服务器
+#### 视频内容
+- [X] 上传文件播放
+- [X] 根据 URL 播放
+- [X] 使用默认源播放
+- [X] 切换清晰度并记忆进度
+- [X] 多场景截屏（包括反转与马赛克后截屏）
+- [X] 实时录屏
+- [X] 反色播放
+- [X] 多用途部分打码（包括涂抹选择与输入位置选择打码区域）
+- [X] flv 播放
+- [X] mov 播放
+- [X] 支持编码格式为 H.265 格式视频播放
+- [X] 支持直播
+  - [X] HLS
+
+#### 工程内容
+- [X] 单元测试
+- [X] 搭建静态文件服务器
+- [X] 搭建页面展示服务器
 
 ### 未来计划
 
 - [ ] 引入 h265web.js 来提高播放 HEVC 视频兼容性
-- [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
+- [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑。（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
+- [ ] 持续完善单元测试。
+
+## 设计文档
+
+### 组件设计
+- custom-video组件
+  - 功能：实现了全部视频功能；向外提供数据源和自定义播放选项的接口（Props）
+
+在根组件中引用此组件，并在App.vue实现了多来源视频的统一选择，日后项目复杂后易于扩展。
+### 模块设计
+封装了一些较复杂的功能模块：
+- pixelate.ts
+- snapshot.ts
+- invert.ts
+
+### 测试模块设计
+由于本项目主要基于成熟的组件库和HTML播放器进行开发，因此主要对核心算法进行单元测试。
+- pixelate.test.ts
+  - 功能：对打码算法的核心函数进行测试。
+  - 具体实现：由于Node.js不支持ImageData的数据类型，因此自定义ImgData类，并对2*2的图片数据进行了测试。
+- invert.test.ts
+  - 功能：对反转颜色的核心函数进行测试。
+  - 具体实现：同样自定义ImgData类，对不同大小的数据进行测试。
+
+### 流程设计
+
 
 ## 开源许可证
 
@@ -148,4 +182,6 @@ npm run dev
 [Vite-url]: https://vitejs.cn/
 [Vuetify.js]: https://img.shields.io/badge/Vuetify-aeddff?style=for-the-badge&logo=vuetify&logoColor=1697F6
 [Vuetify-url]: https://next.vuetifyjs.com/
+[Vitest]: https://img.shields.io/badge/Vitest-729b1b?style=for-the-badge&logo=vitest&logoColor=fcc72b
+[Vitest-url]: https://cn.vitest.dev/
 [product-screenshot]: README_PIC/screenshot.png
