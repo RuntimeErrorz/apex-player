@@ -7,8 +7,8 @@
  */
 import RecordRTC from 'recordrtc';
 import videojs from 'video.js';
-import type {VideoJsPlayer} from 'video.js';
-import type {Ref} from 'vue';
+import type { VideoJsPlayer } from 'video.js';
+import type { Ref } from 'vue';
 
 import cameraImg from '@/assets/images/camera-outline.png';
 import monitorImg from '@/assets/images/monitor-screenshot.png';
@@ -88,8 +88,7 @@ export function recordHandle(
   isPixelated: boolean,
   isInverted: boolean
 ) {
-  isPixelated = isInverted;
-  if (!recorderParams.isRecording) {
+  if (!recorderParams.isRecording) { //开始录屏后修改DOM，创建Canvas
     recordDom.innerHTML = `<i class="record-process"></i><span class="ml10">结束</span>`;
     if (!recorderParams.canvas) {
       recorderParams.canvas = document.createElement('canvas');
@@ -99,8 +98,8 @@ export function recordHandle(
       mimeType: 'video/mp4'
     });
     recorderParams.recorder.startRecording();
-    drawMedia(recorderParams);
-  } else {
+    drawMedia(recorderParams, isInverted, isPixelated);
+  } else { //结束录屏后修改DOM并复原参数
     recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`;
     recorderParams.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(
@@ -188,14 +187,28 @@ function downloadViaCanvas(src: HTMLCanvasElement | HTMLVideoElement) {
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
  **/
-function drawMedia(recorderParams: RecorderParams) {
+function drawMedia(recorderParams: RecorderParams, isInverted: boolean, isPixelated: boolean) {
   const ctx = recorderParams.canvas?.getContext('2d');
-  const video = recorderParams.player.value?.el().querySelector('video');
-  if (!video || !ctx) throw Error('video Error');
-  recorderParams.canvas?.setAttribute('width', video.videoWidth.toString());
-  recorderParams.canvas?.setAttribute('height', video.videoHeight.toString());
-  ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+  let video!: HTMLCanvasElement | HTMLVideoElement
+  if (isInverted && !isPixelated) {
+    video = <HTMLCanvasElement>document.getElementById("invert")
+    recorderParams.canvas?.setAttribute('width', video.width.toString());
+    recorderParams.canvas?.setAttribute('height', video.height.toString());
+  }
+  else if (isPixelated && !isInverted) {
+    video = <HTMLCanvasElement>document.getElementById("pixelate")
+    recorderParams.canvas?.setAttribute('width', video.width.toString());
+    recorderParams.canvas?.setAttribute('height', video.height.toString());
+  }
+  else {
+    video = <HTMLVideoElement>recorderParams.player.value?.el().querySelector('video');
+    if (!video || !ctx) throw Error('video Error');
+    recorderParams.canvas?.setAttribute('width', video.videoWidth.toString());
+    recorderParams.canvas?.setAttribute('height', video.videoHeight.toString());
+  }
+
+  ctx?.drawImage(video, 0, 0, <number>recorderParams.canvas?.width, <number>recorderParams.canvas?.height);
   recorderParams.animationFrame = requestAnimationFrame(() =>
-    drawMedia(recorderParams)
+    drawMedia(recorderParams, isInverted, isPixelated)
   );
 }

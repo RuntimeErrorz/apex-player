@@ -109,6 +109,8 @@ npm run dev
 - [x] 支持编码格式为 H.265 格式视频播放（Chrome 在版本号 107 以上和 Edge 版本号 12 开始已经支持 HEVC https://caniuse.com/?search=hevc）
 - [x] 支持直播
   - [x] HLS
+- [x] 搭建页面展示器
+- [x] 搭建静态文件服务器
 
 ### 未来计划
 

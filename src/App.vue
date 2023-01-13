@@ -196,23 +196,23 @@ const recommendURL = [
   //供参考的视频源
   {
     format: 'H.264/MPEG-4 AVC',
-    url: 'https://vjs.zencdn.net/v/oceans.mp4'
+    url: 'http://172.67.186.136/videos/h264.mp4'
   },
   {
     format: 'HEVC/H.265',
-    url: 'https://vjs.zencdn.net/v/oceans.mp4'
+    url: 'http://172.67.186.136/videos/hevc.mp4'
   },
   {
     format: 'MOV/QuickTime',
-    url: 'https://vjs.zencdn.net/v/oceans.mp4'
-  },
-  {
-    format: 'HLS',
-    url: 'http://220.161.87.62:8800/hls/1/index.m3u8'
+    url: 'http://172.67.186.136/videos/test.mov'
   },
   {
     format: 'FLV',
-    url: 'https://mister-ben.github.io/videojs-flvjs/bbb.flv'
+    url: 'http://172.67.186.136/videos/test.flv'
+  },
+  {
+    format: 'HLS',
+    url: 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8'
   }
 ];
 
