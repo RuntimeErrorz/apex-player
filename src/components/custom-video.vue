@@ -195,7 +195,7 @@ onUnmounted(() => {
   <v-dialog z-index="1003" v-model="pixelateDialogVisible" persistent width="60vw">
     <v-card>
       <v-card-title style="margin-left: 10px; margin-top: 1vh">
-        <span class="text-h6">选择马赛克区域（左下为原点），<strong style="color: #ef5350">马赛克区域可以直接涂抹以选择</strong></span>
+        <span class="text-h6">选择马赛克区域（左下为原点），<strong style="color: #ef5350">马赛克区域可以直接涂抹选择</strong></span>
       </v-card-title>
       <v-card-text>
         <v-container>

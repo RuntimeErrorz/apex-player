@@ -18,12 +18,12 @@
 }
 
 .record-process {
-  height: 25pt;
-  width: 25pt;
+  height: 18pt;
+  width: 18pt;
   background: red;
-  border-radius: 25pt;
+  border-radius: 20pt;
   animation: blings 1s linear infinite;
-  margin-right: 10px;
+  margin-right: 13px;
 }
 
 .snapshot-img {
