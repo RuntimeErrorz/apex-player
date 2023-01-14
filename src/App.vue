@@ -212,7 +212,7 @@ const recommendURL = [
   },
   {
     format: 'HLS',
-    url: 'https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8'
+    url: 'http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/hnwshd/4000000/mnf.m3u8'
   }
 ];
 

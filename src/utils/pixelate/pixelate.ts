@@ -6,7 +6,7 @@
  */
 
 import type { VideoJsPlayer } from 'video.js';
-
+import type { Ref } from "vue"
 export interface PixelatePosition {
   //请注意这里的数字均为百分比
   leftX: number;
@@ -14,6 +14,39 @@ export interface PixelatePosition {
   rightX: number;
   rightY: number;
 }
+
+export default function pixelation(player: VideoJsPlayer, positions: PixelatePosition, animationID: Ref<number>) {
+  const [width, height, ratio, top, left] = autoReSize(player)
+  addPixelation(player, positions, width, height, ratio, top, left, animationID)
+}
+
+export function autoReSize(player: VideoJsPlayer) {
+  const video = <HTMLVideoElement>player.el().querySelector('video');
+  let top = video.getBoundingClientRect().top;
+  let left = video.getBoundingClientRect().left;
+  let height: number;
+  let width: number;
+  let ratio: number;
+  const originRatio = video.videoWidth / video.videoHeight;
+  const currentRatio = player.currentWidth() / player.currentHeight();
+
+  if (currentRatio > originRatio) {
+    //根据视频长宽比例确定码的大小与移动control bar到整体视频下方
+    height = player.currentHeight();
+    width = height * video.videoWidth / video.videoHeight;
+    ratio = height / video.videoHeight;
+    left += (player.currentWidth() - width) / 2;
+
+  } else {
+    width = player.currentWidth();
+    height = (width * video.videoHeight) / video.videoWidth;
+    ratio = width / video.videoWidth;
+    top += (player.currentHeight() - height) / 2;
+  }
+  if (ratio < 1) ratio = 1;
+  return [width, height, ratio, top, left]
+}
+
 
 /**
  * 接受播放器实例和马赛克位置，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择买塞克位置的功能。
@@ -23,47 +56,24 @@ export interface PixelatePosition {
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
  **/
-export default function addPixelation(
+export function addPixelation(
   player: VideoJsPlayer,
-  positions: PixelatePosition
+  positions: PixelatePosition,
+  width: number,
+  height: number,
+  ratio: number,
+  top: number,
+  left: number,
+  animationID: Ref<number>
 ) {
   const canvas = <HTMLCanvasElement>document.getElementById('pixelate');
-  const video = <HTMLVideoElement>player.el().querySelector('video');
-
-  let height: number;
-  let width: number;
-  let ratio: number;
-  const originRatio = video.videoWidth / video.videoHeight;
-  const currentRatio = player.currentWidth() / player.currentHeight();
-
-  const videoParent = <HTMLElement>video.offsetParent;
-  let top = video.offsetTop + videoParent.offsetTop;
-  let left = video.offsetLeft + videoParent.offsetLeft;
-
-  if (currentRatio > originRatio) {
-    //根据视频长宽比例确定码的大小与移动control bar到整体视频下方
-    height = player.currentHeight();
-    width = (height * video.videoWidth) / video.videoHeight;
-    ratio = height / video.videoHeight;
-    left += (player.currentWidth() - width) / 2;
-    canvas.setAttribute(
-      'style',
-      `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`
-    );
-  } else {
-    width = player.currentWidth();
-    height = (width * video.videoHeight) / video.videoWidth;
-    ratio = width / video.videoWidth;
-    top += (player.currentHeight() - height) / 2;
-    canvas.setAttribute(
-      'style',
-      `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`
-    );
-  }
-  if (ratio < 1)
-    ratio = 1
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error();
+  canvas.setAttribute(
+    'style',
+    `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`
+  );
+  const video = <HTMLVideoElement>player.el().querySelector('video');
   const sourceLayer = document.createElement('canvas'); //整体三层canvas，一层源一层马赛克一层路径
   const pixelateLayer = document.createElement('canvas');
   const pathLayer = document.createElement('canvas');
@@ -72,6 +82,8 @@ export default function addPixelation(
   });
   const pixelateContext = pixelateLayer.getContext('2d');
   const pathContext = pathLayer.getContext('2d');
+
+  ctx.clearRect(0, 0, width, height);
 
   canvas.width =
     sourceLayer.width =
@@ -133,9 +145,9 @@ export default function addPixelation(
     ctx.drawImage(pixelateLayer, 0, 0, width, height);
     ctx.globalCompositeOperation = 'destination-over'; //在现有的画布内容后面绘制新的图形。
     ctx.drawImage(sourceLayer, 0, 0, width, height);
-    requestAnimationFrame(draw);
+    animationID.value = requestAnimationFrame(draw);
   }
-  requestAnimationFrame(draw);
+  animationID.value = requestAnimationFrame(draw);
 }
 
 /**
