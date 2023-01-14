@@ -42,22 +42,11 @@ const playerInstance: Ref<VideoJsPlayer | undefined> = ref(); //播放器实例
 const emit = defineEmits(['resetSource']); //子组件emit重设源
 
 watch(isInverted, (newValue) => {
-  //监视反色状态变化时重绘马赛克
-  if(newValue)
-  {
+  if (newValue) {
     if (fullscreen.value) {
       playerInstance.value?.exitFullscreen();
     }
     nextTick(() => invertColor(<VideoJsPlayer>playerInstance.value));
-  }
-  if (isPixelated.value) {
-    nextTick(() => {
-      cancelAnimationFrame(animationID.value)
-      pixelation(
-        <VideoJsPlayer>playerInstance.value,
-        pixelatePosition.value, animationID
-      ); 
-    }); //BUG：在马赛克和反色同时存在时，取消反色马赛克不重绘
   }
 });
 
@@ -66,7 +55,6 @@ watch(isPixelated, (newValue) => {
   const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
   if (!playerInstance.value) throw new Error();
   if (newValue) {
-    cancelAnimationFrame(animationID.value)
     pixelation(
       <VideoJsPlayer>playerInstance.value,
       pixelatePosition.value, animationID
@@ -124,11 +112,19 @@ function initPlayer() {
 
 function invert() {
   //反色控制函数
-  if (!isInverted.value) 
+  if (!isInverted.value)
     isInverted.value = true;
-  else 
+  else
     isInverted.value = false;
-  
+
+}
+
+function reDraw() {
+  if (isPixelated.value)
+    pixelation(
+      <VideoJsPlayer>playerInstance.value,
+      pixelatePosition.value, animationID
+    );
 }
 
 onMounted(() => {
@@ -157,7 +153,6 @@ onMounted(() => {
 
   window.onresize = () => {
     if (isPixelated.value) {
-      cancelAnimationFrame(animationID.value)
       pixelation(
         <VideoJsPlayer>playerInstance.value,
         pixelatePosition.value, animationID
@@ -193,7 +188,7 @@ onUnmounted(() => {
   <div class="container" id="container">
     <video id="video1" crossorigin="anonymous" class="video-js custom-video vjs-static-controls" width="640"
       height="264" controls preload="auto" data-setup='{ "inactivityTimeout": 0 }'></video>
-    <Transition name="slide-fade">
+    <Transition @enter="reDraw" @after-leave="reDraw" name="slide-fade">
       <canvas v-if="isInverted" id="invert" class="invert"></canvas>
     </Transition>
   </div>
@@ -309,7 +304,7 @@ onUnmounted(() => {
 }
 
 .slide-fade-enter-active {
-  transition: all 0.2s ease-out;
+  transition: all 0.1s ease-out;
 }
 
 .slide-fade-leave-active {

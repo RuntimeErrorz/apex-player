@@ -2,13 +2,13 @@
  * ------------------------------------------------------------------
  * 此ES Module处理了侧边栏的添加与截图与录屏功能的实现。
  * 导出了RecordParams类、screenshotHandle、recordHandle、customizeSidebar函数；
- * 实现了downloadFile、downloadViaCanvas、drawMedia函数。
+ * 实现了downloadFile、downloadVia、drawMedia函数。
  * ------------------------------------------------------------------
  */
 import RecordRTC from 'recordrtc';
 import videojs from 'video.js';
-import type {VideoJsPlayer} from 'video.js';
-import type {Ref} from 'vue';
+import type { VideoJsPlayer } from 'video.js';
+import type { Ref } from 'vue';
 
 import cameraImg from '@/assets/images/camera-outline.png';
 import monitorImg from '@/assets/images/monitor-screenshot.png';
@@ -131,18 +131,13 @@ export function screenshotHandle(
   isInverted: boolean
 ) {
   let video;
-  if (isInverted && isPixelated) {
+  if (isInverted && !isPixelated)
     video = <HTMLCanvasElement>document.getElementById('invert');
-    downloadViaCanvas(video);
-    video = <HTMLCanvasElement>document.getElementById('pixelate');
-    downloadViaCanvas(video);
-  } else if (isInverted)
-    video = <HTMLCanvasElement>document.getElementById('invert');
-  else if (isPixelated)
+  else if (isPixelated && !isInverted)
     video = <HTMLCanvasElement>document.getElementById('pixelate');
   else
     video = <HTMLVideoElement>playerInstance.value?.el().querySelector('video');
-  downloadViaCanvas(video);
+  downloadFromCanvasorVideo(video);
 }
 
 /**
@@ -168,7 +163,7 @@ function downloadFile(blobUrl: string, fileType: string) {
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
  **/
-function downloadViaCanvas(src: HTMLCanvasElement | HTMLVideoElement) {
+function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
   const fileType = 'png';
   const canvas = document.createElement('canvas');
   canvas.width = src instanceof HTMLCanvasElement ? src.width : src.videoWidth;

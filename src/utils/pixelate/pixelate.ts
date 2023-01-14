@@ -16,6 +16,7 @@ export interface PixelatePosition {
 }
 
 export default function pixelation(player: VideoJsPlayer, positions: PixelatePosition, animationID: Ref<number>) {
+  cancelAnimationFrame(animationID.value)
   const [width, height, ratio, top, left] = autoReSize(player)
   addPixelation(player, positions, width, height, ratio, top, left, animationID)
 }
