@@ -43,7 +43,7 @@
 - [Vue][Vue-url]
 - [Vite][Vite-url]
 - [Vuetify][Vuetify-url]
-- [Vitest][Vitest-rul]
+- [Vitest][Vitest-url]
 
 ## 项目配置
 
