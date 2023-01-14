@@ -40,10 +40,10 @@
 
 ### 技术选型
 
-- [Vue][Vue-url]
-- [Vite][Vite-url]
-- [Vuetify][Vuetify-url]
-- [Vitest][Vitest-url]
+- [![Vue][Vue]][Vue-url]
+- [![Vite][Vite]][Vite-url]
+- [![Vuetify][Vuetify]][Vuetify-url]
+- [![Vitest][Vitest]][Vitest-url]
 
 ## 项目配置
 
@@ -176,11 +176,11 @@ npm run dev
 - [FFmpeg](https://ffmpeg.org/)
 - [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html)
 
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 [Vue-url]: https://vuejs.org/
-[Vite.js]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite
+[Vite]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite
 [Vite-url]: https://vitejs.cn/
-[Vuetify.js]: https://img.shields.io/badge/Vuetify-aeddff?style=for-the-badge&logo=vuetify&logoColor=1697F6
+[Vuetify]: https://img.shields.io/badge/Vuetify-aeddff?style=for-the-badge&logo=vuetify&logoColor=1697F6
 [Vuetify-url]: https://next.vuetifyjs.com/
 [Vitest]: https://img.shields.io/badge/Vitest-729b1b?style=for-the-badge&logo=vitest&logoColor=fcc72b
 [Vitest-url]: https://cn.vitest.dev/
