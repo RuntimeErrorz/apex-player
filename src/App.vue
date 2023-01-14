@@ -212,7 +212,7 @@ const recommendURL = [
   },
   {
     format: 'HLS',
-    url: 'http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/hnwshd/4000000/mnf.m3u8'
+    url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
   }
 ];
 
