@@ -5,8 +5,8 @@
  * ------------------------------------------------------------------
  */
 
-import type { VideoJsPlayer } from 'video.js';
-import type { Ref } from "vue"
+import type {VideoJsPlayer} from 'video.js';
+import type {Ref} from 'vue';
 export interface PixelatePosition {
   //请注意这里的数字均为百分比
   leftX: number;
@@ -15,10 +15,23 @@ export interface PixelatePosition {
   rightY: number;
 }
 
-export default function pixelation(player: VideoJsPlayer, positions: PixelatePosition, animationID: Ref<number>) {
-  cancelAnimationFrame(animationID.value)
-  const [width, height, ratio, top, left] = autoReSize(player)
-  addPixelation(player, positions, width, height, ratio, top, left, animationID)
+export default function pixelation(
+  player: VideoJsPlayer,
+  positions: PixelatePosition,
+  animationID: Ref<number>
+) {
+  cancelAnimationFrame(animationID.value);
+  const [width, height, ratio, top, left] = autoReSize(player);
+  addPixelation(
+    player,
+    positions,
+    width,
+    height,
+    ratio,
+    top,
+    left,
+    animationID
+  );
 }
 
 export function autoReSize(player: VideoJsPlayer) {
@@ -34,10 +47,9 @@ export function autoReSize(player: VideoJsPlayer) {
   if (currentRatio > originRatio) {
     //根据视频长宽比例确定码的大小与移动control bar到整体视频下方
     height = player.currentHeight();
-    width = height * video.videoWidth / video.videoHeight;
+    width = (height * video.videoWidth) / video.videoHeight;
     ratio = height / video.videoHeight;
     left += (player.currentWidth() - width) / 2;
-
   } else {
     width = player.currentWidth();
     height = (width * video.videoHeight) / video.videoWidth;
@@ -45,9 +57,8 @@ export function autoReSize(player: VideoJsPlayer) {
     top += (player.currentHeight() - height) / 2;
   }
   if (ratio < 1) ratio = 1;
-  return [width, height, ratio, top, left]
+  return [width, height, ratio, top, left];
 }
-
 
 /**
  * 接受播放器实例和马赛克位置，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择买塞克位置的功能。
@@ -90,12 +101,12 @@ export function addPixelation(
     sourceLayer.width =
     pixelateLayer.width =
     pathLayer.width =
-    width;
+      width;
   canvas.height =
     sourceLayer.height =
     pixelateLayer.height =
     pathLayer.height =
-    height;
+      height;
 
   if (!pathContext) throw new Error('');
   pathContext.lineCap = 'round';

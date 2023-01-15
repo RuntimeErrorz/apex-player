@@ -7,8 +7,8 @@
  */
 import RecordRTC from 'recordrtc';
 import videojs from 'video.js';
-import type { VideoJsPlayer } from 'video.js';
-import type { Ref } from 'vue';
+import type {VideoJsPlayer} from 'video.js';
+import type {Ref} from 'vue';
 
 import cameraImg from '@/assets/images/camera-outline.png';
 import monitorImg from '@/assets/images/monitor-screenshot.png';
