@@ -44,13 +44,10 @@
 - [![Vite][Vite]][Vite-url]
 - [![Vuetify][Vuetify]][Vuetify-url]
 - [![Vitest][Vitest]][Vitest-url]
-
-## 项目配置
-
-```sh
-npm install
-npm run dev
-```
+- [![ESlint][ESlint]][ESlint-url]
+- [![Prettier][Prettier]][Prettier-url]
+- Video.js
+- Husky
 
 ## 项目源文件结构
 
@@ -211,4 +208,8 @@ npm run dev
 [Vuetify-url]: https://next.vuetifyjs.com/
 [Vitest]: https://img.shields.io/badge/Vitest-729b1b?style=for-the-badge&logo=vitest&logoColor=fcc72b
 [Vitest-url]: https://cn.vitest.dev/
+[ESlint]: https://eslint.org/
+[ESlint-url]: https://img.shields.io/badge/eslint-101828?style=for-the-badge&logo=eslint
+[Prettier]: https://prettier.io/
+[Prettier-url]: https://img.shields.io/badge/prettier-1a2b34?style=for-the-badge&logo=prettier
 [product-screenshot]: README_PIC/screenshot.png
