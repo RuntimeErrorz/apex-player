@@ -40,14 +40,14 @@
 
 ### 技术选型
 
-- [![Vue][Vue]][Vue-url]
-- [![Vite][Vite]][Vite-url]
-- [![Vuetify][Vuetify]][Vuetify-url]
-- [![Vitest][Vitest]][Vitest-url]
-- [![ESlint][ESlint]][ESlint-url]
-- [![Prettier][Prettier]][Prettier-url]
-- Video.js
-- Husky
+[![Vue][Vue]][Vue-url]
+[![Vite][Vite]][Vite-url]
+[![Vuetify][Vuetify]][Vuetify-url]
+[![Vitest][Vitest]][Vitest-url]
+[![ESlint][ESlint]][ESlint-url]
+[![Prettier][Prettier]][Prettier-url]
+Video.js
+Husky
 
 ## 项目源文件结构
 
