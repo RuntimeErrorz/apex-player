@@ -70,9 +70,7 @@ export default function addQuality() {
           new ResolutionMenuItem(this.player_, {
             label: key,
             src: labels[key],
-            selected:
-              key ===
-              (this.currentSelection ? this.currentSelection.label : false)
+            selected: key === (this.currentSelection ? this.currentSelection.label : false)
           })
         );
       }
@@ -82,15 +80,11 @@ export default function addQuality() {
   ResolutionMenuButton.prototype.update = function () {
     this.sources = this.player_.getGroupedSrc();
     this.currentSelection = this.player_.currentResolution();
-    this.label.innerHTML = this.currentSelection
-      ? this.currentSelection.label
-      : '';
+    this.label.innerHTML = this.currentSelection ? this.currentSelection.label : '';
     return MenuButton.prototype.update.call(this);
   };
   ResolutionMenuButton.prototype.buildCSSClass = function () {
-    return (
-      MenuButton.prototype.buildCSSClass.call(this) + ' vjs-resolution-button'
-    );
+    return MenuButton.prototype.buildCSSClass.call(this) + ' vjs-resolution-button';
   };
   MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton);
 
@@ -153,11 +147,7 @@ export default function addQuality() {
       }
 
       // Lookup sources for label
-      if (
-        !this.groupedSrc ||
-        !this.groupedSrc.label ||
-        !this.groupedSrc.label[label]
-      ) {
+      if (!this.groupedSrc || !this.groupedSrc.label || !this.groupedSrc.label[label]) {
         return;
       }
       const sources = this.groupedSrc.label[label];
@@ -183,11 +173,7 @@ export default function addQuality() {
         handleSeekEvent = 'timeupdate';
       }
       player
-        .setSourcesSanitized(
-          sources,
-          label,
-          customSourcePicker || settings.customSourcePicker
-        )
+        .setSourcesSanitized(sources, label, customSourcePicker || settings.customSourcePicker)
         .one(handleSeekEvent, function () {
           player.currentTime(currentTime);
           if (!isPaused && player.paused()) {
@@ -280,11 +266,7 @@ export default function addQuality() {
       if (selectedRes === 'high') {
         selectedRes = src[0].res;
         selectedLabel = src[0].label;
-      } else if (
-        selectedRes === 'low' ||
-        selectedRes == null ||
-        !groupedSrc.res[selectedRes]
-      ) {
+      } else if (selectedRes === 'low' || selectedRes == null || !groupedSrc.res[selectedRes]) {
         // Select low-res if default is low or not set
         selectedRes = src[src.length - 1].res;
         selectedLabel = src[src.length - 1].label;
@@ -324,17 +306,14 @@ export default function addQuality() {
       player.tech_.ytPlayer.setPlaybackQuality('auto');
 
       // This is triggered when the resolution actually changes
-      player.tech_.ytPlayer.addEventListener(
-        'onPlaybackQualityChange',
-        function (event) {
-          for (const res in _yts) {
-            if (res.yt === event.data) {
-              player.currentResolution(res.label, _customSourcePicker);
-              return;
-            }
+      player.tech_.ytPlayer.addEventListener('onPlaybackQualityChange', function (event) {
+        for (const res in _yts) {
+          if (res.yt === event.data) {
+            player.currentResolution(res.label, _customSourcePicker);
+            return;
           }
         }
-      );
+      });
 
       // We must wait for play event
       player.one('play', function () {
@@ -364,22 +343,17 @@ export default function addQuality() {
         };
 
         player.trigger('updateSources');
-        player.setSourcesSanitized(
-          chosen.sources,
-          chosen.label,
-          _customSourcePicker
-        );
+        player.setSourcesSanitized(chosen.sources, chosen.label, _customSourcePicker);
       });
     }
 
     player.ready(function () {
       if (settings.ui) {
         const menuButton = new ResolutionMenuButton(player, settings);
-        player.controlBar.resolutionSwitcher =
-          player.controlBar.el_.insertBefore(
-            menuButton.el_,
-            player.controlBar.getChild('fullscreenToggle').el_
-          );
+        player.controlBar.resolutionSwitcher = player.controlBar.el_.insertBefore(
+          menuButton.el_,
+          player.controlBar.getChild('fullscreenToggle').el_
+        );
         player.controlBar.resolutionSwitcher.dispose = function () {
           this.parentNode.removeChild(this);
         };
@@ -398,8 +372,5 @@ export default function addQuality() {
   };
 
   // register the plugin
-  videojs.registerPlugin(
-    'videoJsResolutionSwitcher',
-    videoJsResolutionSwitcher
-  );
+  videojs.registerPlugin('videoJsResolutionSwitcher', videoJsResolutionSwitcher);
 }

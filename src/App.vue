@@ -1,3 +1,140 @@
+<script setup lang="ts">
+import {ref, reactive} from 'vue';
+import sd from '@/assets/videos/sd.mp4';
+import hd from '@/assets/videos/hd.mp4';
+import CustomVideo from './components/custom-video.vue';
+
+const dialog = ref(true); // 对象框显示控制
+const tab = ref(null); // tab切换所需
+const tabTitleItems = reactive(['使用URL', '上传文件']); // tab标题
+const defaultSrcs = [
+  // 默认值用于展示清晰度切换
+  {
+    src: hd,
+    type: 'video/mp4',
+    label: 'HD'
+  },
+  {
+    src: sd,
+    type: 'video/mp4',
+    label: 'SD'
+  }
+];
+
+const options = {
+  // videojs选项
+  flvjs: {
+    mediaDataSource: {
+      isLive: false,
+      cors: true,
+      withCredentials: false
+    }
+  },
+  autoplay: true,
+  controls: true,
+  customBar: {
+    screenshot: true,
+    recorder: true
+  },
+  plugins: {
+    videoJsResolutionSwitcher: {
+      default: 'high',
+      dynamicLabel: true
+    }
+  },
+  playbackRates: [0.5, 1, 1.5, 2]
+};
+const mimeTypesMap = {
+  // 根据文件类型转化MediaType
+  flv: 'video/x-flv',
+  mp4: 'video/mp4',
+  mov: 'video/mp4',
+  m3u8: 'application/x-mpegurl'
+};
+
+interface Src {
+  src: string;
+  type: string;
+  label: string;
+}
+let srcs: Array<Src>; // 真正播放传参的源
+let urlSrcs = reactive([
+  //  输入的URL数组
+  {
+    src: '',
+    type: '',
+    label: ''
+  }
+]);
+let fileSrcs = reactive([
+  // 输入的文件数组
+  {
+    files: [],
+    type: '',
+    label: ''
+  }
+]);
+const recommendURL = [
+  // 供参考的视频源
+  {
+    format: 'H.264/MPEG-4 AVC',
+    url: 'http://101.42.51.16/videos/h264.mp4'
+  },
+  {
+    format: 'HEVC/H.265',
+    url: 'http://101.42.51.16/videos/hevc.mp4'
+  },
+  {
+    format: 'MOV/QuickTime',
+    url: 'http://101.42.51.16/videos/test.mov'
+  },
+  {
+    format: 'FLV',
+    url: 'http://101.42.51.16/videos/test.flv'
+  },
+  {
+    format: 'HLS',
+    url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
+  }
+];
+const addType = (srcs: Array<Src>) => {
+  for (const src of srcs)
+    src.type = mimeTypesMap[(<string>src.src.split('.').pop()) as keyof typeof mimeTypesMap];
+  return srcs;
+};
+const resetSource = () => {
+  // 组件换源，需要清空源
+  urlSrcs = reactive([
+    {
+      src: '',
+      type: '',
+      label: ''
+    }
+  ]);
+
+  fileSrcs = reactive([
+    {
+      files: [],
+      type: '',
+      label: ''
+    }
+  ]);
+  dialog.value = true;
+};
+const createBlob = (fileList: Array<{files: Array<File>; type: string; label: string}>) => {
+  const temp = [];
+  for (const file of fileList) {
+    temp.push({
+      src: URL.createObjectURL(file.files[0]),
+      type: mimeTypesMap[
+        (<string>file.files[0].name.split('.').pop()) as keyof typeof mimeTypesMap
+      ],
+      label: file.label
+    });
+  }
+  return reactive(temp);
+};
+</script>
 <template>
   <v-dialog v-model="dialog" style="width: 60vw">
     <v-card>
@@ -69,10 +206,7 @@
           <v-container style="margin-top: 1em">
             <v-row v-for="(item, i) in fileSrcs" :key="i">
               <v-col cols="7">
-                <v-file-input
-                  label="上传文件"
-                  v-model="item.files"
-                ></v-file-input>
+                <v-file-input label="上传文件" v-model="item.files"></v-file-input>
               </v-col>
               <v-col cols="4"
                 ><v-text-field
@@ -142,166 +276,3 @@
   </v-dialog>
   <CustomVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
 </template>
-<script setup lang="ts">
-import {ref, reactive} from 'vue';
-import sd from '@/assets/videos/sd.mp4';
-import hd from '@/assets/videos/hd.mp4';
-import CustomVideo from './components/custom-video.vue';
-const dialog = ref(true); //对象框显示控制
-const tab = ref(null); //tab切换所需
-const tabTitleItems = reactive(['使用URL', '上传文件']); //tab标题
-
-interface ImimeTypesMap {
-  flv: string;
-  mp4: string;
-  mov: string;
-  m3u8: string;
-}
-
-const mimeTypesMap: ImimeTypesMap = {
-  //根据文件类型转化MediaType
-  flv: 'video/x-flv',
-  mp4: 'video/mp4',
-  mov: 'video/mp4',
-  m3u8: 'application/x-mpegurl'
-};
-
-interface Isrc {
-  src: string;
-  type: string;
-  label: string;
-}
-
-let srcs: Array<Isrc>; //真正播放传参的源
-
-let urlSrcs = reactive([
-  {
-    //输入的URL数组
-    src: '',
-    type: '',
-    label: ''
-  }
-]);
-
-let fileSrcs = reactive([
-  //输入的文件数组
-  {
-    files: [],
-    type: '',
-    label: ''
-  }
-]);
-
-const recommendURL = [
-  //供参考的视频源
-  {
-    format: 'H.264/MPEG-4 AVC',
-    url: 'http://101.42.51.16/videos/h264.mp4'
-  },
-  {
-    format: 'HEVC/H.265',
-    url: 'http://101.42.51.16/videos/hevc.mp4'
-  },
-  {
-    format: 'MOV/QuickTime',
-    url: 'http://101.42.51.16/videos/test.mov'
-  },
-  {
-    format: 'FLV',
-    url: 'http://101.42.51.16/videos/test.flv'
-  },
-  {
-    format: 'HLS',
-    url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
-  }
-];
-
-const addType = (srcs: Array<Isrc>) => {
-  //对URL形式的源添加类型字段
-  for (const src of srcs)
-    src.type =
-      mimeTypesMap[
-        (<string>src.src.split('.').pop()) as keyof typeof mimeTypesMap
-      ];
-  return srcs;
-};
-
-const resetSource = () => {
-  //组件换源，需要清空源
-  urlSrcs = reactive([
-    {
-      src: '',
-      type: '',
-      label: ''
-    }
-  ]);
-
-  fileSrcs = reactive([
-    {
-      files: [],
-      type: '',
-      label: ''
-    }
-  ]);
-
-  dialog.value = true;
-};
-
-function createBlob(
-  fileList: Array<{files: Array<File>; type: string; label: string}>
-) {
-  //将上传的文件转化为Blob
-  let temp = [];
-  for (const file of fileList) {
-    temp.push({
-      src: URL.createObjectURL(file.files[0]),
-      type: mimeTypesMap[
-        (<string>(
-          file.files[0].name.split('.').pop()
-        )) as keyof typeof mimeTypesMap
-      ],
-      label: file.label
-    });
-  }
-  return reactive(temp);
-}
-
-let defaultSrcs = [
-  {
-    src: hd,
-    type: 'video/mp4',
-    label: 'HD'
-  },
-  {
-    //默认值用于展示清晰度切换
-    src: sd,
-    type: 'video/mp4',
-    label: 'SD'
-  }
-];
-
-const options = {
-  //videojs选项
-  flvjs: {
-    mediaDataSource: {
-      isLive: false,
-      cors: true,
-      withCredentials: false
-    }
-  },
-  autoplay: true,
-  controls: true,
-  customBar: {
-    screenshot: true,
-    recorder: true
-  },
-  plugins: {
-    videoJsResolutionSwitcher: {
-      default: 'high',
-      dynamicLabel: true
-    }
-  },
-  playbackRates: [0.5, 1, 1.5, 2]
-};
-</script>
-<style></style>

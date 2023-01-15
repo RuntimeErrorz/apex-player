@@ -12,18 +12,16 @@ import type {VideoJsPlayer} from 'video.js';
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export default function invertColor(player: VideoJsPlayer) {
   const video = <HTMLVideoElement>player.el().querySelector('video');
   const canv = <HTMLCanvasElement>document.getElementById('invert');
-  const context = <CanvasRenderingContext2D>(
-    canv.getContext('2d', {willReadFrequently: true})
-  );
+  const context = <CanvasRenderingContext2D>canv.getContext('2d', {willReadFrequently: true});
 
   canv.width = video.videoWidth;
   canv.height = video.videoHeight;
 
-  canv.addEventListener('click', function () {
+  canv.addEventListener('click', () => {
     if (video.paused) {
       video.play();
     } else {
@@ -31,9 +29,7 @@ export default function invertColor(player: VideoJsPlayer) {
     }
   });
 
-  requestAnimationFrame(() =>
-    effectInvert(video, context, canv.width, canv.height)
-  );
+  requestAnimationFrame(() => effectInvert(video, context, canv.width, canv.height));
 }
 
 /**
@@ -45,7 +41,7 @@ export default function invertColor(player: VideoJsPlayer) {
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export function effectInvert(
   video: HTMLVideoElement,
   context: CanvasRenderingContext2D,
@@ -64,7 +60,7 @@ export function effectInvert(
  *@returns  {ImageData}            反色后的画面数据
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export function vidDataInvert(vidData: ImageData): ImageData {
   for (let i = 0; i < vidData.data.length; i += 4) {
     vidData.data[i] = 255 - vidData.data[i];
