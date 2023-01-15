@@ -40,12 +40,13 @@
 
 ### 技术选型
 
+- [![ESlint][ESlint]][ESlint-url]
+- [![Prettier][Prettier]][Prettier-url]
 - [![Vue][Vue]][Vue-url]
 - [![Vite][Vite]][Vite-url]
 - [![Vuetify][Vuetify]][Vuetify-url]
 - [![Vitest][Vitest]][Vitest-url]
-- [![ESlint][ESlint]][ESlint-url]
-- [![Prettier][Prettier]][Prettier-url]
+
 - Video.js
 - Husky
 
