@@ -18,11 +18,11 @@ import monitorImg from '@/assets/images/monitor-screenshot.png';
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export default function customiseSidebar() {
   const Component = videojs.getComponent('Component');
   const CustomBar = videojs.extend(Component, {
-    createEl: function () {
+    createEl() {
       const divDom = videojs.dom.createEl('div', {
         className: 'vjs-custom-bar',
         innerHTML: `
@@ -55,10 +55,15 @@ export default function customiseSidebar() {
  */
 export class RecorderParams {
   player;
+
   canvas;
+
   recorder;
+
   animationFrame;
+
   isRecording;
+
   constructor(
     player: Ref<VideoJsPlayer>,
     canvas: HTMLCanvasElement | null,
@@ -81,7 +86,7 @@ export class RecorderParams {
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export function recordHandle(
   recordDom: HTMLDivElement,
   recorderParams: RecorderParams,
@@ -89,8 +94,8 @@ export function recordHandle(
   isInverted: boolean
 ) {
   if (!recorderParams.isRecording) {
-    //开始录屏后修改DOM，创建Canvas
-    recordDom.innerHTML = `<i class="record-process"></i><span class="ml10">结束</span>`;
+    // 开始录屏后修改DOM，创建Canvas
+    recordDom.innerHTML = '<i class="record-process"></i><span class="ml10">结束</span>';
     if (!recorderParams.canvas) {
       recorderParams.canvas = document.createElement('canvas');
     }
@@ -101,12 +106,10 @@ export function recordHandle(
     recorderParams.recorder.startRecording();
     drawMedia(recorderParams, isInverted, isPixelated);
   } else {
-    //结束录屏后修改DOM并复原参数
+    // 结束录屏后修改DOM并复原参数
     recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`;
     recorderParams.recorder?.stopRecording(() => {
-      const url = window.URL.createObjectURL(
-        <Blob>recorderParams.recorder?.getBlob()
-      );
+      const url = window.URL.createObjectURL(<Blob>recorderParams.recorder?.getBlob());
       downloadFile(url, 'mp4');
       cancelAnimationFrame(<number>recorderParams.animationFrame);
       recorderParams.canvas = null;
@@ -124,19 +127,17 @@ export function recordHandle(
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 export function screenshotHandle(
   playerInstance: Ref<VideoJsPlayer>,
   isPixelated: boolean,
   isInverted: boolean
 ) {
   let video;
-  if (isInverted && !isPixelated)
-    video = <HTMLCanvasElement>document.getElementById('invert');
+  if (isInverted && !isPixelated) video = <HTMLCanvasElement>document.getElementById('invert');
   else if (isPixelated && !isInverted)
     video = <HTMLCanvasElement>document.getElementById('pixelate');
-  else
-    video = <HTMLVideoElement>playerInstance.value?.el().querySelector('video');
+  else video = <HTMLVideoElement>playerInstance.value?.el().querySelector('video');
   downloadFromCanvasorVideo(video);
 }
 
@@ -147,7 +148,7 @@ export function screenshotHandle(
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 function downloadFile(blobUrl: string, fileType: string) {
   const temp = document.createElement('a');
   temp.style.display = 'none';
@@ -162,17 +163,16 @@ function downloadFile(blobUrl: string, fileType: string) {
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * */
 function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
   const fileType = 'png';
   const canvas = document.createElement('canvas');
   canvas.width = src instanceof HTMLCanvasElement ? src.width : src.videoWidth;
-  canvas.height =
-    src instanceof HTMLCanvasElement ? src.height : src.videoHeight;
+  canvas.height = src instanceof HTMLCanvasElement ? src.height : src.videoHeight;
   canvas.getContext('2d')?.drawImage(src, 0, 0, canvas.width, canvas.height);
   canvas.toBlob((blob) => {
     downloadFile(URL.createObjectURL(<Blob>blob), fileType);
-  }, 'image/' + fileType);
+  }, `image/${fileType}`);
 }
 
 /**
@@ -183,12 +183,8 @@ function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
-function drawMedia(
-  recorderParams: RecorderParams,
-  isInverted: boolean,
-  isPixelated: boolean
-) {
+ * */
+function drawMedia(recorderParams: RecorderParams, isInverted: boolean, isPixelated: boolean) {
   const ctx = recorderParams.canvas?.getContext('2d');
   let video!: HTMLCanvasElement | HTMLVideoElement;
   if (isInverted && !isPixelated) {
@@ -200,9 +196,7 @@ function drawMedia(
     recorderParams.canvas?.setAttribute('width', video.width.toString());
     recorderParams.canvas?.setAttribute('height', video.height.toString());
   } else {
-    video = <HTMLVideoElement>(
-      recorderParams.player.value?.el().querySelector('video')
-    );
+    video = <HTMLVideoElement>recorderParams.player.value?.el().querySelector('video');
     if (!video || !ctx) throw Error('video Error');
     recorderParams.canvas?.setAttribute('width', video.videoWidth.toString());
     recorderParams.canvas?.setAttribute('height', video.videoHeight.toString());
