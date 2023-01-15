@@ -33,9 +33,7 @@
 </details>
 
 ## 项目简介
-
-![Product Name Screen Shot][product-screenshot]
-
+![1673792015238](image/README/1673792015238.png)
 本项目是一个基于 Video.js 深度自定义的现代播放器。
 
 ### 技术选型
