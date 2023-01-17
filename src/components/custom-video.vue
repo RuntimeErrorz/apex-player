@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import videojs, { type VideoJsPlayer } from 'video.js';
+import videojs, {type VideoJsPlayer} from 'video.js';
 import 'videojs-flvjs-es6';
-import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
-import type { Ref } from 'vue';
+import {onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
+import type {Ref} from 'vue';
 import addQuality from '@/utils/quality/qualityPlugin.js';
 import customiseSidebar, {
   RecorderParams,
