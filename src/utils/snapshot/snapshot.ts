@@ -15,10 +15,10 @@ import monitorImg from '@/assets/images/monitor-screenshot.png';
 
 /**
  * 自定义video.js的侧边栏，添加截图与录屏按钮
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export default function customiseSidebar() {
   const Component = videojs.getComponent('Component');
   const CustomBar = videojs.extend(Component, {
@@ -81,12 +81,12 @@ export class RecorderParams {
 
 /**
  * 录像控制函数，接受录像DOM和录像参数。负责按需修改recordDom的内容与开始和结束录屏。
- *@param    {HTMLDivElement} recordDom 录像DOM
- *@param    {RecorderParams} recorderParams
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @param    {HTMLDivElement} recordDom 录像DOM
+ * @param    {RecorderParams} recorderParams
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export function recordHandle(
   recordDom: HTMLDivElement,
   recorderParams: RecorderParams,
@@ -159,11 +159,11 @@ function downloadFile(blobUrl: string, fileType: string) {
 
 /**
  * 下载图片函数，接受一个HTMLCanvasElement或HTMLVideoElement，创建Blob并调用下载功能
- *@param    {HTMLCanvasElement | HTMLVideoElement} src 录像DOM
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @param    {HTMLCanvasElement | HTMLVideoElement} src 录像DOM
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
   const fileType = 'png';
   const canvas = document.createElement('canvas');
@@ -177,13 +177,13 @@ function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
 
 /**
  * 截屏控制函数，接受VideoJSPlayer实例与分别表征是否马赛克与是否反转的两个布尔变量。实现了多场景截图的功能。
- *@param    {Ref<VideoJsPlayer>} playerInstance 录像DOM
- *@param    {boolean}            isPixelated    是否马赛克
- *@param    {boolean}            isInverted     是否反转
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @param    {Ref<VideoJsPlayer>} playerInstance 录像DOM
+ * @param    {boolean}            isPixelated    是否马赛克
+ * @param    {boolean}            isInverted     是否反转
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 function drawMedia(recorderParams: RecorderParams, isInverted: boolean, isPixelated: boolean) {
   const ctx = recorderParams.canvas?.getContext('2d');
   let video!: HTMLCanvasElement | HTMLVideoElement;
