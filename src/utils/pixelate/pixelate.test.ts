@@ -77,8 +77,8 @@ function pixelate(
         }
       }
     }
-    return <ImageData>imageData;
   }
+  return <ImgData>imageData;
 }
 
 const srcData = new ImgData(

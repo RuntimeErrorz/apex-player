@@ -66,12 +66,19 @@ watch(props, () => {
   (playerInstance.value as any)?.updateSrc(props.srcs); // 主要是插件问题，没时间重写类型声明
 });
 
-const initPlayer = () => {
-  // 初始化实例的回调函数。添加反色、打码、换源按钮，并监听全屏更换
+/**
+ * 初始化播放器实例的回调函数。添加反色、打码、换源按钮。并监听全屏事件
+ * @returns  {void}
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
+const initPlayer = (): void => {
   const invertButton = <videojs.Component>playerInstance.value?.controlBar.addChild('button');
   invertButton.addClass('vjs-custom-bt');
   invertButton.el().innerHTML = '反色';
-  invertButton.el().addEventListener('click', invert);
+  invertButton.el().addEventListener('click', () => {
+    isInverted.value = !isInverted.value;
+  });
 
   const pixelateButton = <videojs.Component>playerInstance.value?.controlBar.addChild('button');
   pixelateButton.addClass('vjs-custom-bt');
@@ -91,15 +98,15 @@ const initPlayer = () => {
 
   playerInstance.value?.on('fullscreenchange', () => {
     fullscreen.value = !fullscreen.value;
-    if (isPixelated.value) isPixelated.value = !isPixelated.value;
   });
 };
-const invert = () => {
-  // 反色控制函数
-  if (!isInverted.value) isInverted.value = true;
-  else isInverted.value = false;
-};
-const redraw = () => {
+/**
+ * 重绘马赛克
+ * @returns  {void}
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
+const redraw = (): void => {
   if (isPixelated.value)
     pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID);
 };

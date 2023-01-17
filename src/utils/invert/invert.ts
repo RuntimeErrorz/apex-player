@@ -1,18 +1,16 @@
 /**
- * ------------------------------------------------------------------
  * 此ES Module导出了函数名为invertColor的函数。
- * ------------------------------------------------------------------
+ * @module utils/invert/invert
  */
-
 import type {VideoJsPlayer} from 'video.js';
 
 /**
  * 接受一个播放器实例，将其中的画面反色显示到ID为invert的canvas元素上。并为其添加点击暂停时间。
- *@param    {VideoJsPlayer}  player   播放器实例
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @param    {VideoJsPlayer}  player   播放器实例
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export default function invertColor(player: VideoJsPlayer) {
   const video = <HTMLVideoElement>player.el().querySelector('video');
   const canv = <HTMLCanvasElement>document.getElementById('invert');
@@ -34,14 +32,14 @@ export default function invertColor(player: VideoJsPlayer) {
 
 /**
  * invertColor的具体实现
- *@param    {HTMLVideoElement}  video             视频对象
- *@param    {CanvasRenderingContext2D}  context   渲染上下文
- *@param    {number}  width                       canvas宽度
- *@param    {number}  height                      canvas高度
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * @param    {HTMLVideoElement}  video             视频对象
+ * @param    {CanvasRenderingContext2D}  context   渲染上下文
+ * @param    {number}  width                       canvas宽度
+ * @param    {number}  height                      canvas高度
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export function effectInvert(
   video: HTMLVideoElement,
   context: CanvasRenderingContext2D,
@@ -55,12 +53,12 @@ export function effectInvert(
 }
 
 /**
- * 接受一个ImgData，将其反色返回。
- *@param    {ImageData}  vidData   视频某一帧的画面数据
- *@returns  {ImageData}            反色后的画面数据
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- * */
+ * 接受一个ImgData，将其反色返回。如此拆分主要方便测试
+ * @param    {ImageData}  vidData   视频某一帧的画面数据
+ * @returns  {ImageData}            反色后的画面数据
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export function vidDataInvert(vidData: ImageData): ImageData {
   for (let i = 0; i < vidData.data.length; i += 4) {
     vidData.data[i] = 255 - vidData.data[i];

@@ -53,12 +53,12 @@ export function autoReSize(player: VideoJsPlayer) {
 
 /**
  * 接受播放器实例和马赛克位置，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择买塞克位置的功能。
- *@param    {VideoJsPlayer}     player      播放器实例
- *@param    {PixelatePosition}  positions   马赛克位置
- *@returns  void
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * @param    {VideoJsPlayer}     player      播放器实例
+ * @param    {PixelatePosition}  positions   马赛克位置
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export function addPixelation(
   player: VideoJsPlayer,
   positions: PixelatePosition,
@@ -140,12 +140,12 @@ export function addPixelation(
 
 /**
  * 接受ImageData的长和宽，返回一个空的ImgData。
- *@param    {number}      width      所需ImgData的宽度
- *@param    {number}      height     所需ImgData的高度
- *@returns  {ImgData}     马赛克数据
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * @param    {number}      width      所需ImgData的宽度
+ * @param    {number}      height     所需ImgData的高度
+ * @returns  {ImgData}     马赛克数据
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 function createImageData(width: number, height: number) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
@@ -157,13 +157,13 @@ function createImageData(width: number, height: number) {
 
 /**
  * 接受ImageData类型的源数据和马赛克的长与宽，返回打码后的ImgData。
- *@param    {ImageData}   srcImageData         源数据
- *@param    {number}      pixelationWidth      马赛克宽度
- *@param    {number}      pixelationHeight     马赛克高度
- *@returns  {ImageData}     马赛克数据
- *@date     2023-01-12
- *@author   RuntimeErroz<dariuszeng@qq.com>
- **/
+ * @param    {ImageData}   srcImageData         源数据
+ * @param    {number}      pixelationWidth      马赛克宽度
+ * @param    {number}      pixelationHeight     马赛克高度
+ * @returns  {ImageData}     马赛克数据
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 function pixelate(
   srcImageData: ImageData,
   pixelationWidth: number,

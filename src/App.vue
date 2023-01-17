@@ -97,7 +97,14 @@ const recommendURL = [
     url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
   }
 ];
-const addType = (srcs: Array<Src>) => {
+/**
+ * 通过后缀设定各自URL的MediaType
+ * @param    {Array<Src>}  srcs  源数组
+ * @returns  {Array<Src>}        设定后的数组
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
+const setType = (srcs: Array<Src>) => {
   for (const src of srcs)
     src.type = mimeTypesMap[(<string>src.src.split('.').pop()) as keyof typeof mimeTypesMap];
   return srcs;
@@ -121,7 +128,16 @@ const resetSource = () => {
   ]);
   dialog.value = true;
 };
-const createBlob = (fileList: Array<{files: Array<File>; type: string; label: string}>) => {
+/**
+ * 返回一个由文件创建的Blob为源的视频播放源数组。
+ * @param    {Array<Src>}  fileList  源数组
+ * @returns  {Array<Src>} 处理后的数组
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
+const createBlob = (
+  fileList: Array<{files: Array<File>; type: string; label: string}>
+): Array<Src> => {
   const temp = [];
   for (const file of fileList) {
     temp.push({
@@ -132,7 +148,7 @@ const createBlob = (fileList: Array<{files: Array<File>; type: string; label: st
       label: file.label
     });
   }
-  return reactive(temp);
+  return temp;
 };
 </script>
 <template>
@@ -265,7 +281,7 @@ const createBlob = (fileList: Array<{files: Array<File>; type: string; label: st
           color="blue-darken-1"
           @click="
             () => {
-              (dialog = false), (srcs = addType(urlSrcs));
+              (dialog = false), (srcs = setType(urlSrcs));
             }
           "
         >

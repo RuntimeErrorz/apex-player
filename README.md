@@ -33,18 +33,19 @@
 </details>
 
 ## 项目简介
+
 ![1673792015238](image/README/1673792015238.png)
 本项目是一个基于 Video.js 深度自定义的现代播放器。
 
 ### 技术选型
 
-[![Vue][Vue]][Vue-url]  
-[![Vite][Vite]][Vite-url]  
-[![Vuetify][Vuetify]][Vuetify-url]  
-[![Vitest][Vitest]][Vitest-url]  
-[![ESlint][ESlint]][ESlint-url]  
-[![Prettier][Prettier]][Prettier-url]  
-Video.js  
+[Vue][Vue-url]
+[Vite][Vite-url]
+[Vuetify][Vuetify-url]
+[Vitest][Vitest-url]
+[ESlint][ESlint-url]
+[Prettier][Prettier-url]
+Video.js
 Husky
 
 ## 文件结构
@@ -92,26 +93,38 @@ Husky
 ## 使用
 
 ### 1. 选择视频源
+
 可以在播放前和播放中切换URL、文件、默认值等播放源。
 请注意，添加不同清晰度时需要点击右方加号。
 ![1673689752359](image/README/1673689752359.png)
+
 ### 2. 切换清晰度
+
 如果您之前使用了多清晰度的源，在播放途中可以点击设置键进行切换。
 ![1673688400995](image/README/1673688400995.png)
+
 ### 3. 反色
+
 播放中点击反色键即可反色，再点一次可以关闭反色。
 ![1673688449180](image/README/1673688449180.png)
+
 ### 4. 截图
+
 点击截图键即可保存当前视频中的最新帧到本地。（如果处于马赛克或反转颜色状态则截取当前状态下的图片，如果同时处于马赛克和反转颜色状态则截取原视频）
 ![1673688604754](image/README/1673688604754.png)
+
 ### 5. 录屏
+
 点击录屏键开始录屏，点击结束键结束录屏并保存到本地。（录屏逻辑同截图）
 ![1673688896373](image/README/1673688896373.png)
+
 ### 6. 打码
+
 点击打码键可以选择打码区域，并且可以在打码区域涂抹。
 ![1673689080140](image/README/1673689080140.png)
 ![1673689272594](image/README/1673689272594.png)
 ![1673689363627](image/README/1673689363627.png)
+
 ## 项目完成度与未来计划
 
 ### 已实现
@@ -144,6 +157,7 @@ Husky
 - [ ] 引入 h265web.js 来提高播放 HEVC 视频兼容性
 - [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑。（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
 - [ ] 持续完善单元测试。
+- [ ] 使用Video.js 8重构（已尝试过，由于Video.js8对TS的支持目前不佳作罢）
 
 ## 设计文档
 
@@ -206,10 +220,8 @@ Husky
 [Vuetify-url]: https://next.vuetifyjs.com/
 [Vitest]: https://img.shields.io/badge/Vitest-729b1b?style=for-the-badge&logo=vitest&logoColor=fcc72b
 [Vitest-url]: https://cn.vitest.dev/
-
 [ESlint-url]: https://eslint.org/
 [ESlint]: https://img.shields.io/badge/eslint-101828?style=for-the-badge&logo=eslint
-
 [Prettier-url]: https://prettier.io/
 [Prettier]: https://img.shields.io/badge/prettier-1a2b34?style=for-the-badge&logo=prettier
 [product-screenshot]: README_PIC/screenshot.png
