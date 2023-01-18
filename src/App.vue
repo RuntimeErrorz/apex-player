@@ -2,7 +2,7 @@
 import {ref, reactive} from 'vue';
 import sd from '@/assets/videos/sd.mp4';
 import hd from '@/assets/videos/hd.mp4';
-import CustomVideo from './components/custom-video.vue';
+import CustomVideo from './components/CustomVideo.vue';
 
 const dialog = ref(true); // 对象框显示控制
 const tab = ref(null); // tab切换所需
