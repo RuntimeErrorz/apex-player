@@ -39,14 +39,14 @@
 
 ### 技术选型
 
-[Vue][Vue-url]
-[Vite][Vite-url]
-[Vuetify][Vuetify-url]
-[Vitest][Vitest-url]
-[ESlint][ESlint-url]
-[Prettier][Prettier-url]
-Video.js
-Husky
+[![Vue][Vue]][Vue-url]  
+[![Vite][Vite]][Vite-url]  
+[![Vuetify][Vuetify]][Vuetify-url]  
+[![Vitest][Vitest]][Vitest-url]  
+[![ESlint][ESlint]][ESlint-url]  
+[![Prettier][Prettier]][Prettier-url]  
+[Video.js](https://videojs.com/)  
+[Husky](https://typicode.github.io/husky/#/)
 
 ## 文件结构
 
@@ -157,7 +157,7 @@ Husky
 - [ ] 引入 h265web.js 来提高播放 HEVC 视频兼容性
 - [ ] 优化反色与马赛克同时出现时的截屏与录屏逻辑。（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图）
 - [ ] 持续完善单元测试。
-- [ ] 使用Video.js 8重构（已尝试过，由于Video.js8对TS的支持目前不佳作罢）
+- [ ] 使用Video.js 8重构（已尝试过，由于Video.js8对TypeScript的支持目前不佳作罢）
 
 ## 设计文档
 

@@ -1,15 +1,23 @@
+/**
+ * 反转颜色测试模块。
+ * @module utils/invert.test
+ */
 import {test, expect, expectTypeOf} from 'vitest';
 import type {VideoJsPlayer} from 'video.js';
 import invertColor, {vidDataInvert} from './invert.js';
-
+/** 在Node环境中代替ImageData的自定义类。*/
 class ImgData {
   data: Uint8ClampedArray;
-
+  /**
+   * 根据data创建一个ImgData类。
+   * @param {Uint8ClampedArray} data - 颜色与透明度数据。
+   */
   constructor(data: Uint8ClampedArray) {
     this.data = data;
   }
 }
 
+/** 测试反色功能是否按预期工作。*/
 test('invert color works perfectly', () => {
   expectTypeOf(invertColor).toBeFunction();
   expectTypeOf(invertColor).parameter(0).toMatchTypeOf<VideoJsPlayer>(); // 之前使用

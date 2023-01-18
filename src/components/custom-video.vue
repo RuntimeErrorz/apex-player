@@ -17,7 +17,7 @@ const animationID = ref(0);
 const isPixelated = ref(false);
 const isInverted = ref(false);
 const fullscreen = ref(false);
-const pixelateDialogVisible = ref(false);
+const dialog = ref(false);
 const snackbar = ref(false);
 const pixelatePosition: Ref<PixelatePosition> = ref({
   // 打码的位置
@@ -86,7 +86,7 @@ const initPlayer = (): void => {
   pixelateButton.el().addEventListener('click', () => {
     if (fullscreen.value) playerInstance.value?.exitFullscreen();
     originalPosition = JSON.parse(JSON.stringify(pixelatePosition.value));
-    pixelateDialogVisible.value = true;
+    dialog.value = true;
   });
 
   const resetSourceButton = <videojs.Component>playerInstance.value?.controlBar.addChild('button');
@@ -167,8 +167,6 @@ onUnmounted(() => {
       id="video1"
       crossorigin="anonymous"
       class="video-js custom-video vjs-static-controls"
-      width="640"
-      height="264"
       controls
       preload="auto"
       data-setup='{ "inactivityTimeout": 0 }'
@@ -177,7 +175,7 @@ onUnmounted(() => {
       <canvas v-if="isInverted" id="invert" class="invert"></canvas>
     </Transition>
   </div>
-  <v-dialog z-index="1003" v-model="pixelateDialogVisible" persistent width="60vw">
+  <v-dialog z-index="1003" v-model="dialog" persistent width="60vw">
     <v-card>
       <v-card-title style="margin-left: 10px; margin-top: 1vh">
         <span class="text-h6"
@@ -288,7 +286,7 @@ onUnmounted(() => {
           variant="tonal"
           @click="
             () => {
-              pixelateDialogVisible = false;
+              dialog = false;
               pixelatePosition = originalPosition;
             }
           "
@@ -300,7 +298,7 @@ onUnmounted(() => {
           color="blue-darken-1"
           @click="
             () => {
-              pixelateDialogVisible = false;
+              dialog = false;
               isPixelated = true;
             }
           "
@@ -314,7 +312,7 @@ onUnmounted(() => {
           @click="
             () => {
               isPixelated = false;
-              pixelateDialogVisible = false;
+              dialog = false;
             }
           "
         >
