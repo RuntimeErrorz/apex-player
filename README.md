@@ -2,28 +2,34 @@
 <h3 align="center">基于 Video.js 的深度定制播放器</h3>
 
 <p align="center">
-    <a href="https://runtimeerrorz.github.io/player/">在线演示</a>
+    <a href="http://101.42.51.16/player/">在线演示</a>
   </p>
 </div>
 
-<details>
+<details open>
   <summary>目录</summary>
   <ol>
     <li>
       <a href="#项目简介">项目简介</a>
       <ul>
-        <li><a href="#技术栈">技术栈</a></li>
+        <li><a href="#技术选型">技术选型</a></li>
+        <li><a href="#文件结构">文件结构</a></li>
       </ul>
     </li>
-    <li><a href="#文件结构">文件结构</a></li>
     <li><a href="#使用">使用</a></li>
     <li>
       <a href="#项目完成度与未来计划">项目完成度与未来计划</a>
       <ul>
           <li><a href="#已实现">已实现</a></li>
-      </ul>
-       <ul>
           <li><a href="#未来计划">未来计划</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#设计文档">设计文档</a>
+      <ul>
+        <li><a href="#组件设计">组件设计</a></li>
+        <li><a href="#功能模块设计">功能模块设计</a></li>
+        <li><a href="#测试模块设计">测试模块设计</a></li>
       </ul>
     </li>
     <li><a href="#开源许可证">开源许可证</a></li>
@@ -48,7 +54,7 @@
 [Video.js](https://videojs.com/)  
 [Husky](https://typicode.github.io/husky/#/)
 
-## 文件结构
+### 文件结构
 
 ```bash
 │  App.vue
@@ -168,7 +174,7 @@
 
 在根组件中引用此组件，并在 App.vue 实现了多来源视频的统一选择，日后项目复杂后易于扩展。
 
-### 模块设计
+### 功能模块设计
 
 封装了一些较复杂的功能模块：
 
