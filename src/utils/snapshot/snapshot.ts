@@ -1,9 +1,8 @@
 /**
- * ------------------------------------------------------------------
  * 此ES Module处理了侧边栏的添加与截图与录屏功能的实现。
  * 导出了RecordParams类、screenshotHandle、recordHandle、customizeSidebar函数；
  * 实现了downloadFile、downloadVia、drawMedia函数。
- * ------------------------------------------------------------------
+ * @module utils/snapshot
  */
 import RecordRTC from 'recordrtc';
 import videojs from 'video.js';
@@ -43,27 +42,21 @@ export default function customiseSidebar() {
   videojs.registerComponent('CustomBar', CustomBar);
 }
 
-/**
- * 录制器所需的参数
- * @since  x.x.x
- * @member   {Ref<VideoJsPlayer>}        player
- * @member   {HTMLCanvasElement | null}  canvas
- * @member   {RecordRTC | null}          recorder
- * @member   {number | null}             animationFrame
- * @member   {boolean}                   isRecording
- * @memberof RecorderParams
- */
+/**录制器所需的参数类。*/
 export class RecorderParams {
   player;
-
   canvas;
-
   recorder;
-
   animationFrame;
-
   isRecording;
-
+  /**
+   * 创建录制器所需的参数类。
+   * @param   {Ref<VideoJsPlayer>}       player         - player
+   * @param   {HTMLCanvasElement | null} canvas         - canvas
+   * @param   {RecordRTC | null}         recorder       - recorder
+   * @param   {number | null}            animationFrame - animationFrame
+   * @param   {boolean}                  isRecording    - isRecording
+   */
   constructor(
     player: Ref<VideoJsPlayer>,
     canvas: HTMLCanvasElement | null,
@@ -81,7 +74,7 @@ export class RecorderParams {
 
 /**
  * 录像控制函数，接受录像DOM和录像参数。负责按需修改recordDom的内容与开始和结束录屏。
- * @param    {HTMLDivElement} recordDom 录像DOM
+ * @param    {HTMLDivElement} recordDom - 录像DOM
  * @param    {RecorderParams} recorderParams
  * @returns  void
  * @date     2023-01-12
@@ -121,9 +114,9 @@ export function recordHandle(
 
 /**
  * 截屏控制函数，接受VideoJSPlayer实例与分别表征是否马赛克与是否反转的两个布尔变量。实现了多场景截图的功能。
- *@param    {Ref<VideoJsPlayer>} playerInstance 录像DOM
- *@param    {boolean}            isPixelated    是否马赛克
- *@param    {boolean}            isInverted     是否反转
+ *@param    {Ref<VideoJsPlayer>} playerInstance - 录像DOM
+ *@param    {boolean}            isPixelated    - 是否马赛克
+ *@param    {boolean}            isInverted     - 是否反转
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
@@ -143,8 +136,8 @@ export function screenshotHandle(
 
 /**
  * 下载文件函数，接受一个blobUrl和fileType，完成下载功能。
- *@param    {string}   blobUrl    blobURL
- *@param    {string}   fileType   文件类型
+ *@param    {string}   blobUrl   - blobURL
+ *@param    {string}   fileType  - 文件类型
  *@returns  void
  *@date     2023-01-12
  *@author   RuntimeErroz<dariuszeng@qq.com>
@@ -159,7 +152,7 @@ function downloadFile(blobUrl: string, fileType: string) {
 
 /**
  * 下载图片函数，接受一个HTMLCanvasElement或HTMLVideoElement，创建Blob并调用下载功能
- * @param    {HTMLCanvasElement | HTMLVideoElement} src 录像DOM
+ * @param    {HTMLCanvasElement | HTMLVideoElement} src - 录像DOM
  * @returns  void
  * @date     2023-01-12
  * @author   RuntimeErroz<dariuszeng@qq.com>
@@ -177,9 +170,9 @@ function downloadFromCanvasorVideo(src: HTMLCanvasElement | HTMLVideoElement) {
 
 /**
  * 截屏控制函数，接受VideoJSPlayer实例与分别表征是否马赛克与是否反转的两个布尔变量。实现了多场景截图的功能。
- * @param    {Ref<VideoJsPlayer>} playerInstance 录像DOM
- * @param    {boolean}            isPixelated    是否马赛克
- * @param    {boolean}            isInverted     是否反转
+ * @param    {Ref<VideoJsPlayer>} playerInstance - 录像DOM
+ * @param    {boolean}            isPixelated    - 是否马赛克
+ * @param    {boolean}            isInverted     - 是否反转
  * @returns  void
  * @date     2023-01-12
  * @author   RuntimeErroz<dariuszeng@qq.com>

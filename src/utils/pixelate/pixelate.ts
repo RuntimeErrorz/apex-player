@@ -1,12 +1,11 @@
 /**
- * ------------------------------------------------------------------
  * 此ES Module导出了Pixelate接口、以及addPiexelation函数；
  * 另外定义了pixelate函数、createImgData函数
- * ------------------------------------------------------------------
+ * @module utils/pixelate
  */
-
 import type {VideoJsPlayer} from 'video.js';
 import type {Ref} from 'vue';
+
 export interface PixelatePosition {
   //请注意这里的数字均为百分比
   leftX: number;
@@ -15,17 +14,33 @@ export interface PixelatePosition {
   rightY: number;
 }
 
+/**
+ * 接受播放器实例和马赛克相对位置和动画ID，取消该动画ID的动画，并将将一个指定位置的马赛克Canvas元素覆盖于播放器上，并提供涂抹选择马塞克位置的功能。
+ * @param    {VideoJsPlayer}     player      -播放器实例
+ * @param    {PixelatePosition}  positions   -马赛克位置
+ * @param    {Ref<number>}
+ * @returns  void
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
 export default function pixelation(
   player: VideoJsPlayer,
   positions: PixelatePosition,
   animationID: Ref<number>
 ) {
   cancelAnimationFrame(animationID.value);
-  const [width, height, ratio, top, left] = autoReSize(player);
+  const [width, height, ratio, top, left] = getPlayerInfo(player);
   addPixelation(player, positions, width, height, ratio, top, left, animationID);
 }
 
-export function autoReSize(player: VideoJsPlayer) {
+/**
+ * 接受播放器实例，返回视频的长宽以及马赛克Canvas缩放比例，以及相对视图窗口左上角的top与left。
+ * @param    {VideoJsPlayer}   player - 播放器实例
+ * @returns  {Array<number>}
+ * @date     2023-01-12
+ * @author   RuntimeErroz<dariuszeng@qq.com>
+ */
+export function getPlayerInfo(player: VideoJsPlayer) {
   const video = <HTMLVideoElement>player.el().querySelector('video');
   let top = video.getBoundingClientRect().top;
   let left = video.getBoundingClientRect().left;
@@ -36,7 +51,6 @@ export function autoReSize(player: VideoJsPlayer) {
   const currentRatio = player.currentWidth() / player.currentHeight();
 
   if (currentRatio > originRatio) {
-    //根据视频长宽比例确定码的大小与移动control bar到整体视频下方
     height = player.currentHeight();
     width = (height * video.videoWidth) / video.videoHeight;
     ratio = height / video.videoHeight;
@@ -52,9 +66,15 @@ export function autoReSize(player: VideoJsPlayer) {
 }
 
 /**
- * 接受播放器实例和马赛克位置，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择买塞克位置的功能。
- * @param    {VideoJsPlayer}     player      播放器实例
- * @param    {PixelatePosition}  positions   马赛克位置
+ * 接受播放器实例和马赛克具体参数，将一个马赛克Canvas元素覆盖于播放器上，并提供涂抹选择马塞克位置的功能。
+ * @param    {VideoJsPlayer}     player      - 播放器实例
+ * @param    {PixelatePosition}  positions   - 马赛克相对位置
+ * @param    {number}  width   - 马赛克宽度
+ * @param    {number}  height   - 马赛克高度
+ * @param    {number}  ratio   - 马赛克缩放比例
+ * @param    {number}  top   - 马赛克距离Viewport顶部的距离
+ * @param    {number}  left   - 马赛克距离Viewport左部的距离
+ * @param    {Ref<number>}  animationID   - 动画ID
  * @returns  void
  * @date     2023-01-12
  * @author   RuntimeErroz<dariuszeng@qq.com>

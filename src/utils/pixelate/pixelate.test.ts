@@ -1,13 +1,19 @@
+/**
+ * 测试核心打码功能模块.
+ * @module utils/pixelate.test
+ */
 import {test, expect} from 'vitest';
-
-// Node.js不存在此类，特此补充。
+/** 在Node环境中代替ImageData的自定义类. */
 class ImgData {
   data: Uint8ClampedArray;
-
   width: number;
-
   height: number;
-
+  /**
+   * 根据data、width、height创建一个ImgData类.
+   * @param {Uint8ClampedArray} data - The x value.
+   * @param {number} width -
+   * @param {number} height -
+   */
   constructor(data: Uint8ClampedArray, width: number, height: number) {
     this.data = data;
     this.height = height;
@@ -15,7 +21,7 @@ class ImgData {
   }
 }
 
-// 详情参考原函数，此处为了测试方便作了些许简化。
+/* 详情参考原函数，此处为了测试方便作了些许简化。*/
 function pixelate(
   srcImageData: ImgData,
   pixelationWidth: number,
