@@ -29,7 +29,7 @@ jobs:
     - run: npm run build-only
     - name: Deploy
       run: |
-        ls
+        mv dist player
         echo "${{secrets.SERVER_PRIVATE_KEY}}" > deploy_key
         chmod 600 ./deploy_key
-        rsync -chav --delete -e "ssh -i ./deploy_key" ./dist /home/lighthouse/server/player
+        rsync -av --delete ./player/ lighthouse@101.42.51.16:/home/lighthouse/serve/ -e "ssh -i ./deploy_key"
