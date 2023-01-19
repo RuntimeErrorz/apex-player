@@ -27,9 +27,11 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build-only
-    - name: Deploy
-      run: |
-        mv dist player
-        cat "${{secrets.SERVER_PRIVATE_KEY}}" > deploy_key
-        chmod 700 ./deploy_key
-        rsync -av --delete ./player lighthouse@101.42.51.16:/home/lighthouse/serve/new -e "ssh -i ./deploy_key"
+    - uses: easingthemes/ssh-deploy@v2.0.7
+        env:
+            SSH_PRIVATE_KEY: ${{ env.SERVER_PRIVATE_KEY }}
+            ARGS: '-avz --delete'
+            SOURCE: 'dist/'
+            REMOTE_HOST: ${{ env.SERVER_HOST }}
+            REMOTE_USER: ${{ env.USER_NAME }}
+            TARGET: /home/lighthouse/serve/dist # 服务器目标路径
