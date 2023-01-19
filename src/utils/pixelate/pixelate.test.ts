@@ -1,6 +1,8 @@
 /**
  * 测试核心打码功能模块.
  * @module utils/pixelate.test
+ * @date   2023-01-12
+ * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import {test, expect} from 'vitest';
 /** 在Node环境中代替ImageData的自定义类. */

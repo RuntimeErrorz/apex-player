@@ -1,6 +1,8 @@
 /**
  * 反转颜色测试模块。
  * @module utils/invert.test
+ * @date   2023-01-12
+ * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import {test, expect, expectTypeOf} from 'vitest';
 import type {VideoJsPlayer} from 'video.js';
