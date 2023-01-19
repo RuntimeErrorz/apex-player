@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * 此SFC实现了播放器的所有功能。
+ * @module /componet/CustomVideo
+ * @date   2023-01-12
+ * @author RuntimeErroz <dariuszeng@qq.com>
+ */
 import videojs, {type VideoJsPlayer} from 'video.js';
 import 'videojs-flvjs-es6';
 import {onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
@@ -63,14 +69,15 @@ watch(isPixelated, (newValue) => {
 });
 watch(props, () => {
   // 当源变化时，更新源
+  if (isPixelated.value) {
+    isPixelated.value = false;
+  }
   (playerInstance.value as any)?.updateSrc(props.srcs); // 主要是插件问题，没时间重写类型声明
 });
 
 /**
  * 初始化播放器实例的回调函数。添加反色、打码、换源按钮。并监听全屏事件
  * @returns  {void}
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 const initPlayer = (): void => {
   const invertButton = <videojs.Component>playerInstance.value?.controlBar.addChild('button');
@@ -103,8 +110,6 @@ const initPlayer = (): void => {
 /**
  * 重绘马赛克
  * @returns  {void}
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 const redraw = (): void => {
   if (isPixelated.value)

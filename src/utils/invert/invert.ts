@@ -1,6 +1,8 @@
 /**
  * 此ES Module导出了函数名为invertColor的函数。
  * @module utils/invert/invert
+ * @date   2023-01-12
+ * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import type {VideoJsPlayer} from 'video.js';
 
@@ -8,8 +10,6 @@ import type {VideoJsPlayer} from 'video.js';
  * 接受一个播放器实例，将其中的画面反色显示到ID为invert的canvas元素上。并为其添加点击暂停时间。
  * @param    {VideoJsPlayer}  player   播放器实例
  * @returns  void
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 export default function invertColor(player: VideoJsPlayer) {
   const video = <HTMLVideoElement>player.el().querySelector('video');
@@ -37,8 +37,6 @@ export default function invertColor(player: VideoJsPlayer) {
  * @param    {number}  width                       canvas宽度
  * @param    {number}  height                      canvas高度
  * @returns  void
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 export function effectInvert(
   video: HTMLVideoElement,

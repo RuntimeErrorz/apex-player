@@ -1,10 +1,30 @@
-/* videojs-resolution-switcher for VideoJS Version 7+ - 2023-1-11
- * Copyright (c) 2016 Kasper Moskwiak
- * Modified by RuntimeErroz
- * Licensed under the Apache-2.0 license.
+/** 画质切换插件。
+ * @copyright  Kasper Moskwiak 2016
+ * @author RuntimeErroz <dariuszeng@qq.com>
+ * Video.js7的extend需要用到function prototypes，Video.js8则对ts支持不佳并且有BUG，两害相权取Video.js7。
+ * 对原插件重构以修复动态标签失效的Bug，另外支持Videojs.7，并添加部分类型标注与注释从而大大提高可读性。
  */
-import videojs from 'video.js';
 
+interface Src {
+  src: string;
+  label: string;
+  type: string;
+  res: string;
+}
+
+interface Resolution {
+  label: any;
+  res: any;
+  type: any;
+}
+
+interface Chosen {
+  res: string;
+  label: string;
+  sources: Array<Src>;
+}
+
+import videojs, {type VideoJsPlayer} from 'video.js';
 export default function addQuality() {
   let videoJsResolutionSwitcher,
     defaults = {
@@ -16,13 +36,13 @@ export default function addQuality() {
    */
   const MenuItem = videojs.getComponent('MenuItem');
   const ResolutionMenuItem = videojs.extend(MenuItem, {
-    constructor: function (player, options) {
+    constructor: function (player: VideoJsPlayer, options: videojs.MenuItemOptions) {
       options.selectable = true;
       // Sets this.player_, this.options_ and initializes the component
       MenuItem.call(this, player, options);
       this.src = options.src;
 
-      player.on('resolutionchange', videojs.bind(this, this.update));
+      // player.on('resolutionchange', videojs.bind(this, this.update));
     }
   });
   ResolutionMenuItem.prototype.handleClick = function (event) {
@@ -32,6 +52,7 @@ export default function addQuality() {
   ResolutionMenuItem.prototype.update = function () {
     const selection = this.player_.currentResolution();
     this.selected(this.options_.label === selection.label);
+    console.log(selection.label);
   };
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
@@ -40,8 +61,8 @@ export default function addQuality() {
    */
   const MenuButton = videojs.getComponent('MenuButton');
   const ResolutionMenuButton = videojs.extend(MenuButton, {
-    constructor: function (player, options) {
-      this.label = document.createElement('span');
+    constructor: function (player: VideoJsPlayer, options: videojs.MenuItemOptions) {
+      this.label = document.createElement('div');
       options.label = 'Quality';
       // Sets this.player_, this.options_ and initializes the component
       MenuButton.call(this, player, options);
@@ -50,20 +71,19 @@ export default function addQuality() {
 
       if (options.dynamicLabel) {
         videojs.dom.addClass(this.label, 'vjs-resolution-button-label');
-        this.el().appendChild(this.label);
+        this.el().insertBefore(this.label, this.el().firstChild);
       } else {
         const staticLabel = document.createElement('span');
         videojs.dom.addClass(staticLabel, 'vjs-menu-icon');
         this.el().appendChild(staticLabel);
       }
-      player.on('updateSources', videojs.bind(this, this.update));
+      player.on('resolutionchange', videojs.bind(this, this.update));
     }
   });
   ResolutionMenuButton.prototype.createItems = function () {
     const menuItems = [];
     const labels = (this.sources && this.sources.label) || {};
 
-    // FIXME order is not guaranteed here.
     for (const key in labels) {
       if (labels.hasOwnProperty(key)) {
         menuItems.push(
@@ -92,26 +112,23 @@ export default function addQuality() {
    * Initialize the plugin.
    * @param {object} [options] configuration for the plugin
    */
-  videoJsResolutionSwitcher = function (options) {
+  videoJsResolutionSwitcher = function (options: object) {
     const settings = videojs.mergeOptions(defaults, options),
-      player = this,
-      groupedSrc = {},
-      currentSources = {},
-      currentResolutionState = {};
+      player = this;
 
     /**
      * Updates player sources or returns current source URL
      * @param   {Array}  [src] array of sources [{src: '', type: '', label: '', res: ''}]
      * @returns {Object|String|Array} videojs player object if used as setter or current source URL, object, or array of sources
      */
-    player.updateSrc = function (src) {
+    player.updateSrc = function (src: Array<Src>): VideoJsPlayer | string | Array<Src> {
       //Return current src if src is not given
       if (!src) {
         return player.src();
       }
 
       // Only add those sources which we can (maybe) play
-      src = src.filter(function (source) {
+      src = src.filter((source) => {
         try {
           return player.canPlayType(source.type) !== '';
         } catch (e) {
@@ -120,18 +137,17 @@ export default function addQuality() {
         }
       });
       //Sort sources
-      this.currentSources = src.sort(compareResolutions);
+      this.currentSources = src;
       this.groupedSrc = bucketSources(this.currentSources);
       // Pick one by default
-      const chosen = chooseSrc(this.groupedSrc, this.currentSources);
+      const chosen: Chosen = chooseSrc(this.groupedSrc, this.currentSources);
       this.currentResolutionState = {
         label: chosen.label,
         sources: chosen.sources
       };
-
-      player.trigger('updateSources');
-      player.setSourcesSanitized(chosen.sources, chosen.label);
-      player.trigger('resolutionchange');
+      player.trigger('updateSources'); //trigger update
+      player.setSourcesSanitized(chosen.sources, chosen.label, null);
+      player.trigger('resolutionchange'); // trigger update
       return player;
     };
 
@@ -141,14 +157,14 @@ export default function addQuality() {
      * @param {Function} [customSourcePicker] custom function to choose source. Takes 2 arguments: sources, label. Must return player object.
      * @returns {Object}   current resolution object {label: '', sources: []} if used as getter or player object if used as setter
      */
-    player.currentResolution = function (label, customSourcePicker) {
+    player.currentResolution = function (label: string, customSourcePicker: Function): object {
       if (label == null) {
         return this.currentResolutionState;
       }
 
       // Lookup sources for label
       if (!this.groupedSrc || !this.groupedSrc.label || !this.groupedSrc.label[label]) {
-        return;
+        return {};
       }
       const sources = this.groupedSrc.label[label];
       // Remember player state
@@ -188,11 +204,15 @@ export default function addQuality() {
      * Returns grouped sources by label, resolution and type
      * @returns {Object} grouped sources: { label: { key: [] }, res: { key: [] }, type: { key: [] } }
      */
-    player.getGroupedSrc = function () {
+    player.getGroupedSrc = function (): object {
       return this.groupedSrc;
     };
 
-    player.setSourcesSanitized = function (sources, label, customSourcePicker) {
+    player.setSourcesSanitized = function (
+      sources: Array<Src>,
+      label: string,
+      customSourcePicker: Function | null
+    ) {
       this.currentResolutionState = {
         label: label,
         sources: sources
@@ -201,7 +221,7 @@ export default function addQuality() {
         return customSourcePicker(player, sources, label);
       }
       player.src(
-        sources.map(function (src) {
+        sources.map((src) => {
           return {src: src.src, type: src.type, res: src.res};
         })
       );
@@ -214,11 +234,11 @@ export default function addQuality() {
      * @param   {Object} b - source object with res property
      * @returns {Number} result of comparation
      */
-    function compareResolutions(a, b) {
+    function compareResolutions(a: Src, b: Src): number {
       if (!a.res || !b.res) {
         return 0;
       }
-      return +b.res - +a.res;
+      return parseInt(b.res) - parseInt(a.res);
     }
 
     /**
@@ -226,13 +246,13 @@ export default function addQuality() {
      * @param   {Array}  src Array of sources
      * @returns {Object} grouped sources: { label: { key: [] }, res: { key: [] }, type: { key: [] } }
      */
-    function bucketSources(src) {
-      const resolutions = {
+    function bucketSources(src: Array<Src>): Resolution {
+      let resolutions = {
         label: {},
         res: {},
         type: {}
       };
-      src.map(function (source) {
+      src.map((source) => {
         initResolutionKey(resolutions, 'label', source);
         initResolutionKey(resolutions, 'res', source);
         initResolutionKey(resolutions, 'type', source);
@@ -244,14 +264,13 @@ export default function addQuality() {
       return resolutions;
     }
 
-    function initResolutionKey(resolutions, key, source) {
-      if (resolutions[key][source[key]] == null) {
-        resolutions[key][source[key]] = [];
-      }
+    function initResolutionKey(resolutions: Resolution, key: string, source: Src) {
+      if (resolutions[key as keyof Resolution][source[key as keyof Src]] == null)
+        resolutions[key as keyof Resolution][source[key as keyof Src]] = [];
     }
 
-    function appendSourceToKey(resolutions, key, source) {
-      resolutions[key][source[key]].push(source);
+    function appendSourceToKey(resolutions: Resolution, key: string, source: Src) {
+      resolutions[key as keyof Resolution][source[key as keyof Src]].push(source);
     }
 
     /**
@@ -260,8 +279,8 @@ export default function addQuality() {
      * @param   {Array}  src Array of sources sorted by resolution used to find high and low res
      * @returns {Object} {res: string, sources: []}
      */
-    function chooseSrc(groupedSrc, src) {
-      let selectedRes = settings['default']; // use array access as default is a reserved keyword
+    function chooseSrc(groupedSrc: Resolution, src: Array<Src>): Chosen {
+      let selectedRes = <string>settings['default']; //
       let selectedLabel = '';
       if (selectedRes === 'high') {
         selectedRes = src[0].res;
@@ -275,76 +294,10 @@ export default function addQuality() {
       }
 
       return {
-        res: selectedRes,
-        label: selectedLabel,
-        sources: groupedSrc.res[selectedRes]
-      };
-    }
-
-    function initResolutionForYt(player) {
-      // Map youtube qualities names
-      const _yts = {
-        highres: {res: 1080, label: '1080', yt: 'highres'},
-        hd1080: {res: 1080, label: '1080', yt: 'hd1080'},
-        hd720: {res: 720, label: '720', yt: 'hd720'},
-        large: {res: 480, label: '480', yt: 'large'},
-        medium: {res: 360, label: '360', yt: 'medium'},
-        small: {res: 240, label: '240', yt: 'small'},
-        tiny: {res: 144, label: '144', yt: 'tiny'},
-        auto: {res: 0, label: 'auto', yt: 'auto'}
-      };
-      // Overwrite default sourcePicker function
-      const _customSourcePicker = function (_player, _sources, _label) {
-        // Note that setPlayebackQuality is a suggestion. YT does not always obey it.
-        player.tech_.ytPlayer.setPlaybackQuality(_sources[0]._yt);
-        player.trigger('updateSources');
-        return player;
-      };
-      settings.customSourcePicker = _customSourcePicker;
-
-      // Init resolution
-      player.tech_.ytPlayer.setPlaybackQuality('auto');
-
-      // This is triggered when the resolution actually changes
-      player.tech_.ytPlayer.addEventListener('onPlaybackQualityChange', function (event) {
-        for (const res in _yts) {
-          if (res.yt === event.data) {
-            player.currentResolution(res.label, _customSourcePicker);
-            return;
-          }
-        }
-      });
-
-      // We must wait for play event
-      player.one('play', function () {
-        const qualities = player.tech_.ytPlayer.getAvailableQualityLevels();
-        const _sources = [];
-
-        qualities.map(function (q) {
-          _sources.push({
-            src: player.src().src,
-            type: player.src().type,
-            label: _yts[q].label,
-            res: _yts[q].res,
-            _yt: _yts[q].yt
-          });
-        });
-
-        player.groupedSrc = bucketSources(_sources);
-        const chosen = {
-          label: 'auto',
-          res: 0,
-          sources: player.groupedSrc.label.auto
-        };
-
-        this.currentResolutionState = {
-          label: chosen.label,
-          sources: chosen.sources
-        };
-
-        player.trigger('updateSources');
-        player.setSourcesSanitized(chosen.sources, chosen.label, _customSourcePicker);
-      });
+        res: selectedRes, //480
+        label: selectedLabel, //hd
+        sources: groupedSrc.res[selectedRes] //"1.mp4", 2.mp4
+      } as Chosen;
     }
 
     player.ready(function () {
@@ -362,11 +315,6 @@ export default function addQuality() {
         // tech: Html5 and Flash
         // Create resolution switcher for videos form <source> tag inside <video>
         player.updateSrc(player.options_.sources);
-      }
-
-      if (player.techName_ === 'Youtube') {
-        // tech: YouTube
-        initResolutionForYt(player);
       }
     });
   };

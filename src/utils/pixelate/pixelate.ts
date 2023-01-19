@@ -2,6 +2,8 @@
  * 此ES Module导出了Pixelate接口、以及addPiexelation函数；
  * 另外定义了pixelate函数、createImgData函数
  * @module utils/pixelate
+ * @date   2023-01-12
+ * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import type {VideoJsPlayer} from 'video.js';
 import type {Ref} from 'vue';
@@ -18,16 +20,14 @@ export interface PixelatePosition {
  * 接受播放器实例和马赛克相对位置和动画ID，取消该动画ID的动画，并将将一个指定位置的马赛克Canvas元素覆盖于播放器上，并提供涂抹选择马塞克位置的功能。
  * @param    {VideoJsPlayer}     player      -播放器实例
  * @param    {PixelatePosition}  positions   -马赛克位置
- * @param    {Ref<number>}
- * @returns  void
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
+ * @param    {Ref<number>}       animationID
+ * @returns  {void}
  */
 export default function pixelation(
   player: VideoJsPlayer,
   positions: PixelatePosition,
   animationID: Ref<number>
-) {
+): void {
   cancelAnimationFrame(animationID.value);
   const [width, height, ratio, top, left] = getPlayerInfo(player);
   addPixelation(player, positions, width, height, ratio, top, left, animationID);
@@ -37,8 +37,6 @@ export default function pixelation(
  * 接受播放器实例，返回视频的长宽以及马赛克Canvas缩放比例，以及相对视图窗口左上角的top与left。
  * @param    {VideoJsPlayer}   player - 播放器实例
  * @returns  {Array<number>}
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 export function getPlayerInfo(player: VideoJsPlayer) {
   const video = <HTMLVideoElement>player.el().querySelector('video');
@@ -75,9 +73,7 @@ export function getPlayerInfo(player: VideoJsPlayer) {
  * @param    {number}  top   - 马赛克距离Viewport顶部的距离
  * @param    {number}  left   - 马赛克距离Viewport左部的距离
  * @param    {Ref<number>}  animationID   - 动画ID
- * @returns  void
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
+ * @returns  {void}
  */
 export function addPixelation(
   player: VideoJsPlayer,
@@ -88,7 +84,7 @@ export function addPixelation(
   top: number,
   left: number,
   animationID: Ref<number>
-) {
+): void {
   const canvas = <HTMLCanvasElement>document.getElementById('pixelate');
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error();
@@ -163,16 +159,14 @@ export function addPixelation(
  * @param    {number}      width      所需ImgData的宽度
  * @param    {number}      height     所需ImgData的高度
  * @returns  {ImgData}     马赛克数据
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
-function createImageData(width: number, height: number) {
+function createImageData(width: number, height: number): ImageData {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   const imageData = ctx?.createImageData(width, height);
-  return imageData;
+  return <ImageData>imageData;
 }
 
 /**
@@ -181,8 +175,6 @@ function createImageData(width: number, height: number) {
  * @param    {number}      pixelationWidth      马赛克宽度
  * @param    {number}      pixelationHeight     马赛克高度
  * @returns  {ImageData}     马赛克数据
- * @date     2023-01-12
- * @author   RuntimeErroz<dariuszeng@qq.com>
  */
 function pixelate(
   srcImageData: ImageData,
