@@ -304,7 +304,8 @@ onUnmounted(() => {
           @click="
             () => {
               dialog = false;
-              isPixelated = true;
+              isPixelated = false;
+              nextTick(() => (isPixelated = true));
             }
           "
         >
