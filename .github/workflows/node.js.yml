@@ -36,4 +36,4 @@ jobs:
         SOURCE: 'dist/'
         REMOTE_HOST: ${{ secrets.SERVER_HOST }}
         REMOTE_USER: ${{ secrets.USER_NAME }}
-        TARGET: /home/lighthouse # 服务器目标
+        TARGET: /home/lighthouse # 服务器目标1
