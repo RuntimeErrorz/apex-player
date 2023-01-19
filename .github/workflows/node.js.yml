@@ -28,3 +28,12 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build-only
+    - name: Deploy
+      uses: easingthemes/ssh-deploy@v2.0.7
+      env:
+        SSH_PRIVATE_KEY: ${{ env.SERVER_PRIVATE_KEY }}
+        ARGS: '-avz --delete'
+        SOURCE: 'dist/'
+        REMOTE_HOST: ${{ env.SERVER_HOST }}
+        REMOTE_USER: ${{ env.USER_NAME }}
+        TARGET: /home/lighthouse # 服务器目标路
