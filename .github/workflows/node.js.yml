@@ -29,7 +29,7 @@ jobs:
     - run: npm ci
     - run: npm run build-only
     - name: Deploy
-      run:
+      run: |
         ls
         echo "${{secrets.SERVER_PRIVATE_KEY}}" > deploy_key
         chmod 600 ./deploy_key
