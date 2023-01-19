@@ -31,6 +31,5 @@ jobs:
       run: |
         mv dist player
         echo "${{secrets.SERVER_PRIVATE_KEY}}" > deploy_key
-        cat deploy_key
         chmod 600 ./deploy_key
-        rsync -av --delete ./player/ lighthouse@101.42.51.16:/home/lighthouse/serve/ -e "ssh -i ./deploy_key"
+        rsync -av --delete ./player/ ubuntu@101.42.51.16:/home/lighthouse/serve/ -e "ssh -i ./deploy_key"
