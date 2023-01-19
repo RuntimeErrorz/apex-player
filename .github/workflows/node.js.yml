@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -27,13 +27,12 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build-only
-    - run: mv dist player
     - name: Deploy
-      uses: easingthemes/ssh-deploy@v2.0.7
+      uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_PRIVATE_KEY }}
         ARGS: '-avz --delete'
-        SOURCE: 'player/'
+        SOURCE: 'dist/'
         REMOTE_HOST: ${{ secrets.SERVER_HOST }}
         REMOTE_USER: ${{ secrets.USER_NAME }}
-        TARGET: /home/lighthouse/server/
+        TARGET: /home/lighthouse/server/videos
