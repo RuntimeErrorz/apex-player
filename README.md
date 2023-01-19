@@ -39,17 +39,19 @@
 </details>
 
 ## 项目简介
+
 本项目是一个基于 Video.js 深度自定义的现代播放器。
 ![1674139152224](image/README/1674139152224.png)
+
 ### 技术选型
 
-[![Vue][Vue]][Vue-url]  
-[![Vite][Vite]][Vite-url]  
-[![Vuetify][Vuetify]][Vuetify-url]  
-[![Vitest][Vitest]][Vitest-url]  
-[![ESlint][ESlint]][ESlint-url]  
-[![Prettier][Prettier]][Prettier-url]  
-[Video.js](https://videojs.com/)  
+[Vue][Vue-url]
+[Vite][Vite-url]
+[Vuetify][Vuetify-url]
+[Vitest][Vitest-url]
+[ESlint][ESlint-url]
+[Prettier][Prettier-url]
+[Video.js](https://videojs.com/)
 [Husky](https://typicode.github.io/husky/#/)
 
 ### 文件结构
@@ -106,10 +108,12 @@
 
 如果您之前使用了多清晰度的源，在播放途中可以点击设置键进行切换。
 ![1674139202140](image/README/1674139202140.png)
+
 ### 3. 反色
 
 播放中点击反色键即可反色，再点一次可以关闭反色。
 ![1674139253081](image/README/1674139253081.png)
+
 ### 4. 截图
 
 点击截图键即可保存当前视频中的最新帧到本地。（如果处于马赛克或反转颜色状态则截取当前状态下的图片，如果同时处于马赛克和反转颜色状态则截取原视频）
@@ -118,11 +122,13 @@
 
 点击录屏键开始录屏，点击结束键结束录屏并保存到本地。（录屏逻辑同截图）
 ![1674139362764](image/README/1674139362764.png)
+
 ### 6. 打码
 
 点击打码键可以选择打码区域，并且可以在打码区域涂抹。
 ![1674139395811](image/README/1674139395811.png)!![1674139442480](image/README/1674139442480.png)
 ![1674139544542](image/README/1674139544542.png)
+
 ## 项目完成度与未来计划
 
 ### 已实现
@@ -149,6 +155,7 @@
 - [X] 单元测试
 - [X] 搭建静态文件服务器
 - [X] 搭建页面展示服务器
+- [X] CI/CD实现持续测试与持续部署到云服务器
 
 ### 未来计划
 
