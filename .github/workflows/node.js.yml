@@ -33,6 +33,4 @@ jobs:
         ls
         echo "${{secrets.SERVER_PRIVATE_KEY}}" > deploy_key
         chmod 600 ./deploy_key
-        rsync -chav --delete \
-          -e 'ssh -i ./deploy_key \
-          ./dist ${{env.dest}}
+        rsync -chav --delete -e "ssh -i ./deploy_key" ./dist /home/lighthouse
