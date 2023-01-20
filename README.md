@@ -45,12 +45,12 @@
 
 ### 技术选型
 
-[Vue][Vue-url]
-[Vite][Vite-url]
-[Vuetify][Vuetify-url]
-[Vitest][Vitest-url]
-[ESlint][ESlint-url]
-[Prettier][Prettier-url]
+[![Vue][Vue]][Vue-url]  
+[![Vite][Vite]][Vite-url]  
+[![Vuetify][Vuetify]][Vuetify-url]  
+[![Vitest][Vitest]][Vitest-url]  
+[![ESlint][ESlint]][ESlint-url]  
+[![Prettier][Prettier]][Prettier-url]  
 [Video.js](https://videojs.com/)
 [Husky](https://typicode.github.io/husky/#/)
 
@@ -150,19 +150,20 @@
 - [X] 支持直播
   - [X] HLS
 
-#### 其他工作
+#### 前端工程化
 
-- [X] 单元测试
+- [X] 核心功能单元测试
+- [X] Github Actions的实现持续集成与持续部署到云服务器
+- [x] EsLint、Prettier、Husky持续统一规范代码
 - [X] 搭建静态文件服务器
 - [X] 搭建页面展示服务器
-- [X] CI/CD实现持续测试与持续部署到云服务器
 
 ### 未来计划
 
-- [ ] 引入 h265web.js 来提高播放 HEVC 视频的兼容性；
 - [ ] 明确反色与马赛克同时出现时的截屏与录屏逻辑；（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图。）
 - [ ] 持续完善单元测试；
 - [ ] 使用 Video.js 8 重构。（已尝试，由于 Video.js 8 对 TypeScript 的支持目前不佳作罢。）
+- [ ] 引入 h265web.js-wasm-decoder 来提高播放 HEVC 视频的兼容性；
 
 ## 设计文档
 
@@ -207,7 +208,7 @@
 
 ## 致谢
 
-- [GitHub Pages](https://pages.github.com)
+- [GitHub Actionsc](https://github.com/features/actions)
 - [Materialize CSS](https://github.com/dogfalo/materialize)
 - [Stack Overflow](https://stackoverflow.com/)
 - [MDN Web Docs Canvas](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API)
