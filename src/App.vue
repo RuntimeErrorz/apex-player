@@ -6,8 +6,6 @@
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import {ref, reactive} from 'vue';
-import sd from '@/assets/videos/sd.mp4';
-import hd from '@/assets/videos/hd.mp4';
 import CustomVideo from './components/CustomVideo.vue';
 
 const dialog = ref(true); // 对象框显示控制
@@ -16,7 +14,7 @@ const tabTitleItems = reactive(['使用URL', '上传文件']); // tab标题
 const defaultSrcs = [
   // 默认值用于展示清晰度切换
   {
-    src: 'http://101.42.51.16/videos/sd.mp4',
+    src: 'http://101.42.51.16/videos/hd.mp4',
     type: 'video/mp4',
     label: 'HD'
   },
