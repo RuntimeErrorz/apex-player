@@ -16,12 +16,12 @@ const tabTitleItems = reactive(['使用URL', '上传文件']); // tab标题
 const defaultSrcs = [
   // 默认值用于展示清晰度切换
   {
-    src: hd,
+    src: 'http://101.42.51.16/videos/sd.mp4',
     type: 'video/mp4',
     label: 'HD'
   },
   {
-    src: sd,
+    src: 'http://101.42.51.16/videos/sd.mp4',
     type: 'video/mp4',
     label: 'SD'
   }
