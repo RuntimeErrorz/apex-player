@@ -7,7 +7,7 @@
  */
 import {ref, reactive} from 'vue';
 import CustomVideo from './components/CustomVideo.vue';
-
+import type {Src} from './components/CustomVideo.vue';
 const dialog = ref(true); // 对象框显示控制
 const tab = ref(null); // tab切换所需
 const tabTitleItems = reactive(['使用URL', '上传文件']); // tab标题
@@ -16,7 +16,7 @@ const defaultSrcs = [
   {
     src: 'http://101.42.51.16/videos/hd.mp4',
     type: 'video/mp4',
-    label: 'HD'
+    label: 'HasdasdD'
   },
   {
     src: 'http://101.42.51.16/videos/sd.mp4',
@@ -56,12 +56,7 @@ const mimeTypesMap = {
   m3u8: 'application/x-mpegurl'
 };
 
-interface Src {
-  src: string;
-  type: string;
-  label: string;
-}
-let srcs: Array<Src>; // 真正播放传参的源
+let srcs: Array<Src> = []; // 真正播放传参的源
 let urlSrcs = reactive([
   //  输入的URL数组
   {

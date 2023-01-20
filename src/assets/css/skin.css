@@ -311,3 +311,16 @@
 .video-js .vjs-volume-level {
     background-color: #2483d5
 }
+
+.vjs-fullscreen-control .vjs-icon-placeholder::before {
+    margin-left: 0.11em;
+    line-height: 1.25;
+    font-size: 2.4em
+}
+
+.vjs-duration-display,
+.vjs-current-time-display,
+.vjs-time-divider {
+    line-height: 2.4 !important;
+    font-size: 18px !important;
+}
