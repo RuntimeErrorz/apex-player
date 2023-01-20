@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
- * 此SFC实现了播放器的所有功能。
- * @module /componet/CustomVideo
+ * 此SFC实现了播放器的所有要求功能。
+ * @module /components/CustomVideo
  * @date   2023-01-12
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
@@ -334,7 +334,6 @@ onUnmounted(() => {
     </v-card>
   </v-dialog>
 </template>
-
 <style>
 .container {
   display: flex;

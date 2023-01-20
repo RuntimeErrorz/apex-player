@@ -1,10 +1,13 @@
 /** 画质切换插件。
  * @copyright  Kasper Moskwiak 2016
  * @author RuntimeErroz <dariuszeng@qq.com>
- * Video.js7的extend需要用到function prototypes，Video.js8则对ts支持不佳并且有BUG，两害相权取Video.js7。
- * 对原插件重构以修复动态标签失效的Bug，另外支持Videojs.7，并添加部分类型标注与注释从而大大提高可读性。
+ * Video.js7的extend需要用到function prototypes，Video.js8则对TypeScript支持不佳并且有BUG，两害相权取Video.js7。
+ * 因此在本模块中会大量使用any类型，这也是无奈之举。
+ * 修复了动态标签失效的Bug，并增加了动态适应标签长度的功能。
+ * 移除对Flash的支持等过时API，并修复大量非崩溃型错误。
+ * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
  */
-
+import videojs, {type VideoJsPlayer} from 'video.js';
 interface Src {
   src: string;
   label: string;
@@ -12,7 +15,7 @@ interface Src {
   res: string;
 }
 
-interface Resolution {
+interface GroupedSrc {
   label: any;
   res: any;
   type: any;
@@ -24,54 +27,43 @@ interface Chosen {
   sources: Array<Src>;
 }
 
-import videojs, {type VideoJsPlayer} from 'video.js';
 export default function addQuality() {
-  let videoJsResolutionSwitcher,
-    defaults = {
-      ui: true
-    };
-
   /*
-   * Resolution menu item
+   * 分辨率切换菜单
    */
-  const MenuItem = videojs.getComponent('MenuItem');
+  const MenuItem = <any | videojs.MenuItem>videojs.getComponent('MenuItem');
   const ResolutionMenuItem = videojs.extend(MenuItem, {
-    constructor: function (player: VideoJsPlayer, options: videojs.MenuItemOptions) {
+    constructor: function (this: any, player: VideoJsPlayer, options: any) {
       options.selectable = true;
-      // Sets this.player_, this.options_ and initializes the component
       MenuItem.call(this, player, options);
       this.src = options.src;
-
       player.on('resolutionchange', videojs.bind(this, this.update));
     }
   });
-  ResolutionMenuItem.prototype.handleClick = function (event) {
+  ResolutionMenuItem.prototype.handleClick = function (event: videojs.EventTarget.Event) {
     MenuItem.prototype.handleClick.call(this, event);
-    this.player_.currentResolution(this.options_.label);
+    this.player().currentResolution(this.options().label);
   };
   ResolutionMenuItem.prototype.update = function () {
     let options = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
     const length = document.getElementsByClassName('vjs-resolution-button-label')[0].innerHTML
       .length;
-    options?.style.setProperty('left', `${0.3 * length - 1.5}vw`);
+    options?.style.setProperty('left', `${0.3 * length - 1.7}vw`);
   };
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
   /*
-   * Resolution menu button
+   * 分辨率切换按钮
    */
-  const MenuButton = videojs.getComponent('MenuButton');
+  const MenuButton = <any | videojs.MenuButton>videojs.getComponent('MenuButton');
   const ResolutionMenuButton = videojs.extend(MenuButton, {
-    constructor: function (player: VideoJsPlayer, options: videojs.MenuItemOptions) {
+    constructor: function (this: any, player: VideoJsPlayer, options: any) {
       this.label = document.createElement('div');
       options.label = 'Quality';
-      // Sets this.player_, this.options_ and initializes the component
-      MenuButton.call(this, player, options);
+      MenuButton.call(this, player, <videojs.MenuButtonOptions>options);
       this.el().setAttribute('aria-label', 'Quality');
       this.el().setAttribute('id', 'vjs-re');
-
-      this.controlText('Quality');
-
+      this.controlText('画质切换');
       if (options.dynamicLabel) {
         videojs.dom.addClass(this.label, 'vjs-resolution-button-label');
         this.el().insertBefore(this.label, this.el().firstChild);
@@ -90,7 +82,7 @@ export default function addQuality() {
     for (const key in labels) {
       if (labels.hasOwnProperty(key)) {
         menuItems.push(
-          new ResolutionMenuItem(this.player_, {
+          new ResolutionMenuItem(this.player(), <videojs.MenuButtonOptions>{
             label: key,
             src: labels[key],
             selected: key === (this.currentSelection ? this.currentSelection.label : false)
@@ -101,10 +93,9 @@ export default function addQuality() {
     return menuItems;
   };
   ResolutionMenuButton.prototype.update = function () {
-    this.sources = this.player_.getGroupedSrc();
-    this.currentSelection = this.player_.currentResolution();
+    this.sources = this.player().getGroupedSrc();
+    this.currentSelection = this.player().currentResolution();
     this.label.innerHTML = this.currentSelection ? this.currentSelection.label : '';
-    this.label.parentNode?.lastChild.lastChild.style.setProperty('left', '2em', 'important');
     return MenuButton.prototype.update.call(this);
   };
   ResolutionMenuButton.prototype.buildCSSClass = function () {
@@ -113,89 +104,82 @@ export default function addQuality() {
   MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton);
 
   /**
-   * Initialize the plugin.
-   * @param {object} [options] configuration for the plugin
+   * 初始化画质切换插件。
+   * @param {object} options - 插件配置选项
    */
-  videoJsResolutionSwitcher = function (options: object) {
-    const settings = videojs.mergeOptions(defaults, options),
-      player = this;
-
+  const videoJsResolutionSwitcher = function (this: any, options: object) {
+    const player = this; //The value of this in the plugin function is the player instance;
     /**
-     * Updates player sources or returns current source URL
-     * @param   {Array}  [src] array of sources [{src: '', type: '', label: '', res: ''}]
-     * @returns {Object|String|Array} videojs player object if used as setter or current source URL, object, or array of sources
+     * 根据options['default']初始选择源。
+     * @param   {GroupedSrc} groupedSrc {res: { key: [] }}
+     * @param   {Array<Src>}
+     * @returns {Object} {res: string, sources: []}
      */
-    player.updateSrc = function (src: Array<Src>): VideoJsPlayer | string | Array<Src> {
-      //Return current src if src is not given
-      if (!src) {
-        return player.src();
+    function chooseSrc(groupedSrc: GroupedSrc, src: Array<Src>): Chosen {
+      let selectedRes = <string>options['default' as keyof typeof options]; //
+      let selectedLabel = '';
+      if (selectedRes === 'high') {
+        selectedRes = src[0].res;
+        selectedLabel = src[0].label;
+      } else if (selectedRes === 'low' || selectedRes == null || !groupedSrc.res[selectedRes]) {
+        selectedRes = src[src.length - 1].res;
+        selectedLabel = src[src.length - 1].label;
+      } else if (groupedSrc.res[selectedRes]) {
+        selectedLabel = groupedSrc.res[selectedRes][0].label;
       }
 
-      // Only add those sources which we can (maybe) play
-      src = src.filter((source) => {
-        try {
-          return player.canPlayType(source.type) !== '';
-        } catch (e) {
-          // If a Tech doesn't yet have canPlayType just add it
-          return true;
-        }
-      });
-      //Sort sources
-      this.currentSources = src;
-      this.groupedSrc = bucketSources(this.currentSources);
-      // Pick one by default
-      const chosen: Chosen = chooseSrc(this.groupedSrc, this.currentSources);
-      this.currentResolutionState = {
+      return {
+        res: selectedRes, //480
+        label: selectedLabel, //hd
+        sources: groupedSrc.res[selectedRes] //"1.mp4", 2.mp4
+      } as Chosen;
+    }
+
+    /**
+     * 更新视频源
+     * @param   {Array<Src>}
+     * @returns {VideoJsPlayer | Array<Src>} 用作初始值时返回VideoJSPlayer实例，如果
+     */
+    player.updateSrc = function (src: Array<Src>): VideoJsPlayer | Array<Src> {
+      player.currentSources = src;
+      player.groupedSrc = bucketSources(player.currentSources);
+      const chosen: Chosen = chooseSrc(player.groupedSrc, player.currentSources);
+      player.currentResolutionState = {
         label: chosen.label,
         sources: chosen.sources
       };
-      player.trigger('updateSources'); //trigger update
       player.setSourcesSanitized(chosen.sources, chosen.label, null);
-      player.trigger('resolutionchange'); // trigger update
+      player.trigger('resolutionchange');
       player.trigger('resolutionchange');
       return player;
     };
 
     /**
+     * 返回当前分辨率状态，如果label不为空则设置一个
      * Returns current resolution or sets one when label is specified
-     * @param {String}   [label]         label name
-     * @param {Function} [customSourcePicker] custom function to choose source. Takes 2 arguments: sources, label. Must return player object.
-     * @returns {Object}   current resolution object {label: '', sources: []} if used as getter or player object if used as setter
+     * @param {String}   label  - label name
+     * @param {Function} customSourcePicker - custom function to choose source. Takes 2 arguments: sources, label. Must return player object.
+     * @returns {Object} label给明时返回当前分辨率状态 {label: '', sources: []} ，反之返回VideojsPlayer
      */
     player.currentResolution = function (label: string, customSourcePicker: Function): object {
       if (label == null) {
-        return this.currentResolutionState;
+        return player.currentResolutionState;
       }
 
-      // Lookup sources for label
-      if (!this.groupedSrc || !this.groupedSrc.label || !this.groupedSrc.label[label]) {
+      if (!player.groupedSrc || !player.groupedSrc.label || !player.groupedSrc.label[label]) {
         return {};
       }
-      const sources = this.groupedSrc.label[label];
-      // Remember player state
+      const sources = player.groupedSrc.label[label];
       const currentTime = player.currentTime();
       const isPaused = player.paused();
 
-      // Hide bigPlayButton
-      if (!isPaused && this.player_.options_.bigPlayButton) {
-        this.player_.bigPlayButton.hide();
+      if (!isPaused && player.player().options_.bigPlayButton) {
+        player.player().bigPlayButton.hide();
       }
 
-      // Change player source and wait for loadeddata event, then play video
-      // loadedmetadata doesn't work right now for flash.
-      // Probably because of https://github.com/videojs/video-js-swf/issues/124
-      // If player preload is 'none' and then loadeddata not fired. So, we need timeupdate event for seek handle (timeupdate doesn't work properly with flash)
-      let handleSeekEvent = 'loadeddata';
-      if (
-        this.player_.techName_ !== 'Youtube' &&
-        this.player_.preload() === 'none' &&
-        this.player_.techName_ !== 'Flash'
-      ) {
-        handleSeekEvent = 'timeupdate';
-      }
       player
-        .setSourcesSanitized(sources, label, customSourcePicker || settings.customSourcePicker)
-        .one(handleSeekEvent, function () {
+        .setSourcesSanitized(sources, label, customSourcePicker || options[customSourcePicker])
+        .one('loadeddata', () => {
           player.currentTime(currentTime);
           if (!isPaused && player.paused()) {
             player.play();
@@ -206,11 +190,11 @@ export default function addQuality() {
     };
 
     /**
-     * Returns grouped sources by label, resolution and type
-     * @returns {Object} grouped sources: { label: { key: [] }, res: { key: [] }, type: { key: [] } }
+     * 返回分组后的Src
+     * @returns {GroupedSrc}  { label: { key: [] }, res: { key: [] }, type: { key: [] } }
      */
-    player.getGroupedSrc = function (): object {
-      return this.groupedSrc;
+    player.getGroupedSrc = function (): GroupedSrc {
+      return player.groupedSrc;
     };
 
     player.setSourcesSanitized = function (
@@ -218,7 +202,7 @@ export default function addQuality() {
       label: string,
       customSourcePicker: Function | null
     ) {
-      this.currentResolutionState = {
+      player.currentResolutionState = {
         label: label,
         sources: sources
       };
@@ -234,24 +218,11 @@ export default function addQuality() {
     };
 
     /**
-     * Method used for sorting list of sources
-     * @param   {Object} a - source object with res property
-     * @param   {Object} b - source object with res property
-     * @returns {Number} result of comparation
-     */
-    function compareResolutions(a: Src, b: Src): number {
-      if (!a.res || !b.res) {
-        return 0;
-      }
-      return parseInt(b.res) - parseInt(a.res);
-    }
-
-    /**
-     * Group sources by label, resolution and type
+     * 返回根据label, resolution and type分组的源
      * @param   {Array}  src Array of sources
      * @returns {Object} grouped sources: { label: { key: [] }, res: { key: [] }, type: { key: [] } }
      */
-    function bucketSources(src: Array<Src>): Resolution {
+    function bucketSources(src: Array<Src>): GroupedSrc {
       let resolutions = {
         label: {},
         res: {},
@@ -269,61 +240,29 @@ export default function addQuality() {
       return resolutions;
     }
 
-    function initResolutionKey(resolutions: Resolution, key: string, source: Src) {
-      if (resolutions[key as keyof Resolution][source[key as keyof Src]] == null)
-        resolutions[key as keyof Resolution][source[key as keyof Src]] = [];
+    function initResolutionKey(resolutions: GroupedSrc, key: string, source: Src) {
+      if (resolutions[key as keyof GroupedSrc][source[key as keyof Src]] == null)
+        resolutions[key as keyof GroupedSrc][source[key as keyof Src]] = [];
     }
 
-    function appendSourceToKey(resolutions: Resolution, key: string, source: Src) {
-      resolutions[key as keyof Resolution][source[key as keyof Src]].push(source);
-    }
-
-    /**
-     * Choose src if option.default is specified
-     * @param   {Object} groupedSrc {res: { key: [] }}
-     * @param   {Array}  src Array of sources sorted by resolution used to find high and low res
-     * @returns {Object} {res: string, sources: []}
-     */
-    function chooseSrc(groupedSrc: Resolution, src: Array<Src>): Chosen {
-      let selectedRes = <string>settings['default']; //
-      let selectedLabel = '';
-      if (selectedRes === 'high') {
-        selectedRes = src[0].res;
-        selectedLabel = src[0].label;
-      } else if (selectedRes === 'low' || selectedRes == null || !groupedSrc.res[selectedRes]) {
-        // Select low-res if default is low or not set
-        selectedRes = src[src.length - 1].res;
-        selectedLabel = src[src.length - 1].label;
-      } else if (groupedSrc.res[selectedRes]) {
-        selectedLabel = groupedSrc.res[selectedRes][0].label;
-      }
-
-      return {
-        res: selectedRes, //480
-        label: selectedLabel, //hd
-        sources: groupedSrc.res[selectedRes] //"1.mp4", 2.mp4
-      } as Chosen;
+    function appendSourceToKey(resolutions: GroupedSrc, key: string, source: Src) {
+      resolutions[key as keyof GroupedSrc][source[key as keyof Src]].push(source);
     }
 
     player.ready(function () {
-      if (settings.ui) {
-        const menuButton = new ResolutionMenuButton(player, settings);
-        player.controlBar.resolutionSwitcher = player.controlBar.el_.insertBefore(
-          menuButton.el_,
-          player.controlBar.getChild('fullscreenToggle').el_
-        );
-        player.controlBar.resolutionSwitcher.dispose = function () {
-          this.parentNode.removeChild(this);
-        };
-      }
-      if (player.options_.sources.length > 1) {
-        // tech: Html5 and Flash
-        // Create resolution switcher for videos form <source> tag inside <video>
+      const menuButton = new ResolutionMenuButton(player, options);
+      player.controlBar.resolutionSwitcher = player.controlBar
+        .el()
+        .insertBefore(menuButton.el(), player.controlBar.getChild('fullscreenToggle').el());
+      player.controlBar.resolutionSwitcher.dispose = function () {
+        player.parentNode.removeChild(player);
+      };
+
+      if (player.options().sources.length > 1) {
         player.updateSrc(player.options_.sources);
       }
     });
   };
 
-  // register the plugin
   videojs.registerPlugin('videoJsResolutionSwitcher', videoJsResolutionSwitcher);
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 此SFC实现了换源对话框，包含了CustomVideo组件。
+ * 此SFC实现了换源功能，并将其与CustomVideo组件进行整合。
  * @module /App
  * @date   2023-01-12
  * @author RuntimeErroz <dariuszeng@qq.com>
@@ -62,7 +62,7 @@ let urlSrcs = reactive([
   {
     src: '',
     type: '',
-    label: 'HD'
+    label: ''
   }
 ]);
 let fileSrcs = reactive([
