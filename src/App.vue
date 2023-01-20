@@ -16,7 +16,7 @@ const defaultSrcs = [
   {
     src: 'http://101.42.51.16/videos/hd.mp4',
     type: 'video/mp4',
-    label: 'HasdasdD'
+    label: 'HD'
   },
   {
     src: 'http://101.42.51.16/videos/sd.mp4',
@@ -70,7 +70,7 @@ let fileSrcs = reactive([
   {
     files: [],
     type: '',
-    label: 'HD'
+    label: ''
   }
 ]);
 const recommendURL = [
@@ -112,7 +112,7 @@ const resetSource = () => {
     {
       src: '',
       type: '',
-      label: 'HD'
+      label: ''
     }
   ]);
 
@@ -120,7 +120,7 @@ const resetSource = () => {
     {
       files: [],
       type: '',
-      label: 'HD'
+      label: ''
     }
   ]);
   dialog.value = true;
@@ -184,7 +184,7 @@ const createBlob = (
                       urlSrcs.push({
                         src: '',
                         type: '',
-                        label: 'HD'
+                        label: ''
                       });
                     }
                   "
@@ -236,7 +236,7 @@ const createBlob = (
                       fileSrcs.push({
                         files: [],
                         type: '',
-                        label: 'HD'
+                        label: ''
                       });
                     }
                   "
