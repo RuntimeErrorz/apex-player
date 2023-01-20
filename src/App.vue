@@ -67,7 +67,7 @@ let urlSrcs = reactive([
   {
     src: '',
     type: '',
-    label: ''
+    label: 'HD'
   }
 ]);
 let fileSrcs = reactive([
@@ -75,7 +75,7 @@ let fileSrcs = reactive([
   {
     files: [],
     type: '',
-    label: ''
+    label: 'HD'
   }
 ]);
 const recommendURL = [
@@ -117,7 +117,7 @@ const resetSource = () => {
     {
       src: '',
       type: '',
-      label: ''
+      label: 'HD'
     }
   ]);
 
@@ -125,7 +125,7 @@ const resetSource = () => {
     {
       files: [],
       type: '',
-      label: ''
+      label: 'HD'
     }
   ]);
   dialog.value = true;
@@ -189,7 +189,7 @@ const createBlob = (
                       urlSrcs.push({
                         src: '',
                         type: '',
-                        label: ''
+                        label: 'HD'
                       });
                     }
                   "
@@ -241,7 +241,7 @@ const createBlob = (
                       fileSrcs.push({
                         files: [],
                         type: '',
-                        label: ''
+                        label: 'HD'
                       });
                     }
                   "
