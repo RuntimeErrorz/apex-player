@@ -19,6 +19,12 @@ import invertColor from '@/utils/invert/invert.js';
 import pixelation from '@/utils/pixelate/pixelate.js';
 import type {PixelatePosition} from '@/utils/pixelate/pixelate.js';
 
+export interface Src {
+  src: string;
+  type: string;
+  label: string;
+}
+
 const animationID = ref(0);
 const isPixelated = ref(false);
 const isInverted = ref(false);
@@ -34,7 +40,7 @@ const pixelatePosition: Ref<PixelatePosition> = ref({
 });
 const props = defineProps<{
   // 父组件传来的用于初始化video的值
-  srcs: Array<object>;
+  srcs: Array<Src>;
   options: object;
 }>();
 const playerID = ref('video1');

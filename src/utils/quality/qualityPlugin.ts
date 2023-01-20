@@ -42,7 +42,7 @@ export default function addQuality() {
       MenuItem.call(this, player, options);
       this.src = options.src;
 
-      // player.on('resolutionchange', videojs.bind(this, this.update));
+      player.on('resolutionchange', videojs.bind(this, this.update));
     }
   });
   ResolutionMenuItem.prototype.handleClick = function (event) {
@@ -50,9 +50,10 @@ export default function addQuality() {
     this.player_.currentResolution(this.options_.label);
   };
   ResolutionMenuItem.prototype.update = function () {
-    const selection = this.player_.currentResolution();
-    this.selected(this.options_.label === selection.label);
-    console.log(selection.label);
+    let options = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
+    const length = document.getElementsByClassName('vjs-resolution-button-label')[0].innerHTML
+      .length;
+    options?.style.setProperty('left', `${0.3 * length - 1.5}vw`);
   };
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
@@ -67,6 +68,8 @@ export default function addQuality() {
       // Sets this.player_, this.options_ and initializes the component
       MenuButton.call(this, player, options);
       this.el().setAttribute('aria-label', 'Quality');
+      this.el().setAttribute('id', 'vjs-re');
+
       this.controlText('Quality');
 
       if (options.dynamicLabel) {
@@ -101,6 +104,7 @@ export default function addQuality() {
     this.sources = this.player_.getGroupedSrc();
     this.currentSelection = this.player_.currentResolution();
     this.label.innerHTML = this.currentSelection ? this.currentSelection.label : '';
+    this.label.parentNode?.lastChild.lastChild.style.setProperty('left', '2em', 'important');
     return MenuButton.prototype.update.call(this);
   };
   ResolutionMenuButton.prototype.buildCSSClass = function () {
@@ -148,6 +152,7 @@ export default function addQuality() {
       player.trigger('updateSources'); //trigger update
       player.setSourcesSanitized(chosen.sources, chosen.label, null);
       player.trigger('resolutionchange'); // trigger update
+      player.trigger('resolutionchange');
       return player;
     };
 

@@ -1,19 +1,15 @@
+#vjs-re {
+    width: fit-content;
+}
+
+.vjs-resolution-button {
+    position: relative;
+    top: -30px !important
+}
+
 .vjs-resolution-button-label {
-    position: absolute;
+    width: fit-content;
     font-size: 16pt !important;
     margin-left: 0.43em;
     margin-top: 0.5em;
-}
-
-.vjs-resolution-button .vjs-menu .vjs-menu-content {
-    width: 4em;
-    left: 50%;
-    /* Center the menu, in it's parent */
-    margin-left: -2em;
-    /* half of width, to center */
-}
-
-.vjs-resolution-button .vjs-menu li {
-    text-transform: none;
-    font-size: 1em;
 }

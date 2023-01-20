@@ -92,7 +92,7 @@ export function recordHandle(
     }
     recorderParams.recorder = new RecordRTC(recorderParams.canvas, {
       type: 'canvas',
-      mimeType: 'video/mp4'
+      mimeType: 'video/webm'
     });
     recorderParams.recorder.startRecording();
     drawMedia(recorderParams, isInverted, isPixelated);
@@ -101,7 +101,7 @@ export function recordHandle(
     recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="ml10">录像</span>`;
     recorderParams.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(<Blob>recorderParams.recorder?.getBlob());
-      downloadFile(url, 'mp4');
+      downloadFile(url, 'webm');
       cancelAnimationFrame(<number>recorderParams.animationFrame);
       recorderParams.canvas = null;
       recorderParams.animationFrame = null;
