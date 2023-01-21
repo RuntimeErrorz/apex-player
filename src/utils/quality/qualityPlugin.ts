@@ -62,7 +62,7 @@ export default function addQuality() {
       options.label = 'Quality';
       MenuButton.call(this, player, <videojs.MenuButtonOptions>options);
       this.el().setAttribute('aria-label', 'Quality');
-      this.el().setAttribute('id', 'vjs-re');
+      this.el().setAttribute('id', 'vjs-resolution-menu');
       this.controlText('画质切换');
       if (options.dynamicLabel) {
         videojs.dom.addClass(this.label, 'vjs-resolution-button-label');

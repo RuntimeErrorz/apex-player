@@ -101,7 +101,7 @@ const recommendURL = [
  * @param    {Array<Src>}  srcs  源数组
  * @returns  {Array<Src>}        设定后的数组
  */
-const setType = (srcs: Array<Src>) => {
+const setType = (srcs: Array<Src>): Array<Src> => {
   for (const src of srcs)
     src.type = mimeTypesMap[(<string>src.src.split('.').pop()) as keyof typeof mimeTypesMap];
   return srcs;
@@ -147,7 +147,7 @@ const createBlob = (
 };
 </script>
 <template>
-  <v-dialog v-model="dialog" style="width: 60vw" persistent>
+  <v-dialog v-model="dialog" style="width: 60vw" persistent scrollable>
     <v-card>
       <v-card-title>
         <span class="text-h5">选择视频源</span>
@@ -175,7 +175,7 @@ const createBlob = (
                   placeholder="1080P"
                 ></v-text-field>
               </v-col>
-              <v-col cols="1">
+              <v-col cols="auto">
                 <v-btn
                   icon
                   size="large"
@@ -189,7 +189,7 @@ const createBlob = (
                     }
                   "
                 >
-                  <v-icon>mdi-plus</v-icon>
+                  <v-icon style="min-width: 200px">mdi-plus</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
