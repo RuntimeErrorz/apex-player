@@ -38,7 +38,7 @@ export default function pixelation(
  * @param    {VideoJsPlayer}   player - 播放器实例
  * @returns  {Array<number>}
  */
-export function getPlayerInfo(player: VideoJsPlayer) {
+export function getPlayerInfo(player: VideoJsPlayer): Array<number> {
   const video = <HTMLVideoElement>player.el().querySelector('video');
   let top = video.getBoundingClientRect().top;
   let left = video.getBoundingClientRect().left;
