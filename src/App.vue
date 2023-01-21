@@ -147,7 +147,7 @@ const createBlob = (
 };
 </script>
 <template>
-  <v-dialog v-model="dialog" style="width: 60vw">
+  <v-dialog v-model="dialog" style="width: 60vw" persistent>
     <v-card>
       <v-card-title>
         <span class="text-h5">选择视频源</span>

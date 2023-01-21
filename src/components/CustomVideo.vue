@@ -61,7 +61,9 @@ watch(isPixelated, (newValue) => {
   const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
   if (!playerInstance.value) throw new Error();
   if (newValue) {
-    pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID);
+    nextTick(() =>
+      pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID)
+    );
     snackbar.value = true;
     controlBar.setAttribute(
       'style',
@@ -166,7 +168,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <canvas v-show="isPixelated" id="pixelate" class="pixelate"></canvas>
+  <canvas v-if="isPixelated" id="pixelate" style="position: absolute"></canvas>
   <v-snackbar v-model="snackbar" :timeout="3000">
     您可以通过鼠标来涂抹马赛克。
     <template v-slot:actions>
