@@ -1,3 +1,7 @@
+.video-js button.vjs-custom-bt {
+    font-size: 14pt;
+  }
+
 #vjs-re {
     width: fit-content;
 }
