@@ -356,10 +356,6 @@ onUnmounted(() => {
   margin: 0 2vw;
 }
 
-.video-js button.vjs-custom-bt {
-  font-size: 14pt;
-}
-
 .slide-fade-enter-from {
   transform: translateX(5vw);
   opacity: 1;

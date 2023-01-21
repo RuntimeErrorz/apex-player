@@ -4,10 +4,8 @@ import 'vuetify/styles';
 import {createVuetify} from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import './assets/css/min.css';
-import '@/assets/css/quality.css';
-import '@/assets/css/snapshot.css';
-import '@/assets/css/skin.css';
+import '@/assets/css/controlbar.css';
+import '@/assets/css/sidebar.css';
 
 import App from './App.vue';
 
