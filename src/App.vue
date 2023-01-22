@@ -90,11 +90,11 @@ const recommendURL = [
     url: 'http://101.42.51.16/videos/test.mov'
   },
   {
-    format: 'FLV',
+    format: 'Flash Video',
     url: 'http://101.42.51.16/videos/test.flv'
   },
   {
-    format: 'HLS',
+    format: 'HTTP Live Streaming',
     url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
   }
 ];
