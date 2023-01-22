@@ -58,6 +58,7 @@ export default function addQuality() {
     MenuItem.prototype.handleClick.call(this, event);
     this.player().currentResolution(this.options_.label);
   };
+  ResolutionMenuItem.prototype.update = function () {};
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
   /*
