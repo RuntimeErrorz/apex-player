@@ -13,6 +13,7 @@ import type {Ref} from 'vue';
 
 import cameraImg from '@/assets/images/camera-outline.png';
 import monitorImg from '@/assets/images/monitor-screenshot.png';
+import srcImg from '@/assets/images/source-branch.png';
 
 /**
  * 自定义video.js的侧边栏，添加截图与录屏按钮
@@ -26,12 +27,16 @@ export default function customiseSidebar() {
         className: 'vjs-custom-bar',
         innerHTML: `
           <div class="vjs-custom-bar-item">
-            <img src="${cameraImg}"  class="snapshot-img"/>
+            <img src="${cameraImg}"  class="custombar-img"/>
             <span class="snapshot-text">截图</span>
           </div>
           <div class="vjs-custom-bar-item" >
-            <img src="${monitorImg}" class="snapshot-img" />
+            <img src="${monitorImg}" class="custombar-img" />
             <span class="snapshot-text">录像</span>
+          </div>
+          <div class="vjs-custom-bar-item" >
+            <img src="${srcImg}" class="custombar-img" />
+            <span class="snapshot-text">换源</span>
           </div>
         `
       });
@@ -98,7 +103,7 @@ export function recordHandle(
     drawMedia(recorderParams, isInverted, isPixelated);
   } else {
     // 结束录屏后修改DOM并复原参数
-    recordDom.innerHTML = `<img src="${monitorImg}" class="snapshot-img" /><span class="snapshot-text">录像</span>`;
+    recordDom.innerHTML = `<img src="${monitorImg}" class="custombar-img" /><span class="snapshot-text">录像</span>`;
     recorderParams.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(<Blob>recorderParams.recorder?.getBlob());
       downloadFile(url, 'webm');

@@ -8,6 +8,16 @@
  * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
  */
 import videojs, {type VideoJsPlayer} from 'video.js';
+export const autoLocation = () => {
+  const label = <HTMLDivElement>document.getElementsByClassName('vjs-resolution-button-label')[0];
+  console.log(label, label.clientWidth);
+  const menuItems = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
+  // options?.style.setProperty('left', map[label.innerHTML.length as keyof typeof map]);
+  menuItems?.style.setProperty(
+    'left',
+    `${label.clientWidth * 0.5581395348837209 - 35.74418604651163}px`
+  );
+};
 interface Src {
   src: string;
   label: string;
@@ -42,13 +52,10 @@ export default function addQuality() {
   });
   ResolutionMenuItem.prototype.handleClick = function (event: videojs.EventTarget.Event) {
     MenuItem.prototype.handleClick.call(this, event);
-    this.player().currentResolution(this.options().label);
+    this.player().currentResolution(this.options_.label);
   };
   ResolutionMenuItem.prototype.update = function () {
-    let options = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
-    const length = document.getElementsByClassName('vjs-resolution-button-label')[0].innerHTML
-      .length;
-    options?.style.setProperty('left', `${0.3 * length - 1.7}vw`);
+    //resolutionChange
   };
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
@@ -63,22 +70,26 @@ export default function addQuality() {
       MenuButton.call(this, player, <videojs.MenuButtonOptions>options);
       this.el().setAttribute('aria-label', 'Quality');
       this.el().setAttribute('id', 'vjs-resolution-menu');
-      this.controlText('画质切换');
-      if (options.dynamicLabel) {
-        videojs.dom.addClass(this.label, 'vjs-resolution-button-label');
-        this.el().insertBefore(this.label, this.el().firstChild);
-      } else {
-        const staticLabel = document.createElement('span');
-        videojs.dom.addClass(staticLabel, 'vjs-menu-icon');
-        this.el().appendChild(staticLabel);
-      }
-      player.on('resolutionchange', videojs.bind(this, this.update));
+      videojs.dom.addClass(this.label, 'vjs-resolution-button-label');
+      this.el().insertBefore(this.label, this.el().firstChild);
+      player.on('updateSources', videojs.bind(this, this.update));
     }
   });
+  ResolutionMenuButton.prototype.update = function () {
+    //updateSources
+    this.sources = this.player().getGroupedSrc();
+    this.currentSelection = this.player().currentResolution();
+
+    this.label.innerHTML = this.currentSelection?.label;
+    // setTimeout(autoLocation, 200) //FIXME: innerHTML应该是同步的，但是初始化时取得到div取不到clientWidth，后续切换正常。初步考虑Video.js的问题，后续尝试使用CSS定位。
+    return MenuButton.prototype.update.call(this);
+  };
+  ResolutionMenuButton.prototype.buildCSSClass = function () {
+    return MenuButton.prototype.buildCSSClass.call(this) + ' vjs-resolution-button';
+  };
   ResolutionMenuButton.prototype.createItems = function () {
     const menuItems = [];
     const labels = (this.sources && this.sources.label) || {};
-
     for (const key in labels) {
       if (labels.hasOwnProperty(key)) {
         menuItems.push(
@@ -92,15 +103,7 @@ export default function addQuality() {
     }
     return menuItems;
   };
-  ResolutionMenuButton.prototype.update = function () {
-    this.sources = this.player().getGroupedSrc();
-    this.currentSelection = this.player().currentResolution();
-    this.label.innerHTML = this.currentSelection ? this.currentSelection.label : '';
-    return MenuButton.prototype.update.call(this);
-  };
-  ResolutionMenuButton.prototype.buildCSSClass = function () {
-    return MenuButton.prototype.buildCSSClass.call(this) + ' vjs-resolution-button';
-  };
+
   MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton);
 
   /**
@@ -149,8 +152,7 @@ export default function addQuality() {
         sources: chosen.sources
       };
       player.setSourcesSanitized(chosen.sources, chosen.label, null);
-      player.trigger('resolutionchange');
-      player.trigger('resolutionchange');
+      player.trigger('updateSources');
       return player;
     };
 
@@ -184,8 +186,8 @@ export default function addQuality() {
           if (!isPaused && player.paused()) {
             player.play();
           }
-          player.trigger('resolutionchange');
         });
+      player.trigger('updateSources');
       return player;
     };
 
@@ -263,6 +265,5 @@ export default function addQuality() {
       }
     });
   };
-
   videojs.registerPlugin('videoJsResolutionSwitcher', videoJsResolutionSwitcher);
 }

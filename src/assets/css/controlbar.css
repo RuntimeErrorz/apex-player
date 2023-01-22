@@ -1,5 +1,8 @@
 .video-js button.vjs-custom-bt {
-    font-size: 14pt;
+    margin-top: 1px;
+    width: 2.5em;
+    margin-left: 4px;
+    font-size: 20px;
 }
 
 #vjs-resolution-menu {
@@ -12,6 +15,7 @@
 }
 
 .vjs-resolution-button-label {
+    display: block;
     font-size: 16pt !important;
     margin-left: 0.43em;
     margin-top: 0.5em;

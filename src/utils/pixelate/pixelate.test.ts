@@ -98,8 +98,6 @@ const srcData = new ImgData(
 );
 const destData = new ImgData(new Uint8ClampedArray([9, 7, 8, 4]), 2, 2); // 此为手动计算
 
-console.log(pixelate(<ImageData>srcData, 2, 2).data);
-
 test('Pixelate', () => {
   expect(pixelate(<ImageData>srcData, 2, 2).data).toStrictEqual(destData.data);
 });
