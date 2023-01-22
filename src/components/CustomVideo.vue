@@ -18,7 +18,6 @@ import customiseSidebar, {
 import invertColor from '@/utils/invert/invert.js';
 import pixelation from '@/utils/pixelate/pixelate.js';
 import type {PixelatePosition} from '@/utils/pixelate/pixelate.js';
-
 export interface Src {
   src: string;
   type: string;
@@ -84,7 +83,7 @@ watch(props, () => {
 });
 
 /**
- * 初始化播放器实例的回调函数。添加反色、打码、换源按钮。并监听全屏事件
+ * 初始化播放器实例的回调函数。添加反色、打码、按钮。并监听全屏事件
  * @returns  {void}
  */
 const initPlayer = (): void => {
@@ -104,10 +103,8 @@ const initPlayer = (): void => {
     dialog.value = true;
   });
 
-  const resetSourceButton = <videojs.Component>playerInstance.value?.controlBar.addChild('button');
-  resetSourceButton.addClass('vjs-custom-bt');
-  resetSourceButton.el().innerHTML = '换源';
-  resetSourceButton.el().addEventListener('click', () => {
+  const resetSourceButton = document.getElementsByClassName('vjs-custom-bar')[0].lastElementChild;
+  resetSourceButton?.addEventListener('click', () => {
     emit('resetSource');
   });
 
@@ -176,14 +173,7 @@ onUnmounted(() => {
     </template>
   </v-snackbar>
   <div class="container" id="container">
-    <video
-      id="video1"
-      crossorigin="anonymous"
-      class="video-js custom-video vjs-static-controls"
-      controls
-      preload="auto"
-      data-setup='{ "inactivityTimeout": 0 }'
-    ></video>
+    <video id="video1" class="video-js custom-video"></video>
     <Transition @enter="redraw" @after-leave="redraw" name="slide-fade">
       <canvas v-if="isInverted" id="invert" class="invert"></canvas>
     </Transition>

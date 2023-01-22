@@ -34,6 +34,9 @@ const options = {
       withCredentials: false
     }
   },
+  crossorigin: 'anonymous',
+  inactivityTimeout: 0,
+  preload: 'auto',
   autoplay: true,
   controls: true,
   customBar: {
@@ -42,8 +45,7 @@ const options = {
   },
   plugins: {
     videoJsResolutionSwitcher: {
-      default: 'high',
-      dynamicLabel: true
+      default: 'high'
     }
   },
   playbackRates: [0.5, 1, 1.5, 2]
@@ -147,7 +149,7 @@ const createBlob = (
 };
 </script>
 <template>
-  <v-dialog v-model="dialog" style="width: 60vw" persistent scrollable>
+  <v-dialog v-model="dialog" style="width: 60vw" scrollable>
     <v-card>
       <v-card-title>
         <span class="text-h5">选择视频源</span>
