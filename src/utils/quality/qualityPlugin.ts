@@ -3,19 +3,23 @@
  * @author RuntimeErroz <dariuszeng@qq.com>
  * Video.js7的extend需要用到function prototypes，Video.js8则对TypeScript支持不佳并且有BUG，两害相权取Video.js7。
  * 因此在本模块中会大量使用any类型，这也是无奈之举。
- * 修复了动态标签失效的Bug，并增加了动态适应标签长度的功能。
+ * 重写动态标签，并增加了动态适应标签长度的功能。
  * 移除对Flash的支持等过时API，并修复大量非崩溃型错误。
  * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
  */
 import videojs, {type VideoJsPlayer} from 'video.js';
-export const autoLocation = () => {
+
+/**
+ * 一个定长和一个不定长div的中点对齐，CSS学艺不精。
+ */
+const autoLocation = () => {
   const label = <HTMLDivElement>document.getElementsByClassName('vjs-resolution-button-label')[0];
   console.log(label, label.clientWidth);
   const menuItems = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
   // options?.style.setProperty('left', map[label.innerHTML.length as keyof typeof map]);
   menuItems?.style.setProperty(
     'left',
-    `${label.clientWidth * 0.5581395348837209 - 35.74418604651163}px`
+    `${label.clientWidth * 0.5581395348837209 - 35.74418604651163}px` //直接暴力拟合
   );
 };
 interface Src {
@@ -54,9 +58,6 @@ export default function addQuality() {
     MenuItem.prototype.handleClick.call(this, event);
     this.player().currentResolution(this.options_.label);
   };
-  ResolutionMenuItem.prototype.update = function () {
-    //resolutionChange
-  };
   MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem);
 
   /*
@@ -81,7 +82,7 @@ export default function addQuality() {
     this.currentSelection = this.player().currentResolution();
 
     this.label.innerHTML = this.currentSelection?.label;
-    // setTimeout(autoLocation, 200) //FIXME: innerHTML应该是同步的，但是初始化时取得到div取不到clientWidth，后续切换正常。初步考虑Video.js的问题，后续尝试使用CSS定位。
+    setTimeout(autoLocation, 300); //FIXME: innerHTML应该是同步的，但是初始化时取得到div取不到clientWidth，后续切换正常。初步考虑Video.js的API问题。
     return MenuButton.prototype.update.call(this);
   };
   ResolutionMenuButton.prototype.buildCSSClass = function () {
@@ -115,7 +116,7 @@ export default function addQuality() {
     /**
      * 根据options['default']初始选择源。
      * @param   {GroupedSrc} groupedSrc {res: { key: [] }}
-     * @param   {Array<Src>}
+     * @param   {Array<Src>} src
      * @returns {Object} {res: string, sources: []}
      */
     function chooseSrc(groupedSrc: GroupedSrc, src: Array<Src>): Chosen {
@@ -140,7 +141,7 @@ export default function addQuality() {
 
     /**
      * 更新视频源
-     * @param   {Array<Src>}
+     * @param   {Array<Src>} src
      * @returns {VideoJsPlayer | Array<Src>} 用作初始值时返回VideoJSPlayer实例，如果
      */
     player.updateSrc = function (src: Array<Src>): VideoJsPlayer | Array<Src> {

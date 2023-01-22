@@ -16,8 +16,8 @@ import monitorImg from '@/assets/images/monitor-screenshot.png';
 import srcImg from '@/assets/images/source-branch.png';
 
 /**
- * 自定义video.js的侧边栏，添加截图与录屏按钮
- * @returns  void
+ * 自定义video.js的侧边栏，添加截图、录屏和换源按钮。
+ * @returns  {void}
  */
 export default function customiseSidebar() {
   const Component = videojs.getComponent('Component');

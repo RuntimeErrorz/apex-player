@@ -9,14 +9,18 @@
     width: fit-content;
 }
 
-.vjs-resolution-button {
-    position: relative;
-    top: -30px !important
+#vjs-resolution-menu .vjs-menu {
+    margin-bottom: 1.3em;
 }
 
-.vjs-resolution-button-label {
+#vjs-resolution-menu .vjs-resolution-button {
+    position: relative;
+    top: -30px
+}
+
+#vjs-resolution-menu .vjs-resolution-button-label {
     display: block;
-    font-size: 16pt !important;
+    font-size: 16pt;
     margin-left: 0.43em;
     margin-top: 0.5em;
 }
