@@ -5,7 +5,7 @@
  * 移除对Flash的支持等过时API，并修复大量非崩溃型错误。
  * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
  * @module utils/quality/qualitySwitching
- * @date
+ * @date 2023-01-20
  * @author RuntimeErroz <dariuszeng@qq.com>
  * @copyright  Kasper Moskwiak 2016
  */
