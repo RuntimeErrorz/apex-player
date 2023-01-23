@@ -3,7 +3,7 @@
  * 导出了RecordParams类、screenshotHandle、recordHandle、customizeSidebar函数；
  * 实现了downloadFile、downloadVia、drawMedia函数。
  * @module utils/snapshot
- * @date   2023-01-12
+ * @date   2023-01-14
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import RecordRTC from 'recordrtc';
@@ -19,7 +19,7 @@ import srcImg from '@/assets/images/source-branch.png';
  * 自定义video.js的侧边栏，添加截图、录屏和换源按钮。
  * @returns  {void}
  */
-export default function customiseSidebar() {
+export default function customiseSidebar(): void {
   const Component = videojs.getComponent('Component');
   const CustomBar = videojs.extend(Component, {
     createEl() {

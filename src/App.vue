@@ -167,7 +167,7 @@ const createBlob = (
                 <v-text-field
                   label="URL"
                   v-model="item.src"
-                  placeholder="https://vjs.zencdn.net/v/oceans.mp4"
+                  placeholder="http://101.42.51.16/videos/sd.mp4"
                 ></v-text-field>
               </v-col>
               <v-col cols="4"

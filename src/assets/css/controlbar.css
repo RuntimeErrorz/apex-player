@@ -1,23 +1,25 @@
+.video-js button.vjs-custom-bt:nth-last-child(2) {
+    margin-left: 5px;
+}
+.video-js button.vjs-custom-bt:last-child {
+    margin-right: 5px;
+}
 .video-js button.vjs-custom-bt {
-    margin-top: 1px;
     width: 2.5em;
-    margin-left: 4px;
+    margin-left: 3px;
     font-size: 20px;
 }
 
 #vjs-resolution-menu {
     width: fit-content;
 }
-
 #vjs-resolution-menu .vjs-menu {
     margin-bottom: 1.3em;
 }
-
 #vjs-resolution-menu .vjs-resolution-button {
     position: relative;
     top: -30px
 }
-
 #vjs-resolution-menu .vjs-resolution-button-label {
     display: block;
     font-size: 16pt;

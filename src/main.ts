@@ -1,4 +1,6 @@
 import {createApp} from 'vue';
+import {createPinia} from 'pinia';
+
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 import {createVuetify} from 'vuetify';
@@ -9,4 +11,4 @@ import '@/assets/css/sidebar.css';
 
 import App from './App.vue';
 
-createApp(App).use(createVuetify({components, directives})).mount('#app');
+createApp(App).use(createPinia()).use(createVuetify({components, directives})).mount('#app');
