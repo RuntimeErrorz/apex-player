@@ -13,18 +13,6 @@ import videojs, {type VideoJsPlayer} from 'video.js';
 import {useVideoStore} from '@/store/videoState.js';
 import {storeToRefs} from 'pinia';
 
-/**
- * 一个定长和一个不定长div的中点对齐。
- */
-const autoLocation = () => {
-  const label = <HTMLDivElement>document.getElementsByClassName('vjs-resolution-button-label')[0];
-  const menuItems = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
-  menuItems?.style.setProperty('z-index', '1100');
-  menuItems?.style.setProperty(
-    'left',
-    `${label.clientWidth * 0.5581395348837209 - 35.74418604651163}px` //直接暴力拟合
-  );
-};
 interface Src {
   src: string;
   label: string;
@@ -86,9 +74,7 @@ export default function addQuality() {
     isPixelated.value = false;
     this.sources = this.player().getGroupedSrc();
     this.currentSelection = this.player().currentResolution();
-
     this.label.innerHTML = this.currentSelection?.label;
-    setTimeout(autoLocation, 300); //FIXME: innerHTML应该是同步的，但是初始化时取得到div取不到clientWidth，后续切换正常。初步考虑Video.js的API问题。
     return MenuButton.prototype.update.call(this);
   };
   ResolutionMenuButton.prototype.buildCSSClass = function () {
@@ -262,7 +248,8 @@ export default function addQuality() {
       const menuButton = new ResolutionMenuButton(player, options);
       player.controlBar.resolutionSwitcher = player.controlBar
         .el()
-        .insertBefore(menuButton.el(), player.controlBar.getChild('fullscreenToggle').el());
+        .insertBefore(menuButton.el(), player.controlBar.children()[10].el());
+
       player.controlBar.resolutionSwitcher.dispose = function () {
         player.parentNode.removeChild(player);
       };
