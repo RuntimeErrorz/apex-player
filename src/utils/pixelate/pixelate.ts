@@ -7,6 +7,8 @@
  */
 import type {VideoJsPlayer} from 'video.js';
 import type {Ref} from 'vue';
+import {useVideoStore} from '@/store/videoState.js';
+import {storeToRefs} from 'pinia';
 
 export interface PixelatePosition {
   //请注意这里的数字均为百分比
@@ -23,11 +25,8 @@ export interface PixelatePosition {
  * @param    {Ref<number>}       animationID
  * @returns  {void}
  */
-export default function pixelation(
-  player: VideoJsPlayer,
-  positions: PixelatePosition,
-  animationID: Ref<number>
-): void {
+export default function pixelation(player: VideoJsPlayer, positions: PixelatePosition): void {
+  const {isPixelated, animationID} = storeToRefs(useVideoStore());
   cancelAnimationFrame(animationID.value);
   const [width, height, ratio, top, left] = getPlayerInfo(player);
   addPixelation(player, positions, width, height, ratio, top, left, animationID);

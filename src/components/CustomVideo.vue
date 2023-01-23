@@ -9,7 +9,9 @@ import videojs, {type VideoJsPlayer} from 'video.js';
 import 'videojs-flvjs-es6';
 import {onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
 import type {Ref} from 'vue';
-import addQuality from '@/utils/quality/qualityPlugin.js';
+import {storeToRefs} from 'pinia';
+
+import addQuality from '@/utils/quality/qualitySwitching.js';
 import customiseSidebar, {
   RecorderParams,
   screenshotHandle,
@@ -18,14 +20,15 @@ import customiseSidebar, {
 import invertColor from '@/utils/invert/invert.js';
 import pixelation from '@/utils/pixelate/pixelate.js';
 import type {PixelatePosition} from '@/utils/pixelate/pixelate.js';
+import {useVideoStore} from '@/store/videoState.js';
+
 export interface Src {
   src: string;
   type: string;
   label: string;
 }
 
-const animationID = ref(0);
-const isPixelated = ref(false);
+const {isPixelated, animationID} = storeToRefs(useVideoStore());
 const isInverted = ref(false);
 const fullscreen = ref(false);
 const dialog = ref(false);
@@ -45,7 +48,7 @@ const props = defineProps<{
 const playerID = ref('video1');
 const playerInstance: Ref<VideoJsPlayer | undefined> = ref(); // 播放器实例
 const emit = defineEmits(['resetSource']); // 子组件emit重设源
-let originalPosition: Ref<PixelatePosition>; // 临时变量用于储存源位置
+let originalPosition: Ref<PixelatePosition>; // 临时变量用于储存原打码位置
 
 watch(isInverted, (newValue) => {
   if (newValue) {
@@ -60,9 +63,7 @@ watch(isPixelated, (newValue) => {
   const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
   if (!playerInstance.value) throw new Error();
   if (newValue) {
-    nextTick(() =>
-      pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID)
-    );
+    nextTick(() => pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value));
     snackbar.value = true;
     controlBar.setAttribute(
       'style',
@@ -79,7 +80,7 @@ watch(props, () => {
   if (isPixelated.value) {
     isPixelated.value = false;
   }
-  (playerInstance.value as any)?.updateSrc(props.srcs); // 主要是插件问题，没时间重写类型声明
+  nextTick(() => (playerInstance.value as any)?.updateSrc(props.srcs)); // 主要是插件问题，没时间重写类型声明
 });
 
 /**
@@ -117,8 +118,7 @@ const initPlayer = (): void => {
  * @returns  {void}
  */
 const redraw = (): void => {
-  if (isPixelated.value)
-    pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID);
+  if (isPixelated.value) pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value);
 };
 
 onMounted(() => {
@@ -143,7 +143,7 @@ onMounted(() => {
 
   window.onresize = () => {
     if (isPixelated.value) {
-      pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value, animationID);
+      pixelation(<VideoJsPlayer>playerInstance.value, pixelatePosition.value);
       const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
       if (playerInstance.value) {
         {
@@ -166,7 +166,7 @@ onUnmounted(() => {
 </script>
 <template>
   <canvas v-if="isPixelated" id="pixelate" style="position: absolute"></canvas>
-  <v-snackbar v-model="snackbar" :timeout="3000">
+  <v-snackbar v-model="snackbar" timeout="3000">
     您可以通过鼠标来涂抹马赛克。
     <template v-slot:actions>
       <v-btn color="blue" variant="text" @click="snackbar = false"> Close </v-btn>

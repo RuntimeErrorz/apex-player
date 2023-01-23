@@ -1,7 +1,7 @@
 /**
  * 反转颜色测试模块。
  * @module utils/invert.test
- * @date   2023-01-12
+ * @date   2023-01-13
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import {test, expect, expectTypeOf} from 'vitest';

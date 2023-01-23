@@ -1,7 +1,7 @@
 /**
  * 测试核心打码功能模块.
  * @module utils/pixelate.test
- * @date   2023-01-12
+ * @date   2023-01-13
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import {test, expect} from 'vitest';

@@ -8,15 +8,17 @@
  * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
  */
 import videojs, {type VideoJsPlayer} from 'video.js';
+import {useVideoStore} from '@/store/videoState.js';
+import {storeToRefs} from 'pinia';
 
 /**
- * 一个定长和一个不定长div的中点对齐，CSS学艺不精。
+ * 一个定长和一个不定长div的中点对齐，CSS学艺不精。不过据我观察视频网站一般切换视频都是定宽的。
  */
 const autoLocation = () => {
   const label = <HTMLDivElement>document.getElementsByClassName('vjs-resolution-button-label')[0];
-  console.log(label, label.clientWidth);
   const menuItems = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
   // options?.style.setProperty('left', map[label.innerHTML.length as keyof typeof map]);
+  menuItems?.style.setProperty('z-index', '1100');
   menuItems?.style.setProperty(
     'left',
     `${label.clientWidth * 0.5581395348837209 - 35.74418604651163}px` //直接暴力拟合
@@ -45,6 +47,7 @@ export default function addQuality() {
   /*
    * 分辨率切换菜单
    */
+  const {isPixelated} = storeToRefs(useVideoStore());
   const MenuItem = <any | videojs.MenuItem>videojs.getComponent('MenuItem');
   const ResolutionMenuItem = videojs.extend(MenuItem, {
     constructor: function (this: any, player: VideoJsPlayer, options: any) {
@@ -79,6 +82,7 @@ export default function addQuality() {
   });
   ResolutionMenuButton.prototype.update = function () {
     //updateSources
+    isPixelated.value = false;
     this.sources = this.player().getGroupedSrc();
     this.currentSelection = this.player().currentResolution();
 
@@ -227,7 +231,7 @@ export default function addQuality() {
      * @returns {Object} grouped sources: { label: { key: [] }, res: { key: [] }, type: { key: [] } }
      */
     function bucketSources(src: Array<Src>): GroupedSrc {
-      let resolutions = {
+      const resolutions = {
         label: {},
         res: {},
         type: {}

@@ -1,7 +1,7 @@
 /**
- * 此ES Module导出了函数名为invertColor的函数。
+ * 此ES Module实现导出了反色函数。
  * @module utils/invert/invert
- * @date   2023-01-12
+ * @date   2023-01-13
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
 import type {VideoJsPlayer} from 'video.js';

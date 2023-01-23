@@ -88,7 +88,7 @@
     │      pixelate.test.ts //打码测试模块
     │
     ├─quality
-    │      qualityPlugin.ts //切换清晰度插件
+    │      qualitySwitching.ts //切换清晰度插件模块
     │
     └─snapshot
             snapshot.ts //多场景截图与录屏模块
@@ -157,6 +157,7 @@
 
 ### 未来计划
 
+- [ ] 使用Pinia跨组件/页面共享核心播放器状态。（从而获得Devtools支持与服务端渲染。）
 - [ ] 明确反色与马赛克同时出现时的截屏与录屏逻辑；（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图。）
 - [ ] 持续完善单元测试；
 - [ ] 使用 Video.js 8 重构。（已尝试，由于 Video.js 8 对 TypeScript 的支持目前不佳作罢。）
@@ -201,7 +202,7 @@
 - Tel：15102801677
 - Email：dariuszeng@qq.com
 - Blog：https://runtimeerrorz.github.io/
-- Résumé：https://github.com/RuntimeErrorz/apex-player/blob/master/曾德御简历.pdf
+- Résumé：[曾德御简历](./曾德御简历.pdf)
 
 ## 致谢
 
