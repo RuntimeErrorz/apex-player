@@ -1,23 +1,24 @@
 /** 画质切换插件。
- * @copyright  Kasper Moskwiak 2016
- * @author RuntimeErroz <dariuszeng@qq.com>
  * Video.js7的extend需要用到function prototypes，Video.js8则对TypeScript支持不佳并且有BUG，两害相权取Video.js7。
  * 因此在本模块中会大量使用any类型，这也是无奈之举。
  * 重写动态标签，并增加了动态适应标签长度的功能。
  * 移除对Flash的支持等过时API，并修复大量非崩溃型错误。
  * 重构逻辑，添加类型标注与注释从而大大提高可读性、可维护性。
+ * @module utils/quality/qualitySwitching
+ * @date
+ * @author RuntimeErroz <dariuszeng@qq.com>
+ * @copyright  Kasper Moskwiak 2016
  */
 import videojs, {type VideoJsPlayer} from 'video.js';
 import {useVideoStore} from '@/store/videoState.js';
 import {storeToRefs} from 'pinia';
 
 /**
- * 一个定长和一个不定长div的中点对齐，CSS学艺不精。不过据我观察视频网站一般切换视频都是定宽的。
+ * 一个定长和一个不定长div的中点对齐。
  */
 const autoLocation = () => {
   const label = <HTMLDivElement>document.getElementsByClassName('vjs-resolution-button-label')[0];
   const menuItems = <HTMLUListElement>document.getElementsByClassName('vjs-menu-content')[5];
-  // options?.style.setProperty('left', map[label.innerHTML.length as keyof typeof map]);
   menuItems?.style.setProperty('z-index', '1100');
   menuItems?.style.setProperty(
     'left',
