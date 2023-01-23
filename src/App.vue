@@ -16,12 +16,12 @@ const defaultSrcs = [
   {
     src: 'http://101.42.51.16/videos/hd.mp4',
     type: 'video/mp4',
-    label: 'HD'
+    label: 'HasdasdD'
   },
   {
     src: 'http://101.42.51.16/videos/sd.mp4',
     type: 'video/mp4',
-    label: 'SD'
+    label: 'SDa'
   }
 ];
 
