@@ -90,12 +90,12 @@ const recommendURL = [
     url: 'http://101.42.51.16/videos/test.mov'
   },
   {
-    format: 'HTTP Live Streaming',
-    url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
-  },
-  {
     format: 'HEVC/H.265',
     url: 'http://101.42.51.16/videos/hevc.mp4'
+  },
+  {
+    format: 'HTTP Live Streaming',
+    url: 'http://livefr.cgtn.com/1000f/prog_index.m3u8'
   }
 ];
 /**
