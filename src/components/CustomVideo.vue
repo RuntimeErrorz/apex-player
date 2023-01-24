@@ -5,11 +5,11 @@
  * @date   2023-01-12
  * @author RuntimeErroz <dariuszeng@qq.com>
  */
-import videojs, { type VideoJsPlayer } from 'video.js';
+import videojs, {type VideoJsPlayer} from 'video.js';
 import 'videojs-flvjs-es6';
-import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
-import type { Ref } from 'vue';
-import { storeToRefs } from 'pinia';
+import {onMounted, onUnmounted, ref, watch, nextTick} from 'vue';
+import type {Ref} from 'vue';
+import {storeToRefs} from 'pinia';
 
 import addQuality from '@/utils/quality/qualitySwitching.js';
 import customiseSidebar, {
@@ -19,8 +19,8 @@ import customiseSidebar, {
 } from '@/utils/snapshot/snapshot.js';
 import invertColor from '@/utils/invert/invert.js';
 import pixelation from '@/utils/pixelate/pixelate.js';
-import type { PixelatePosition } from '@/utils/pixelate/pixelate.js';
-import { useVideoStore } from '@/store/videoState.js';
+import type {PixelatePosition} from '@/utils/pixelate/pixelate.js';
+import {useVideoStore} from '@/store/videoState.js';
 
 export interface Src {
   src: string;
@@ -28,7 +28,7 @@ export interface Src {
   label: string;
 }
 
-const { isPixelated, animationID } = storeToRefs(useVideoStore());
+const {isPixelated, animationID} = storeToRefs(useVideoStore());
 const isInverted = ref(false);
 const fullscreen = ref(false);
 const dialog = ref(false);
@@ -51,10 +51,8 @@ const emit = defineEmits(['resetSource']); // 子组件emit重设源
 let originalPosition: Ref<PixelatePosition>; // 临时变量用于储存原打码位置
 
 watch(fullscreen, (newValue) => {
-  //处理全屏事件
-  if (isPixelated.value && newValue)
-    isPixelated.value = false
-})
+  if (isPixelated.value && newValue) isPixelated.value = false;
+});
 
 watch(isInverted, (newValue) => {
   if (newValue) {
@@ -73,7 +71,8 @@ watch(isPixelated, (newValue) => {
     snackbar.value = true;
     controlBar.setAttribute(
       'style',
-      `position: relative;top: ${playerInstance.value.currentHeight() + 7
+      `position: relative;top: ${
+        playerInstance.value.currentHeight() + 7
       }px; background-color:black!important`
     );
   } else {
@@ -154,7 +153,8 @@ onMounted(() => {
         {
           controlBar.setAttribute(
             'style',
-            `position: relative;top: ${playerInstance.value.currentHeight() + 7
+            `position: relative;top: ${
+              playerInstance.value.currentHeight() + 7
             }px; background-color:black!important`
           );
         } // 加防抖
@@ -185,46 +185,98 @@ onUnmounted(() => {
   <v-dialog z-index="3" v-model="dialog" persistent width="60vw">
     <v-card>
       <v-card-title style="margin-left: 10px; margin-top: 1vh">
-        <span class="text-h6">选择马赛克区域（左下为原点），<strong style="color: #ef5350">马赛克区域可以直接涂抹选择</strong></span>
+        <span class="text-h6"
+          >选择马赛克区域（左下为原点），<strong style="color: #ef5350"
+            >马赛克区域可以直接涂抹选择</strong
+          ></span
+        >
       </v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="6">
-              <v-slider label="区域左下X坐标百分比" v-model="pixelatePosition.leftX" class="align-center" max="100" :min="0"
-                hide-details>
+              <v-slider
+                label="区域左下X坐标百分比"
+                v-model="pixelatePosition.leftX"
+                class="align-center"
+                max="100"
+                :min="0"
+                hide-details
+              >
                 <template v-slot:append>
-                  <v-text-field v-model="pixelatePosition.leftX" hide-details single-line density="compact"
-                    type="number" style="width: 100px"></v-text-field>
+                  <v-text-field
+                    v-model="pixelatePosition.leftX"
+                    hide-details
+                    single-line
+                    density="compact"
+                    type="number"
+                    style="width: 100px"
+                  ></v-text-field>
                 </template>
               </v-slider>
             </v-col>
             <v-col cols="6">
-              <v-slider label="区域右上X坐标百分比" v-model="pixelatePosition.rightX" class="align-center" max="100" :min="0"
-                hide-details>
+              <v-slider
+                label="区域右上X坐标百分比"
+                v-model="pixelatePosition.rightX"
+                class="align-center"
+                max="100"
+                :min="0"
+                hide-details
+              >
                 <template v-slot:append>
-                  <v-text-field v-model="pixelatePosition.rightX" hide-details single-line density="compact"
-                    type="number" style="width: 100px"></v-text-field>
+                  <v-text-field
+                    v-model="pixelatePosition.rightX"
+                    hide-details
+                    single-line
+                    density="compact"
+                    type="number"
+                    style="width: 100px"
+                  ></v-text-field>
                 </template>
               </v-slider>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="6">
-              <v-slider label="区域左下Y坐标百分比" v-model="pixelatePosition.leftY" class="align-center" max="100" :min="0"
-                hide-details>
+              <v-slider
+                label="区域左下Y坐标百分比"
+                v-model="pixelatePosition.leftY"
+                class="align-center"
+                max="100"
+                :min="0"
+                hide-details
+              >
                 <template v-slot:append>
-                  <v-text-field v-model="pixelatePosition.leftY" hide-details single-line density="compact"
-                    type="number" style="width: 100px"></v-text-field>
+                  <v-text-field
+                    v-model="pixelatePosition.leftY"
+                    hide-details
+                    single-line
+                    density="compact"
+                    type="number"
+                    style="width: 100px"
+                  ></v-text-field>
                 </template>
               </v-slider>
             </v-col>
             <v-col cols="6">
-              <v-slider label="区域右上Y坐标百分比" v-model="pixelatePosition.rightY" class="align-center" max="100" :min="0"
-                hide-details>
+              <v-slider
+                label="区域右上Y坐标百分比"
+                v-model="pixelatePosition.rightY"
+                class="align-center"
+                max="100"
+                :min="0"
+                hide-details
+              >
                 <template v-slot:append>
-                  <v-text-field v-model="pixelatePosition.rightY" hide-details single-line density="compact"
-                    type="number" style="width: 100px"></v-text-field>
+                  <v-text-field
+                    v-model="pixelatePosition.rightY"
+                    hide-details
+                    single-line
+                    density="compact"
+                    type="number"
+                    style="width: 100px"
+                  ></v-text-field>
                 </template>
               </v-slider>
             </v-col>
@@ -237,53 +289,65 @@ onUnmounted(() => {
       </span>
       <v-card-actions style="margin-bottom: 5px; margin-top: 3vh">
         <v-spacer></v-spacer>
-        <v-btn variant="tonal" @click="
-          () => {
-            dialog = false;
-            pixelatePosition = originalPosition;
-          }
-        ">
+        <v-btn
+          variant="tonal"
+          @click="
+            () => {
+              dialog = false;
+              pixelatePosition = originalPosition;
+            }
+          "
+        >
           取消
         </v-btn>
-        <v-btn variant="tonal" color="blue-darken-1" @click="
-          () => {
-            dialog = false;
-            isPixelated = false;
-            nextTick(() => (isPixelated = true));
-          }
-        ">
+        <v-btn
+          variant="tonal"
+          color="blue-darken-1"
+          @click="
+            () => {
+              dialog = false;
+              isPixelated = false;
+              nextTick(() => (isPixelated = true));
+            }
+          "
+        >
           保存
         </v-btn>
-        <v-btn v-show="isPixelated" color="red darken-1" variant="tonal" @click="
-  () => {
-    isPixelated = false;
-    dialog = false;
-  }
-        ">
+        <v-btn
+          v-show="isPixelated"
+          color="red darken-1"
+          variant="tonal"
+          @click="
+            () => {
+              isPixelated = false;
+              dialog = false;
+            }
+          "
+        >
           关闭马赛克
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
-<style>
+<style lang="less">
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
-}
 
-.custom-video {
-  margin: 0 2vw;
-  flex: 1;
-  height: 80vh;
-}
+  .custom-video {
+    margin: 0 2vw;
+    flex: 1;
+    height: 80vh;
+  }
 
-.invert {
-  width: 46vw;
-  margin: 0 2vw;
+  .invert {
+    width: 46vw;
+    margin: 0 2vw;
+  }
 }
 
 .slide-fade-enter-from {
