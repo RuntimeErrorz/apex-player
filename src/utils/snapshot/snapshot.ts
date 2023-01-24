@@ -40,7 +40,6 @@ export default function customiseSidebar(): void {
           </div>
         `
       });
-      divDom.setAttribute('style', 'z-index:1001');
       return divDom;
     }
   });
