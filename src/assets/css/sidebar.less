@@ -1,0 +1,50 @@
+@width: 30px;
+@height: @width;
+
+.vjs-custom-bar-left {
+  width: @width;
+  height: @height;
+  margin-right: 10px;
+}
+
+.vjs-custom-bar {
+  position: absolute;
+  right: 10px;
+  transform: translateY(-50%);
+  top: 50%;
+
+  .vjs-custom-bar-item {
+    padding: 10px;
+    background: rgba(43, 51, 63, 0.7);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+
+    .custombar-img {
+      .vjs-custom-bar-left();
+    }
+
+    .custombar-recording {
+      .vjs-custom-bar-left();
+      background: red;
+      border-radius: @width;
+      animation: twinkling 1s linear infinite;
+    }
+
+    .custombar-text {
+      font-size: 26px;
+    }
+  }
+}
+
+@keyframes twinkling {
+  0% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
