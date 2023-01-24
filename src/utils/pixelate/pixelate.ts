@@ -87,7 +87,7 @@ export function addPixelation(
   const canvas = <HTMLCanvasElement>document.getElementById('pixelate');
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error();
-  canvas.setAttribute('style', `position: absolute; top:${top}px; left:${left}px;z-index: 1000;`);
+  canvas.setAttribute('style', `position: absolute; top:${top}px; left:${left}px;z-index: 1;`);
   const video = <HTMLVideoElement>player.el().querySelector('video');
   const sourceLayer = document.createElement('canvas'); //整体三层canvas，一层源一层马赛克一层路径
   const pixelateLayer = document.createElement('canvas');
