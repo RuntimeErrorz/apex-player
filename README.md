@@ -50,9 +50,10 @@
 [![Vuetify][Vuetify]][Vuetify-url]  
 [![Vitest][Vitest]][Vitest-url]  
 [![ESlint][ESlint]][ESlint-url]  
-[![Prettier][Prettier]][Prettier-url]  
-[Video.js](https://videojs.com/)
-[Husky](https://typicode.github.io/husky/#/)
+[![Prettier][Prettier]][Prettier-url] 
+[Pinia](https://pinia.vuejs.org/zh/)  
+[Video.js](https://videojs.com/)  
+[Husky](https://typicode.github.io/husky/#/)  
 
 ### 文件结构
 
@@ -62,38 +63,34 @@
 │
 ├─assets
 │  ├─css
-│  │      min.css //videojs源样式
-│  │      quality.css // 清晰度切换插件样式
-│  │      skin.css //videojs皮肤
-│  │      snapshot.css //静态截图按钮样式
+│  │       controlbar.less  //底部控制栏样式
+│  │       sidebar.less     //侧边栏样式
 │  │
-│  ├─images
-│  │      camera.png   //截图图标
-│  │      monitor.png  //录屏图标
-│  │
-│  └─videos
-│          hd.mp4 //默认高清源
-│          sd.mp4 //默认标清源
+│  └─images
+│          camera-outline.png      //截图图标
+│          monitor-screenshot.png  //录屏图标
+│          source-branch.png       //换源图标
 │
 ├─components
-│      video.vue //封装的Video组件，接受源数组与自定义选项
+│      CustomVideo.vue  //实现所有视频功能的SFC
+│ 
+├─store
+│      videoState.ts    //定义了视频全局状态的Store
 │
 └─utils
     ├─invert
-    │      invert.ts //反色模块
-    │      invert.test.ts //反色模块测试
+    │      invert.ts       //反色模块
+    │      invert.test.ts  //反色模块测试
     │
     ├─pixelate
-    │      pixelate.ts //打码模块
-    │      pixelate.test.ts //打码测试模块
+    │      pixelate.ts       //打码模块
+    │      pixelate.test.ts  //打码测试模块
     │
     ├─quality
-    │      qualitySwitching.ts //切换清晰度插件模块
+    │      qualitySwitching.ts   //切换清晰度插件模块
     │
     └─snapshot
-            snapshot.ts //多场景截图与录屏模块
-            snapshot.test.ts //多场景截图与录屏模块
-
+           snapshot.ts   //多场景截图与录屏模块
 ```
 
 ## 使用
@@ -102,15 +99,12 @@
 
 可以在播放前和播放中切换 URL、文件、默认值等播放源。
 请注意，添加不同清晰度时需要点击右方加号。
-![1674395701034](image/README/1674395701034.png)
 ### 2. 切换清晰度
 
 如果您之前使用了多清晰度的源，在播放途中可以点击设置键进行切换。
-![1674395983306](image/README/1674395983306.png)
 ### 3. 反色
 
 播放中点击反色键即可反色，再点一次可以关闭反色。
-![1674396011202](image/README/1674396011202.png)
 ### 4. 截图
 
 点击截图键即可保存当前视频中的最新帧到本地。（如果处于马赛克或反转颜色状态则截取当前状态下的图片，如果同时处于马赛克和反转颜色状态则截取原视频）
@@ -118,13 +112,10 @@
 ### 5. 录屏
 
 点击录屏键开始录屏，点击结束键结束录屏并保存到本地。（录屏逻辑同截图）
-![1674396080149](image/README/1674396080149.png)
 ### 6. 打码
 
 点击打码键可以选择打码区域，并且可以在打码区域涂抹。
-![1674396183088](image/README/1674396183088.png)
-![1674396162779](image/README/1674396162779.png)
-![1674396352635](image/README/1674396352635.png)
+
 
 ## 项目完成度与未来计划
 
@@ -152,12 +143,12 @@
 - [X] 核心功能单元测试
 - [X] 通过Github Actions实现持续集成与持续部署到云服务器
 - [x] 使用EsLint、Prettier、Husky全过程统一规范代码
+- [x] 引入Less预处理器全方位提升CSS开发效率
 - [X] 搭建静态文件服务
 - [X] 搭建页面展示服务
 
 ### 未来计划
 
-- [ ] 使用Pinia跨组件/页面共享核心播放器状态。（从而获得Devtools支持与服务端渲染。）
 - [ ] 明确反色与马赛克同时出现时的截屏与录屏逻辑；（项目内容要求中并未细化。具体实现时，反色与马赛克的源均直接来源于源视频，截图时如果同时反色与马赛克则截两张图。）
 - [ ] 持续完善单元测试；
 - [ ] 使用 Video.js 8 重构。（已尝试，由于 Video.js 8 对 TypeScript 的支持目前不佳作罢。）
@@ -167,7 +158,7 @@
 
 ### 组件设计
 
-- custom-video 组件
+- CustomVideo 组件
   - 功能：实现了全部视频功能；向外提供数据源和自定义播放选项的接口（Props）
 
 在根组件中引用此组件，并在 App.vue 实现了多来源视频的统一选择，日后项目复杂后易于扩展。
@@ -189,7 +180,7 @@
   - 具体实现：由于 Node.js 不支持 ImageData 的数据类型，因此自定义 ImgData 类，并对 2\*2 的图片数据进行了测试。
 - invert.test.ts
   - 功能：对反转颜色的核心函数进行测试。
-  - 具体实现：同样自定义 ImgData 类，对不同大小的数据进行测试。
+  - 具体实现：同样自定义 ImgData 类，对数据进行测试。
 
 ## 开源许可证
 
