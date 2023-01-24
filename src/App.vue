@@ -289,7 +289,3 @@ const createBlob = (
   </v-dialog>
   <CustomVideo :srcs="srcs" :options="options" @resetSource="resetSource" />
 </template>
-<style>
-@import 'http://101.42.51.16/css/video-js.css';
-@import 'http://101.42.51.16/css/skin.css';
-</style>
