@@ -14,14 +14,14 @@ const tabTitleItems = reactive(['使用URL', '上传文件']); // tab标题
 const defaultSrcs = [
   // 默认值用于展示清晰度切换
   {
-    src: 'http://101.42.51.16/videos/hd.mp4',
+    src: 'http://101.42.51.16/videos/high.mp4',
     type: 'video/mp4',
-    label: 'HasdasdD'
+    label: '400P'
   },
   {
-    src: 'http://101.42.51.16/videos/sd.mp4',
+    src: 'http://101.42.51.16/videos/low.mp4',
     type: 'video/mp4',
-    label: 'SDa'
+    label: '180P'
   }
 ];
 
@@ -79,7 +79,7 @@ const recommendURL = [
   // 供参考的视频源
   {
     format: 'H.264/MPEG-4 AVC',
-    url: 'http://101.42.51.16/videos/sd.mp4'
+    url: 'http://101.42.51.16/videos/low.mp4'
   },
   {
     format: 'HEVC/H.265',

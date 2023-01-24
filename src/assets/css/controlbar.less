@@ -1,0 +1,47 @@
+.video-js {
+    button.vjs-custom-bt {
+        @margin :5px ;
+        &:nth-last-child(2) {
+            margin-left: @margin;
+        }
+
+        &:last-child {
+            margin-right: @margin;
+        }
+        width: 2.5em;
+        margin-left: 3px;
+        font-size: 21px;
+    }
+}
+
+#vjs-resolution-menu {
+    margin-right: 6px;
+    top: 10.5px;
+    width: auto;
+
+    .vjs-menu {
+        left: 0;
+        width: 100%;
+        justify-content: center;
+
+        .vjs-menu-content {
+            left: initial;
+            padding-bottom: 1.2em;
+        }
+    }
+
+    .vjs-resolution-button {
+        position: relative;
+        top: -30px;
+    }
+
+    .vjs-resolution-button-label {
+        font-size: 21px;
+    }
+}
+
+#vjs-resolution-menu.vjs-hover {
+    .vjs-menu {
+        display: flex;
+    }
+}

@@ -28,15 +28,15 @@ export default function customiseSidebar(): void {
         innerHTML: `
           <div class="vjs-custom-bar-item">
             <img src="${cameraImg}"  class="custombar-img"/>
-            <span class="snapshot-text">截图</span>
+            <span class="custombar-text">截图</span>
           </div>
           <div class="vjs-custom-bar-item" >
             <img src="${monitorImg}" class="custombar-img" />
-            <span class="snapshot-text">录像</span>
+            <span class="custombar-text">录像</span>
           </div>
           <div class="vjs-custom-bar-item" >
             <img src="${srcImg}" class="custombar-img" />
-            <span class="snapshot-text">换源</span>
+            <span class="custombar-text">换源</span>
           </div>
         `
       });
@@ -91,7 +91,8 @@ export function recordHandle(
 ) {
   if (!recorderParams.isRecording) {
     // 开始录屏后修改DOM，创建Canvas
-    recordDom.innerHTML = '<i class="record-process"></i><span class="snapshot-text">结束</span>';
+    recordDom.innerHTML =
+      '<i class="custombar-recording"></i><span class="custombar-text">结束</span>';
     if (!recorderParams.canvas) {
       recorderParams.canvas = document.createElement('canvas');
     }
@@ -103,7 +104,7 @@ export function recordHandle(
     drawMedia(recorderParams, isInverted, isPixelated);
   } else {
     // 结束录屏后修改DOM并复原参数
-    recordDom.innerHTML = `<img src="${monitorImg}" class="custombar-img" /><span class="snapshot-text">录像</span>`;
+    recordDom.innerHTML = `<img src="${monitorImg}" class="custombar-img" /><span class="custombar-text">录像</span>`;
     recorderParams.recorder?.stopRecording(() => {
       const url = window.URL.createObjectURL(<Blob>recorderParams.recorder?.getBlob());
       downloadFile(url, 'webm');
