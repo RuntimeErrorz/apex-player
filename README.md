@@ -1,5 +1,5 @@
 <div align="center">
-<h3 align="center">基于 Video.js 深度的定制播放器</h3>
+<h3 align="center">基于 Video.js 深度定制的播放器</h3>
 
 <p align="center">
     <a href="http://101.42.51.16/player/">在线演示</a>
