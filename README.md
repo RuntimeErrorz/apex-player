@@ -186,14 +186,6 @@
 
 在 GPLv3 协议下分发，更多信息请参考 `LICENSE`。
 
-## 联系我
-
-曾德御 电子科技大学信息与软件工程学院
-
-- Tel：15102801677
-- Email：dariuszeng@qq.com
-- Blog：https://runtimeerrorz.github.io/
-- Résumé：[曾德御简历](./曾德御简历.pdf)
 
 ## 致谢
 
